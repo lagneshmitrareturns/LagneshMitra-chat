@@ -1,256 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>LagneshMitra – Customer Query Form</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>LagneshMitra – Customer Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <style>
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: linear-gradient(135deg, #2b1055, #9b1fe8);
-      padding: 16px;
-      color: #111;
-    }
+<style>
+/* ===== BASE ===== */
+body{
+  margin:0;
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:linear-gradient(135deg,#1b0f2e,#2b1055);
+  color:#fff;
+  height:100vh;
+  overflow:hidden;
+}
 
-    .box {
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 16px;
-      max-width: 900px;
-      margin: auto;
-      box-shadow: 0 14px 40px rgba(0,0,0,0.28);
-    }
+/* ===== FLOATING CHAT BUTTON ===== */
+.chat-btn{
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#ff5da2,#c084fc);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  cursor:pointer;
+  box-shadow:0 12px 30px rgba(0,0,0,.5);
+  z-index:1000;
+}
 
-    h2 {
-      color: #5b21b6;
-      margin-bottom: 4px;
-    }
+/* ===== CHAT POPUP ===== */
+.chat-box{
+  position:fixed;
+  bottom:100px;
+  right:24px;
+  width:340px;
+  max-height:80vh;
+  background:#24123d;
+  border-radius:16px;
+  padding:16px;
+  display:none;
+  box-shadow:0 18px 40px rgba(0,0,0,.6);
+  overflow-y:auto;
+}
 
-    .subtitle {
-      font-size: 14px;
-      color: #6b7280;
-      margin-bottom: 14px;
-    }
+.chat-box h3{
+  margin-top:0;
+  color:#ff5da2;
+  font-size:18px;
+}
 
-    h3 {
-      margin-top: 18px;
-      color: #111827;
-    }
+/* ===== INPUTS ===== */
+input{
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:10px;
+  border:1px solid #3b2463;
+  background:#2f1850;
+  color:#fff;
+}
 
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
-      font-size: 14px;
-      background: #fafafa;
-    }
+input::placeholder{color:#c4b5fd;}
 
-    input:focus {
-      outline: none;
-      border-color: #7c3aed;
-      background: #ffffff;
-    }
+button{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  margin-top:6px;
+  background:linear-gradient(135deg,#ff5da2,#d946ef);
+  color:#1b0f2e;
+  font-weight:600;
+  cursor:pointer;
+}
 
-    /* 🔥 UNIFIED BUTTON STYLE */
-    .btn {
-      background: linear-gradient(135deg, #7c3aed, #ec4899);
-      color: #ffffff;
-      border: none;
-      border-radius: 12px;
-      padding: 12px 18px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-right: 8px;
-      margin-top: 8px;
-      box-shadow: 0 6px 18px rgba(124,58,237,0.35);
-      transition: all 0.25s ease;
-    }
+/* ===== OUTPUT ===== */
+#output{
+  margin-top:10px;
+  font-size:14px;
+  color:#e9d5ff;
+}
 
-    .btn:hover {
-      opacity: 0.95;
-      transform: translateY(-1px);
-      box-shadow: 0 10px 22px rgba(124,58,237,0.45);
-    }
+/* ===== USERS TABLE (BOTTOM) ===== */
+.bottom-panel{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:#1f1433;
+  padding:10px;
+  max-height:180px;
+  overflow-y:auto;
+  box-shadow:0 -10px 30px rgba(0,0,0,.6);
+}
 
-    #output {
-      margin-top: 14px;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 14px;
-      background: #f5f3ff;
-      border-left: 4px solid #7c3aed;
-    }
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-      font-size: 14px;
-    }
+th{
+  background:#ff5da2;
+  color:#1b0f2e;
+  padding:6px;
+}
 
-    th {
-      background: #111827;
-      color: #ffffff;
-      padding: 10px;
-      text-align: left;
-    }
-
-    td {
-      padding: 10px;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    hr {
-      margin: 22px 0;
-      border: none;
-      height: 1px;
-      background: #e5e7eb;
-    }
-
-    @media(max-width:600px){
-      .btn { width:100%; margin-right:0; }
-    }
-  </style>
+td{
+  padding:6px;
+  border-bottom:1px solid #3b2463;
+}
+</style>
 </head>
 
 <body>
 
-<div class="box">
+<!-- CHAT BUTTON -->
+<div class="chat-btn" onclick="toggleChat()">💬</div>
 
-  <h2>✨ LagneshMitra – Customer Query Form</h2>
-  <div class="subtitle">
-    Please submit your birth details for advanced astrological analysis
-  </div>
+<!-- CHAT POPUP -->
+<div class="chat-box" id="chatBox">
+  <h3>Talk to LagneshMitra</h3>
 
-  <h3>Your Details</h3>
   <input id="name" placeholder="Full Name">
-  <input id="mobile" placeholder="Mobile Number (unique)">
+  <input id="mobile" placeholder="Mobile Number">
   <input id="gender" placeholder="Gender">
-  <input id="dob" placeholder="Date of Birth (DD-MM-YYYY)">
-  <input id="tob" placeholder="Time of Birth (HH:MM AM/PM)">
+  <input id="dob" placeholder="DOB (DD-MM-YYYY)">
+  <input id="tob" placeholder="TOB (HH:MM AM/PM)">
   <input id="pob" placeholder="Place of Birth">
 
-  <button class="btn" onclick="addUser()">Submit Details</button>
-  <button class="btn" onclick="addChat()">Start Consultation</button>
-  <button class="btn" onclick="loadData()">Refresh Data</button>
+  <button onclick="addUser()">Submit Details</button>
+  <button onclick="addChat()">Request Consultation</button>
 
   <div id="output"></div>
+</div>
 
-  <hr>
-
-  <!-- नीचे की tables अभी रहने दो (internal / ? mode) -->
-  <h3>Users</h3>
-  <table id="usersTable"></table>
-
-  <h3>Chats</h3>
-  <table id="chatsTable"></table>
-
+<!-- USERS TABLE ONLY -->
+<div class="bottom-panel">
+  <table id="usersTable">
+    <tr>
+      <th>Mobile</th>
+      <th>Name</th>
+      <th>DOB</th>
+      <th>POB</th>
+    </tr>
+  </table>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  serverTimestamp,
-  collection,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, doc, setDoc, serverTimestamp, collection, getDocs }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* Firebase Config */
-const firebaseConfig = {
-  apiKey: "AIzaSyCX8yGRJc5AcxSEaaC6AzNLZzxtOCz83Sk",
-  authDomain: "lagneshmitra-e57b8.firebaseapp.com",
-  projectId: "lagneshmitra-e57b8",
-  storageBucket: "lagneshmitra-e57b8.firebasestorage.app",
-  messagingSenderId: "420798143606",
-  appId: "1:420798143606:web:ace6aec7d195492a415357"
+const firebaseConfig={
+ apiKey:"AIzaSyCX8yGRJc5AcxSEaaC6AzNLZzxtOCz83Sk",
+ authDomain:"lagneshmitra-e57b8.firebaseapp.com",
+ projectId:"lagneshmitra-e57b8",
+ storageBucket:"lagneshmitra-e57b8.firebasestorage.app",
+ messagingSenderId:"420798143606",
+ appId:"1:420798143606:web:ace6aec7d195492a415357"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
 
-/* Helpers */
-const fields = ["name","mobile","gender","dob","tob","pob"];
-const v = id => document.getElementById(id).value.trim();
-const clearForm = () => fields.forEach(f => document.getElementById(f).value = "");
-const uid = () => v("mobile");
+const v=id=>document.getElementById(id).value.trim();
+const uid=()=>v("mobile");
 
-/* Add User */
-window.addUser = async () => {
-  if (!uid()) return alert("Mobile required");
+window.toggleChat=()=>{
+ document.getElementById("chatBox").style.display=
+  document.getElementById("chatBox").style.display==="block"?"none":"block";
+}
 
-  await setDoc(doc(db,"users",uid()),{
-    name:v("name"),
-    mobile:uid(),
-    gender:v("gender"),
-    dob:v("dob"),
-    tob:v("tob"),
-    pob:v("pob"),
-    hasActiveOrder:true,
-    createdAt:serverTimestamp()
-  });
+window.addUser=async()=>{
+ if(!uid()) return alert("Mobile required");
+ await setDoc(doc(db,"users",uid()),{
+  name:v("name"),mobile:uid(),gender:v("gender"),
+  dob:v("dob"),tob:v("tob"),pob:v("pob"),
+  createdAt:serverTimestamp()
+ });
+ document.getElementById("output").innerText="Details submitted";
+ loadData();
+}
 
-  output.innerText = "✅ Details submitted successfully";
-  clearForm();
-  loadData();
-};
+window.addChat=async()=>{
+ await setDoc(doc(db,"chats",uid()),{
+  userId:uid(),lastMessage:"Consultation requested",
+  lastMessageAt:serverTimestamp(),status:"new"
+ });
+ document.getElementById("output").innerText="Request sent";
+}
 
-/* Add Chat */
-window.addChat = async () => {
-  if (!uid()) return alert("Mobile required");
-
-  await setDoc(doc(db,"chats",uid()),{
-    userId:uid(),
-    lastMessage:"Customer submitted details and requested consultation",
-    lastMessageAt:serverTimestamp(),
-    status:"new",
-    paymentStatus:"not_received"
-  });
-
-  output.innerText = "✅ Consultation request initiated";
-  loadData();
-};
-
-/* Load Data */
-window.loadData = async () => {
-
-  usersTable.innerHTML =
-    `<tr><th>Mobile</th><th>Name</th><th>DOB</th><th>POB</th></tr>`;
-  chatsTable.innerHTML =
-    `<tr><th>User</th><th>Message</th><th>Status</th><th>Payment</th></tr>`;
-
-  const usersSnap = await getDocs(collection(db,"users"));
-  usersSnap.forEach(d=>{
-    const u=d.data();
-    usersTable.innerHTML += `
-      <tr>
-        <td>${d.id}</td>
-        <td>${u.name || ""}</td>
-        <td>${u.dob || ""}</td>
-        <td>${u.pob || ""}</td>
-      </tr>`;
-  });
-
-  const chatsSnap = await getDocs(collection(db,"chats"));
-  chatsSnap.forEach(d=>{
-    const c=d.data();
-    chatsTable.innerHTML += `
-      <tr>
-        <td>${d.id}</td>
-        <td>${c.lastMessage || ""}</td>
-        <td>${c.status || ""}</td>
-        <td>${c.paymentStatus || ""}</td>
-      </tr>`;
-  });
-
-  output.innerText = "📡 Data synced";
-};
+async function loadData(){
+ usersTable.innerHTML="<tr><th>Mobile</th><th>Name</th><th>DOB</th><th>POB</th></tr>";
+ const snap=await getDocs(collection(db,"users"));
+ snap.forEach(d=>{
+  const u=d.data();
+  usersTable.innerHTML+=`<tr>
+   <td>${d.id}</td><td>${u.name||""}</td>
+   <td>${u.dob||""}</td><td>${u.pob||""}</td></tr>`;
+ });
+}
+loadData();
 </script>
 
 </body>
