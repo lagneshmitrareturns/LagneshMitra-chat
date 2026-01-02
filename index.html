@@ -2,57 +2,104 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LagneshMitra – Customer Portal</title>
+<title>LagneshMitra – Shaping the Future</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-/* ===== BASE ===== */
+/* ===== RESET ===== */
+*{box-sizing:border-box;margin:0;padding:0}
+
+/* ===== BODY ===== */
 body{
-  margin:0;
-  font-family:"Segoe UI",Arial,sans-serif;
+  font-family:"Segoe UI",Roboto,Arial,sans-serif;
   background:linear-gradient(135deg,#1b0f2e,#2b1055);
-  color:#fff;
+  color:#f5f3ff;
   height:100vh;
   overflow:hidden;
 }
 
-/* ===== FLOATING CHAT BUTTON ===== */
+/* ===== TOP BAR ===== */
+.topbar{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  padding:16px 22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:100;
+}
+
+.brand{
+  font-size:22px;
+  font-style:italic;
+  font-weight:600;
+  color:#ff5da2;
+}
+
+.brand span{
+  display:block;
+  font-size:12px;
+  font-style:italic;
+  color:#d8b4fe;
+}
+
+.menu{
+  font-size:26px;
+  cursor:pointer;
+  color:#e9d5ff;
+}
+
+/* ===== LANDING BLANK AREA ===== */
+.hero{
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-style:italic;
+  font-size:22px;
+  color:#c4b5fd;
+}
+
+/* ===== CHAT BUTTON ===== */
 .chat-btn{
   position:fixed;
-  bottom:24px;
-  right:24px;
-  width:64px;
-  height:64px;
+  bottom:26px;
+  right:26px;
+  width:70px;
+  height:70px;
   border-radius:50%;
   background:linear-gradient(135deg,#ff5da2,#c084fc);
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:28px;
+  font-size:30px;
   cursor:pointer;
-  box-shadow:0 12px 30px rgba(0,0,0,.5);
+  box-shadow:0 14px 36px rgba(0,0,0,.6);
   z-index:1000;
 }
 
-/* ===== CHAT POPUP ===== */
+/* ===== CHAT DRAWER ===== */
 .chat-box{
   position:fixed;
-  bottom:100px;
-  right:24px;
-  width:340px;
-  max-height:80vh;
+  bottom:110px;
+  right:26px;
+  width:380px;
+  max-height:75vh;
   background:#24123d;
-  border-radius:16px;
-  padding:16px;
+  border-radius:18px;
+  padding:18px;
   display:none;
-  box-shadow:0 18px 40px rgba(0,0,0,.6);
+  box-shadow:0 20px 45px rgba(0,0,0,.7);
   overflow-y:auto;
 }
 
 .chat-box h3{
-  margin-top:0;
+  margin-bottom:12px;
   color:#ff5da2;
-  font-size:18px;
+  font-style:italic;
 }
 
 /* ===== INPUTS ===== */
@@ -64,16 +111,18 @@ input{
   border:1px solid #3b2463;
   background:#2f1850;
   color:#fff;
+  font-size:14px;
 }
 
-input::placeholder{color:#c4b5fd;}
+input::placeholder{color:#c4b5fd}
 
+/* ===== BUTTON ===== */
 button{
   width:100%;
   padding:12px;
   border-radius:10px;
   border:none;
-  margin-top:6px;
+  margin-top:8px;
   background:linear-gradient(135deg,#ff5da2,#d946ef);
   color:#1b0f2e;
   font-weight:600;
@@ -87,23 +136,23 @@ button{
   color:#e9d5ff;
 }
 
-/* ===== USERS TABLE (BOTTOM) ===== */
+/* ===== BOTTOM USERS PANEL ===== */
 .bottom-panel{
   position:fixed;
   bottom:0;
   left:0;
   width:100%;
   background:#1f1433;
-  padding:10px;
-  max-height:180px;
+  padding:8px 12px;
+  max-height:130px;
   overflow-y:auto;
-  box-shadow:0 -10px 30px rgba(0,0,0,.6);
+  box-shadow:0 -10px 30px rgba(0,0,0,.7);
 }
 
 table{
   width:100%;
   border-collapse:collapse;
-  font-size:13px;
+  font-size:12px;
 }
 
 th{
@@ -121,10 +170,24 @@ td{
 
 <body>
 
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="brand">
+    LagneshMitra
+    <span>Shaping the Future</span>
+  </div>
+  <div class="menu">⋮</div>
+</div>
+
+<!-- LANDING -->
+<div class="hero">
+  Astrology. Psychology. Destiny Engineering.
+</div>
+
 <!-- CHAT BUTTON -->
 <div class="chat-btn" onclick="toggleChat()">💬</div>
 
-<!-- CHAT POPUP -->
+<!-- CHAT DRAWER -->
 <div class="chat-box" id="chatBox">
   <h3>Talk to LagneshMitra</h3>
 
@@ -141,15 +204,10 @@ td{
   <div id="output"></div>
 </div>
 
-<!-- USERS TABLE ONLY -->
+<!-- USERS PANEL -->
 <div class="bottom-panel">
   <table id="usersTable">
-    <tr>
-      <th>Mobile</th>
-      <th>Name</th>
-      <th>DOB</th>
-      <th>POB</th>
-    </tr>
+    <tr><th>Mobile</th><th>Name</th><th>DOB</th><th>POB</th></tr>
   </table>
 </div>
 
@@ -174,8 +232,8 @@ const v=id=>document.getElementById(id).value.trim();
 const uid=()=>v("mobile");
 
 window.toggleChat=()=>{
- document.getElementById("chatBox").style.display=
-  document.getElementById("chatBox").style.display==="block"?"none":"block";
+ const box=document.getElementById("chatBox");
+ box.style.display=box.style.display==="block"?"none":"block";
 }
 
 window.addUser=async()=>{
