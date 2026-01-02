@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>LagneshMitra � Firestore Admin</title>
+  <title>LagneshMitra – Customer Query Form</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
@@ -15,16 +15,22 @@
 
     .box {
       background: #ffffff;
-      padding: 18px;
-      border-radius: 14px;
+      padding: 20px;
+      border-radius: 16px;
       max-width: 900px;
       margin: auto;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.28);
     }
 
     h2 {
       color: #5b21b6;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 14px;
     }
 
     h3 {
@@ -34,75 +40,79 @@
 
     input {
       width: 100%;
-      padding: 11px;
+      padding: 12px;
       margin-bottom: 10px;
-      border-radius: 8px;
+      border-radius: 10px;
       border: 1px solid #d1d5db;
       font-size: 14px;
+      background: #fafafa;
     }
 
-    button {
-      padding: 10px 16px;
-      border-radius: 8px;
+    input:focus {
+      outline: none;
+      border-color: #7c3aed;
+      background: #ffffff;
+    }
+
+    /* 🔥 UNIFIED BUTTON STYLE */
+    .btn {
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
+      color: #ffffff;
       border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      margin-right: 6px;
-      margin-top: 6px;
+      margin-right: 8px;
+      margin-top: 8px;
+      box-shadow: 0 6px 18px rgba(124,58,237,0.35);
+      transition: all 0.25s ease;
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, #7c3aed, #ec4899);
-      color: white;
-    }
-
-    .btn-secondary {
-      background: #111827;
-      color: white;
-    }
-
-    button:hover {
-      opacity: 0.92;
+    .btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(124,58,237,0.45);
     }
 
     #output {
-      margin-top: 12px;
-      padding: 10px;
-      border-radius: 8px;
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 10px;
       font-size: 14px;
-      background: #ecfeff;
-      border-left: 4px solid #06b6d4;
+      background: #f5f3ff;
+      border-left: 4px solid #7c3aed;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
+      margin-top: 12px;
       font-size: 14px;
     }
 
     th {
       background: #111827;
-      color: white;
-      padding: 8px;
+      color: #ffffff;
+      padding: 10px;
       text-align: left;
     }
 
     td {
-      padding: 8px;
+      padding: 10px;
       border-bottom: 1px solid #e5e7eb;
     }
 
     hr {
-      margin: 20px 0;
+      margin: 22px 0;
       border: none;
       height: 1px;
       background: #e5e7eb;
     }
 
     @media(max-width:600px){
-      button { width:100%; margin-right:0; }
+      .btn { width:100%; margin-right:0; }
     }
   </style>
 </head>
@@ -111,29 +121,32 @@
 
 <div class="box">
 
-  <h2> LagneshMitra � Firestore Admin Panel</h2>
-  <p style="font-size:14px;color:#6b7280;">Internal testing dashboard</p>
+  <h2>✨ LagneshMitra – Customer Query Form</h2>
+  <div class="subtitle">
+    Please submit your birth details for advanced astrological analysis
+  </div>
 
-  <h3>User Details</h3>
-  <input id="name" placeholder="Name">
-  <input id="mobile" placeholder="Mobile (unique ID)">
+  <h3>Your Details</h3>
+  <input id="name" placeholder="Full Name">
+  <input id="mobile" placeholder="Mobile Number (unique)">
   <input id="gender" placeholder="Gender">
-  <input id="dob" placeholder="DOB (DD-MM-YYYY)">
-  <input id="tob" placeholder="TOB (HH:MM AM/PM)">
-  <input id="pob" placeholder="POB">
+  <input id="dob" placeholder="Date of Birth (DD-MM-YYYY)">
+  <input id="tob" placeholder="Time of Birth (HH:MM AM/PM)">
+  <input id="pob" placeholder="Place of Birth">
 
-  <button class="btn-primary" onclick="addUser()">Add User</button>
-  <button class="btn-secondary" onclick="addChat()">Add Chat</button>
-  <button class="btn-secondary" onclick="loadData()">Load Data</button>
+  <button class="btn" onclick="addUser()">Submit Details</button>
+  <button class="btn" onclick="addChat()">Start Consultation</button>
+  <button class="btn" onclick="loadData()">Refresh Data</button>
 
   <div id="output"></div>
 
   <hr>
 
-  <h3> Users</h3>
+  <!-- नीचे की tables अभी रहने दो (internal / ? mode) -->
+  <h3>Users</h3>
   <table id="usersTable"></table>
 
-  <h3> Chats</h3>
+  <h3>Chats</h3>
   <table id="chatsTable"></table>
 
 </div>
@@ -183,7 +196,7 @@ window.addUser = async () => {
     createdAt:serverTimestamp()
   });
 
-  output.innerText = " User saved to Firestore";
+  output.innerText = "✅ Details submitted successfully";
   clearForm();
   loadData();
 };
@@ -194,13 +207,13 @@ window.addChat = async () => {
 
   await setDoc(doc(db,"chats",uid()),{
     userId:uid(),
-    lastMessage:"Namaste! I want advanced analysis",
+    lastMessage:"Customer submitted details and requested consultation",
     lastMessageAt:serverTimestamp(),
     status:"new",
     paymentStatus:"not_received"
   });
 
-  output.innerText = " Chat saved to Firestore";
+  output.innerText = "✅ Consultation request initiated";
   loadData();
 };
 
@@ -236,7 +249,7 @@ window.loadData = async () => {
       </tr>`;
   });
 
-  output.innerText = " Firestore synced";
+  output.innerText = "📡 Data synced";
 };
 </script>
 
