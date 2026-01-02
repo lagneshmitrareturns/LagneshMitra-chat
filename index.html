@@ -6,10 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-/* ===== RESET ===== */
 *{box-sizing:border-box;margin:0;padding:0}
 
-/* ===== BODY ===== */
 body{
   font-family:"Segoe UI",Roboto,Arial,sans-serif;
   background:linear-gradient(135deg,#1b0f2e,#2b1055);
@@ -21,14 +19,12 @@ body{
 /* ===== TOP BAR ===== */
 .topbar{
   position:fixed;
-  top:0;
-  left:0;
-  width:100%;
+  top:0;left:0;width:100%;
   padding:16px 22px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  z-index:100;
+  z-index:200;
 }
 
 .brand{
@@ -41,7 +37,6 @@ body{
 .brand span{
   display:block;
   font-size:12px;
-  font-style:italic;
   color:#d8b4fe;
 }
 
@@ -51,7 +46,30 @@ body{
   color:#e9d5ff;
 }
 
-/* ===== LANDING BLANK AREA ===== */
+/* ===== DROPDOWN MENU ===== */
+.dropdown{
+  position:absolute;
+  top:60px;
+  right:22px;
+  background:#24123d;
+  border-radius:14px;
+  box-shadow:0 18px 45px rgba(0,0,0,.7);
+  display:none;
+  overflow:hidden;
+}
+
+.dropdown div{
+  padding:12px 18px;
+  font-size:14px;
+  cursor:pointer;
+  color:#e9d5ff;
+}
+
+.dropdown div:hover{
+  background:#2f1850;
+}
+
+/* ===== HERO / IDEOLOGY ===== */
 .hero{
   height:100vh;
   display:flex;
@@ -59,7 +77,13 @@ body{
   justify-content:center;
   text-align:center;
   font-style:italic;
-  font-size:22px;
+  padding:40px;
+}
+
+.hero p{
+  max-width:720px;
+  font-size:20px;
+  line-height:1.7;
   color:#c4b5fd;
 }
 
@@ -68,8 +92,7 @@ body{
   position:fixed;
   bottom:26px;
   right:26px;
-  width:70px;
-  height:70px;
+  width:70px;height:70px;
   border-radius:50%;
   background:linear-gradient(135deg,#ff5da2,#c084fc);
   display:flex;
@@ -78,7 +101,7 @@ body{
   font-size:30px;
   cursor:pointer;
   box-shadow:0 14px 36px rgba(0,0,0,.6);
-  z-index:1000;
+  z-index:300;
 }
 
 /* ===== CHAT DRAWER ===== */
@@ -103,7 +126,7 @@ body{
 }
 
 /* ===== INPUTS ===== */
-input{
+input,textarea{
   width:100%;
   padding:12px;
   margin-bottom:10px;
@@ -114,7 +137,13 @@ input{
   font-size:14px;
 }
 
-input::placeholder{color:#c4b5fd}
+textarea{
+  min-height:90px;
+  resize:none;
+}
+
+input::placeholder,
+textarea::placeholder{color:#c4b5fd}
 
 /* ===== BUTTON ===== */
 button{
@@ -136,12 +165,10 @@ button{
   color:#e9d5ff;
 }
 
-/* ===== BOTTOM USERS PANEL ===== */
+/* ===== USERS PANEL ===== */
 .bottom-panel{
   position:fixed;
-  bottom:0;
-  left:0;
-  width:100%;
+  bottom:0;left:0;width:100%;
   background:#1f1433;
   padding:8px 12px;
   max-height:130px;
@@ -176,12 +203,23 @@ td{
     LagneshMitra
     <span>Shaping the Future</span>
   </div>
-  <div class="menu">⋮</div>
+  <div class="menu" onclick="toggleMenu()">⋮</div>
+
+  <div class="dropdown" id="menuBox">
+    <div>Ideology</div>
+    <div>Product & Pricing</div>
+    <div>Admin Panel</div>
+  </div>
 </div>
 
-<!-- LANDING -->
+<!-- HERO -->
 <div class="hero">
-  Astrology. Psychology. Destiny Engineering.
+  <p>
+    Astrology. Psychology. Destiny Engineering.<br><br>
+    LagneshMitra is not prediction.<br>
+    It is pattern recognition, karmic timing,<br>
+    and conscious life design.
+  </p>
 </div>
 
 <!-- CHAT BUTTON -->
@@ -198,8 +236,10 @@ td{
   <input id="tob" placeholder="TOB (HH:MM AM/PM)">
   <input id="pob" placeholder="Place of Birth">
 
+  <textarea id="message" placeholder="Type your concern here..."></textarea>
+
   <button onclick="addUser()">Submit Details</button>
-  <button onclick="addChat()">Request Consultation</button>
+  <button onclick="sendMessage()">Send Message</button>
 
   <div id="output"></div>
 </div>
@@ -230,10 +270,16 @@ const db=getFirestore(app);
 
 const v=id=>document.getElementById(id).value.trim();
 const uid=()=>v("mobile");
+const msg=()=>document.getElementById("message").value.trim();
 
 window.toggleChat=()=>{
  const box=document.getElementById("chatBox");
  box.style.display=box.style.display==="block"?"none":"block";
+}
+
+window.toggleMenu=()=>{
+ const m=document.getElementById("menuBox");
+ m.style.display=m.style.display==="block"?"none":"block";
 }
 
 window.addUser=async()=>{
@@ -247,12 +293,19 @@ window.addUser=async()=>{
  loadData();
 }
 
-window.addChat=async()=>{
+window.sendMessage=async()=>{
+ if(!uid()) return alert("Mobile required");
+ if(!msg()) return alert("Please type a message");
+
  await setDoc(doc(db,"chats",uid()),{
-  userId:uid(),lastMessage:"Consultation requested",
-  lastMessageAt:serverTimestamp(),status:"new"
+  userId:uid(),
+  customerMessage:msg(),
+  lastMessageAt:serverTimestamp(),
+  status:"new"
  });
- document.getElementById("output").innerText="Request sent";
+
+ document.getElementById("output").innerText="Message sent";
+ document.getElementById("message").value="";
 }
 
 async function loadData(){
