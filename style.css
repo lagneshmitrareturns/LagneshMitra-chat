@@ -1,6 +1,6 @@
-/* ================================
-   LagneshMitra – Core Styling (Premium Violet)
-   ================================ */
+/* =========================================
+   LagneshMitra – Premium Violet Theme
+   ========================================= */
 
 * {
   box-sizing: border-box;
@@ -8,6 +8,7 @@
   padding: 0;
 }
 
+/* Page Background */
 body {
   font-family: "Segoe UI", Roboto, Arial, sans-serif;
   background: linear-gradient(135deg, #1b0f2e, #2b1055);
@@ -16,14 +17,15 @@ body {
   padding: 16px;
 }
 
-/* Container */
-.container {
-  max-width: 720px;
+/* Main Card / Container */
+.container,
+.box {
+  max-width: 900px;
   margin: auto;
   background: #24123d;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  padding: 22px;
+  border-radius: 18px;
+  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.5);
 }
 
 /* Headings */
@@ -43,20 +45,29 @@ h3 {
   color: #d8b4fe;
 }
 
-/* Accent line */
-.divider {
-  height: 2px;
+/* Subtitles / helper text */
+.subtitle,
+p {
+  font-size: 14px;
+  color: #c4b5fd;
+}
+
+/* Divider */
+.divider,
+hr {
+  height: 1px;
   background: linear-gradient(90deg, #ff5da2, #c084fc);
-  margin: 16px 0;
+  border: none;
+  margin: 18px 0;
   border-radius: 2px;
 }
 
 /* Inputs */
 input {
   width: 100%;
-  padding: 12px 14px;
+  padding: 13px 14px;
   margin-bottom: 12px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid #3b2463;
   font-size: 15px;
   background: #2f1850;
@@ -73,41 +84,38 @@ input:focus {
   background: #321a57;
 }
 
-/* Buttons */
-button {
+/* Buttons (Unified look) */
+button,
+.btn,
+.btn-primary,
+.btn-secondary {
   padding: 12px 18px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: none;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   margin-right: 8px;
-  margin-top: 6px;
-}
-
-/* Primary Action */
-.btn-primary {
+  margin-top: 8px;
   background: linear-gradient(135deg, #ff5da2, #d946ef);
   color: #1b0f2e;
-}
-
-/* Secondary Action */
-.btn-secondary {
-  background: #3b2463;
-  color: #f5f3ff;
+  box-shadow: 0 6px 18px rgba(217, 70, 239, 0.45);
+  transition: all 0.25s ease;
 }
 
 button:hover {
-  opacity: 0.9;
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(217, 70, 239, 0.6);
 }
 
-/* Status / Output */
+/* Status / Output Message */
 #output {
   margin-top: 16px;
-  padding: 12px;
+  padding: 12px 14px;
   background: #1f1433;
   border-left: 4px solid #22d3ee;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 14px;
   color: #e9d5ff;
 }
@@ -116,23 +124,23 @@ button:hover {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 12px;
+  margin-top: 14px;
   font-size: 14px;
   background: #24123d;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
 }
 
 th {
   background: linear-gradient(135deg, #ff5da2, #c084fc);
   color: #1b0f2e;
-  padding: 10px;
+  padding: 11px;
   text-align: left;
   font-weight: 600;
 }
 
 td {
-  padding: 10px;
+  padding: 11px;
   border-bottom: 1px solid #3b2463;
   color: #f3e8ff;
 }
@@ -146,6 +154,7 @@ tr:nth-child(even) {
   h2 {
     font-size: 20px;
   }
+
   button {
     width: 100%;
     margin-right: 0;
