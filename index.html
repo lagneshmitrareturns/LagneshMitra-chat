@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LagneshMitra – Firestore Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #2b1055, #9b1fe8);
+      padding: 16px;
+      color: #111;
+    }
+
+    .box {
+      background: #ffffff;
+      padding: 18px;
+      border-radius: 14px;
+      max-width: 900px;
+      margin: auto;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+
+    h2 {
+      color: #5b21b6;
+      margin-bottom: 6px;
+    }
+
+    h3 {
+      margin-top: 18px;
+      color: #111827;
+    }
+
+    input {
+      width: 100%;
+      padding: 11px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 6px;
+      margin-top: 6px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #111827;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.92;
+    }
+
+    #output {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #ecfeff;
+      border-left: 4px solid #06b6d4;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    th {
+      background: #111827;
+      color: white;
+      padding: 8px;
+      text-align: left;
+    }
+
+    td {
+      padding: 8px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    hr {
+      margin: 20px 0;
+      border: none;
+      height: 1px;
+      background: #e5e7eb;
+    }
+
+    @media(max-width:600px){
+      button { width:100%; margin-right:0; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+
+  <h2> LagneshMitra – Firestore Admin Panel</h2>
+  <p style="font-size:14px;color:#6b7280;">Internal testing dashboard</p>
+
+  <h3>User Details</h3>
+  <input id="name" placeholder="Name">
+  <input id="mobile" placeholder="Mobile (unique ID)">
+  <input id="gender" placeholder="Gender">
+  <input id="dob" placeholder="DOB (DD-MM-YYYY)">
+  <input id="tob" placeholder="TOB (HH:MM AM/PM)">
+  <input id="pob" placeholder="POB">
+
+  <button class="btn-primary" onclick="addUser()">Add User</button>
+  <button class="btn-secondary" onclick="addChat()">Add Chat</button>
+  <button class="btn-secondary" onclick="loadData()">Load Data</button>
+
+  <div id="output"></div>
+
+  <hr>
+
+  <h3> Users</h3>
+  <table id="usersTable"></table>
+
+  <h3> Chats</h3>
+  <table id="chatsTable"></table>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  serverTimestamp,
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* Firebase Config */
+const firebaseConfig = {
+  apiKey: "AIzaSyCX8yGRJc5AcxSEaaC6AzNLZzxtOCz83Sk",
+  authDomain: "lagneshmitra-e57b8.firebaseapp.com",
+  projectId: "lagneshmitra-e57b8",
+  storageBucket: "lagneshmitra-e57b8.firebasestorage.app",
+  messagingSenderId: "420798143606",
+  appId: "1:420798143606:web:ace6aec7d195492a415357"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* Helpers */
+const fields = ["name","mobile","gender","dob","tob","pob"];
+const v = id => document.getElementById(id).value.trim();
+const clearForm = () => fields.forEach(f => document.getElementById(f).value = "");
+const uid = () => v("mobile");
+
+/* Add User */
+window.addUser = async () => {
+  if (!uid()) return alert("Mobile required");
+
+  await setDoc(doc(db,"users",uid()),{
+    name:v("name"),
+    mobile:uid(),
+    gender:v("gender"),
+    dob:v("dob"),
+    tob:v("tob"),
+    pob:v("pob"),
+    hasActiveOrder:true,
+    createdAt:serverTimestamp()
+  });
+
+  output.innerText = " User saved to Firestore";
+  clearForm();
+  loadData();
+};
+
+/* Add Chat */
+window.addChat = async () => {
+  if (!uid()) return alert("Mobile required");
+
+  await setDoc(doc(db,"chats",uid()),{
+    userId:uid(),
+    lastMessage:"Namaste! I want advanced analysis",
+    lastMessageAt:serverTimestamp(),
+    status:"new",
+    paymentStatus:"not_received"
+  });
+
+  output.innerText = " Chat saved to Firestore";
+  loadData();
+};
+
+/* Load Data */
+window.loadData = async () => {
+
+  usersTable.innerHTML =
+    `<tr><th>Mobile</th><th>Name</th><th>DOB</th><th>POB</th></tr>`;
+  chatsTable.innerHTML =
+    `<tr><th>User</th><th>Message</th><th>Status</th><th>Payment</th></tr>`;
+
+  const usersSnap = await getDocs(collection(db,"users"));
+  usersSnap.forEach(d=>{
+    const u=d.data();
+    usersTable.innerHTML += `
+      <tr>
+        <td>${d.id}</td>
+        <td>${u.name || ""}</td>
+        <td>${u.dob || ""}</td>
+        <td>${u.pob || ""}</td>
+      </tr>`;
+  });
+
+  const chatsSnap = await getDocs(collection(db,"chats"));
+  chatsSnap.forEach(d=>{
+    const c=d.data();
+    chatsTable.innerHTML += `
+      <tr>
+        <td>${d.id}</td>
+        <td>${c.lastMessage || ""}</td>
+        <td>${c.status || ""}</td>
+        <td>${c.paymentStatus || ""}</td>
+      </tr>`;
+  });
+
+  output.innerText = " Firestore synced";
+};
+</script>
+
+</body>
+</html>

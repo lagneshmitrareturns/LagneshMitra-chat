@@ -1,0 +1,153 @@
+/* ================================
+   LagneshMitra – Core Styling (Premium Violet)
+   ================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: linear-gradient(135deg, #1b0f2e, #2b1055);
+  color: #f5f3ff;
+  line-height: 1.5;
+  padding: 16px;
+}
+
+/* Container */
+.container {
+  max-width: 720px;
+  margin: auto;
+  background: #24123d;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+}
+
+/* Headings */
+h1, h2, h3 {
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #fdf4ff;
+}
+
+h2 {
+  font-size: 22px;
+  color: #ff5da2;
+}
+
+h3 {
+  font-size: 17px;
+  color: #d8b4fe;
+}
+
+/* Accent line */
+.divider {
+  height: 2px;
+  background: linear-gradient(90deg, #ff5da2, #c084fc);
+  margin: 16px 0;
+  border-radius: 2px;
+}
+
+/* Inputs */
+input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid #3b2463;
+  font-size: 15px;
+  background: #2f1850;
+  color: #ffffff;
+}
+
+input::placeholder {
+  color: #c4b5fd;
+}
+
+input:focus {
+  outline: none;
+  border-color: #ff5da2;
+  background: #321a57;
+}
+
+/* Buttons */
+button {
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 8px;
+  margin-top: 6px;
+}
+
+/* Primary Action */
+.btn-primary {
+  background: linear-gradient(135deg, #ff5da2, #d946ef);
+  color: #1b0f2e;
+}
+
+/* Secondary Action */
+.btn-secondary {
+  background: #3b2463;
+  color: #f5f3ff;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Status / Output */
+#output {
+  margin-top: 16px;
+  padding: 12px;
+  background: #1f1433;
+  border-left: 4px solid #22d3ee;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #e9d5ff;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 14px;
+  background: #24123d;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th {
+  background: linear-gradient(135deg, #ff5da2, #c084fc);
+  color: #1b0f2e;
+  padding: 10px;
+  text-align: left;
+  font-weight: 600;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #3b2463;
+  color: #f3e8ff;
+}
+
+tr:nth-child(even) {
+  background: #2a1650;
+}
+
+/* Mobile optimisation */
+@media (max-width: 600px) {
+  h2 {
+    font-size: 20px;
+  }
+  button {
+    width: 100%;
+    margin-right: 0;
+  }
+}
