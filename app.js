@@ -31,6 +31,14 @@ const db = getFirestore(app);
 const val = id => document.getElementById(id)?.value.trim() || "";
 const uid = () => val("mobile");
 
+/* ⏱ Minutes-only formatter */
+function formatMinutesAgo(timestampSeconds) {
+  const diffMs = Date.now() - timestampSeconds * 1000;
+  const mins = Math.floor(diffMs / 60000);
+  if (mins <= 0) return "just now";
+  return `${mins} mins ago`;
+}
+
 /* 👤 Add / Update User */
 async function addUser() {
   if (!uid()) return alert("Mobile number required");
@@ -88,15 +96,15 @@ async function loadLatestPost() {
   const post = snapDoc.data();
   const postRef = doc(db, "posts", snapDoc.id);
 
-  /* 🔢 Increment views (refresh = +1 for now) */
+  /* 🔢 Increment views (temporary logic) */
   await updateDoc(postRef, {
     views: increment(1)
   });
 
-  /* ⏱ Hours ago */
-  const hrs = post.updatedAt?.seconds
-    ? Math.floor((Date.now() - post.updatedAt.seconds * 1000) / 3600000)
-    : 0;
+  /* ⏱ Minutes ago text */
+  const timeText = post.updatedAt?.seconds
+    ? formatMinutesAgo(post.updatedAt.seconds)
+    : "just now";
 
   /* ✂️ Preview */
   const preview =
@@ -108,13 +116,16 @@ async function loadLatestPost() {
   document.getElementById("postPreview").innerText = preview;
   document.getElementById("postFull").innerText = post.content;
   document.getElementById("postMeta").innerText =
-    `Updated ${hrs <= 0 ? "just now" : hrs + " hrs ago"} • Views ${(post.views || 0) + 1}`;
+    `Updated ${timeText} • Views ${(post.views || 0) + 1}`;
 }
 
-/* 🔘 Expose to window */
+/* 🔘 Expose */
 window.addUser = addUser;
 window.sendMessage = sendMessage;
 window.loadLatestPost = loadLatestPost;
 
-/* 🚀 Auto load on page open */
+/* 🚀 Initial load */
 loadLatestPost();
+
+/* 🔁 Auto refresh every 1 minute */
+setInterval(loadLatestPost, 60000);
