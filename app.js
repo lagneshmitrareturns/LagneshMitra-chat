@@ -35,15 +35,19 @@ const uid = () => val("mobile");
 async function addUser() {
   if (!uid()) return alert("Mobile number required");
 
-  await setDoc(doc(db, "users", uid()), {
-    name: val("name"),
-    mobile: uid(),
-    gender: val("gender"),
-    dob: val("dob"),
-    tob: val("tob"),
-    pob: val("pob"),
-    updatedAt: serverTimestamp()
-  }, { merge: true });
+  await setDoc(
+    doc(db, "users", uid()),
+    {
+      name: val("name"),
+      mobile: uid(),
+      gender: val("gender"),
+      dob: val("dob"),
+      tob: val("tob"),
+      pob: val("pob"),
+      updatedAt: serverTimestamp()
+    },
+    { merge: true }
+  );
 
   document.getElementById("output").innerText = "✅ Details submitted";
 }
@@ -53,21 +57,24 @@ async function sendMessage() {
   if (!uid()) return alert("Mobile required");
   if (!val("message")) return alert("Type your concern");
 
-  await setDoc(doc(db, "chats", uid()), {
-    userId: uid(),
-    lastMessage: val("message"),
-    lastMessageAt: serverTimestamp(),
-    status: "new",
-    unread: true
-  }, { merge: true });
+  await setDoc(
+    doc(db, "chats", uid()),
+    {
+      userId: uid(),
+      lastMessage: val("message"),
+      lastMessageAt: serverTimestamp(),
+      status: "new",
+      unread: true
+    },
+    { merge: true }
+  );
 
   document.getElementById("message").value = "";
   document.getElementById("output").innerText = "📨 Message sent";
 }
 
-/* 🏆 Load Latest Post (Hall of Fame) */
+/* 🏆 Load Latest Hall of Fame Post */
 async function loadLatestPost() {
-
   const q = query(
     collection(db, "posts"),
     orderBy("updatedAt", "desc"),
@@ -77,11 +84,11 @@ async function loadLatestPost() {
   const snap = await getDocs(q);
   if (snap.empty) return;
 
-  const docSnap = snap.docs[0];
-  const post = docSnap.data();
-  const postRef = doc(db, "posts", docSnap.id);
+  const snapDoc = snap.docs[0];
+  const post = snapDoc.data();
+  const postRef = doc(db, "posts", snapDoc.id);
 
-  /* 🔢 Increment views (basic phase) */
+  /* 🔢 Increment views (refresh = +1 for now) */
   await updateDoc(postRef, {
     views: increment(1)
   });
@@ -91,22 +98,23 @@ async function loadLatestPost() {
     ? Math.floor((Date.now() - post.updatedAt.seconds * 1000) / 3600000)
     : 0;
 
-  /* 🪄 Render preview + full */
-  document.getElementById("postPreview").innerText =
+  /* ✂️ Preview */
+  const preview =
     post.content.length > 300
       ? post.content.slice(0, 300) + "..."
       : post.content;
 
+  /* 🪄 Render */
+  document.getElementById("postPreview").innerText = preview;
   document.getElementById("postFull").innerText = post.content;
-
   document.getElementById("postMeta").innerText =
     `Updated ${hrs <= 0 ? "just now" : hrs + " hrs ago"} • Views ${(post.views || 0) + 1}`;
 }
 
-/* 🔘 Expose */
+/* 🔘 Expose to window */
 window.addUser = addUser;
 window.sendMessage = sendMessage;
 window.loadLatestPost = loadLatestPost;
 
-/* 🚀 Auto load */
+/* 🚀 Auto load on page open */
 loadLatestPost();
