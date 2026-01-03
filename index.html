@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-/* ===== RESET ===== */
 *{box-sizing:border-box;margin:0;padding:0}
 
 /* ===== BODY ===== */
@@ -14,19 +13,21 @@ body{
   font-family:"Segoe UI",Roboto,Arial,sans-serif;
   background:linear-gradient(135deg,#1b0f2e,#2b1055);
   color:#f5f3ff;
-  height:100vh;
-  overflow:hidden;
+  min-height:100vh;
+  overflow-x:hidden;
+  overflow-y:auto;
 }
 
 /* ===== TOP BAR ===== */
 .topbar{
   position:fixed;
   top:0;left:0;width:100%;
+  height:70px;
   padding:16px 22px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  z-index:200;
+  z-index:500;
 }
 
 .brand{
@@ -35,43 +36,34 @@ body{
   font-weight:600;
   color:#ff5da2;
 }
+.brand span{font-size:12px;color:#d8b4fe}
 
-.brand span{
-  display:block;
-  font-size:12px;
-  color:#d8b4fe;
-}
-
-.menu{
-  font-size:26px;
-  cursor:pointer;
-  color:#e9d5ff;
-}
+.menu{font-size:26px;cursor:pointer;color:#e9d5ff}
 
 /* ===== DROPDOWN ===== */
 .dropdown{
   position:absolute;
-  top:60px;
+  top:70px;
   right:22px;
   background:#24123d;
   border-radius:14px;
   box-shadow:0 18px 45px rgba(0,0,0,.7);
   display:none;
   overflow:hidden;
+  z-index:999;
 }
-
 .dropdown div{
   padding:12px 18px;
   font-size:14px;
   cursor:pointer;
   color:#e9d5ff;
 }
-
 .dropdown div:hover{background:#2f1850}
 
 /* ===== HERO / POST AREA ===== */
 .hero{
-  height:100vh;
+  min-height:calc(100vh - 160px);
+  margin-top:70px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -88,25 +80,14 @@ body{
   cursor:pointer;
 }
 
-.post-card h3{
-  color:#ff5da2;
-  font-style:italic;
-  margin-bottom:6px;
-}
+.post-card h3{color:#ff5da2;font-style:italic;margin-bottom:6px}
+.meta{font-size:12px;color:#c4b5fd;margin-bottom:14px}
 
-.meta{
-  font-size:12px;
-  color:#c4b5fd;
-  margin-bottom:14px;
-}
-
-.post-preview,
-.post-full{
+.post-preview,.post-full{
   font-size:18px;
   line-height:1.75;
   color:#e9d5ff;
 }
-
 .post-full{display:none}
 
 .read-more{
@@ -130,7 +111,7 @@ body{
   font-size:30px;
   cursor:pointer;
   box-shadow:0 14px 36px rgba(0,0,0,.6);
-  z-index:300;
+  z-index:800;
 }
 
 /* ===== CHAT BOX ===== */
@@ -139,20 +120,17 @@ body{
   bottom:110px;
   right:26px;
   width:380px;
-  max-height:75vh;
+  max-height:70vh;
   background:#24123d;
   border-radius:20px;
   padding:18px;
   display:none;
   box-shadow:0 20px 45px rgba(0,0,0,.7);
   overflow-y:auto;
+  z-index:900;
 }
 
-.chat-box h3{
-  margin-bottom:12px;
-  color:#ff5da2;
-  font-style:italic;
-}
+.chat-box h3{margin-bottom:12px;color:#ff5da2;font-style:italic}
 
 /* ===== INPUTS ===== */
 input,textarea{
@@ -165,11 +143,8 @@ input,textarea{
   color:#fff;
   font-size:14px;
 }
-
 textarea{min-height:90px;resize:none}
-
-input::placeholder,
-textarea::placeholder{color:#c4b5fd}
+input::placeholder,textarea::placeholder{color:#c4b5fd}
 
 /* ===== BUTTON ===== */
 button{
@@ -184,12 +159,7 @@ button{
   cursor:pointer;
 }
 
-/* ===== OUTPUT ===== */
-#output{
-  margin-top:10px;
-  font-size:14px;
-  color:#e9d5ff;
-}
+#output{margin-top:10px;font-size:14px;color:#e9d5ff}
 </style>
 </head>
 
@@ -202,11 +172,10 @@ button{
     <span>Shaping the Future</span>
   </div>
   <div class="menu" onclick="toggleMenu()">⋮</div>
-
   <div class="dropdown" id="menuBox">
     <div>Ideology</div>
     <div>Product & Pricing</div>
-    <div>Admin Panel</div>
+    <div onclick="location.href='admin-posts.html'">Admin Panel</div>
   </div>
 </div>
 
@@ -217,7 +186,7 @@ button{
     <div class="meta" id="postMeta"></div>
     <div class="post-preview" id="postPreview"></div>
     <div class="post-full" id="postFull"></div>
-    <div class="read-more">Tap to expand</div>
+    <div class="read-more" id="readMore">Tap to expand</div>
   </div>
 </div>
 
@@ -227,7 +196,6 @@ button{
 <!-- CHAT BOX -->
 <div class="chat-box" id="chatBox">
   <h3>Talk to LagneshMitra</h3>
-
   <input id="name" placeholder="Full Name">
   <input id="mobile" placeholder="Mobile Number">
   <input id="gender" placeholder="Gender">
@@ -235,90 +203,93 @@ button{
   <input id="tob" placeholder="TOB (HH:MM AM/PM)">
   <input id="pob" placeholder="Place of Birth">
   <textarea id="message" placeholder="Type your concern here..."></textarea>
-
   <button onclick="addUser()">Submit Details</button>
   <button onclick="sendMessage()">Send Message</button>
-
   <div id="output"></div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, setDoc, serverTimestamp, collection, getDocs }
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+  getFirestore, doc, setDoc, updateDoc,
+  serverTimestamp, collection, getDocs, increment
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig={
- apiKey:"AIzaSyCX8yGRJc5AcxSEaaC6AzNLZzxtOCz83Sk",
- authDomain:"lagneshmitra-e57b8.firebaseapp.com",
- projectId:"lagneshmitra-e57b8",
- storageBucket:"lagneshmitra-e57b8.firebasestorage.app",
- messagingSenderId:"420798143606",
- appId:"1:420798143606:web:ace6aec7d195492a415357"
-};
-
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
+const app = initializeApp({
+  apiKey:"AIzaSyCX8yGRJc5AcxSEaaC6AzNLZzxtOCz83Sk",
+  authDomain:"lagneshmitra-e57b8.firebaseapp.com",
+  projectId:"lagneshmitra-e57b8"
+});
+const db = getFirestore(app);
 
 const v=id=>document.getElementById(id).value.trim();
 const uid=()=>v("mobile");
 
-window.toggleChat=()=>{
- const b=document.getElementById("chatBox");
- b.style.display=b.style.display==="block"?"none":"block";
-}
+window.toggleChat=()=>chatBox.style.display=
+  chatBox.style.display==="block"?"none":"block";
 
-window.toggleMenu=()=>{
- const m=document.getElementById("menuBox");
- m.style.display=m.style.display==="block"?"none":"block";
-}
+window.toggleMenu=()=>menuBox.style.display=
+  menuBox.style.display==="block"?"none":"block";
 
-let expanded=false;
-window.togglePost=()=>{
- expanded=!expanded;
- document.getElementById("postFull").style.display=expanded?"block":"none";
- document.getElementById("postPreview").style.display=expanded?"none":"block";
-}
+let expanded=false, currentPostId=null;
+
+window.togglePost=async()=>{
+  if(!currentPostId) return;
+  expanded=!expanded;
+  postFull.style.display=expanded?"block":"none";
+  postPreview.style.display=expanded?"none":"block";
+  readMore.innerText=expanded?"Tap to collapse":"Tap to expand";
+
+  if(expanded){
+    await updateDoc(doc(db,"posts",currentPostId),{
+      views: increment(1)
+    });
+  }
+};
 
 window.addUser=async()=>{
- if(!uid()) return alert("Mobile required");
- await setDoc(doc(db,"users",uid()),{
-  name:v("name"),mobile:uid(),gender:v("gender"),
-  dob:v("dob"),tob:v("tob"),pob:v("pob"),
-  createdAt:serverTimestamp()
- });
- document.getElementById("output").innerText="Details submitted";
-}
+  if(!uid()) return alert("Mobile required");
+  await setDoc(doc(db,"users",uid()),{
+    name:v("name"),mobile:uid(),gender:v("gender"),
+    dob:v("dob"),tob:v("tob"),pob:v("pob"),
+    createdAt:serverTimestamp()
+  },{merge:true});
+  output.innerText="Details submitted";
+};
 
 window.sendMessage=async()=>{
- await setDoc(doc(db,"chats",uid()),{
-  userId:uid(),
-  customerMessage:v("message"),
-  lastMessageAt:serverTimestamp(),
-  status:"new"
- });
- document.getElementById("output").innerText="Message sent";
- document.getElementById("message").value="";
-}
+  if(!uid()) return alert("Mobile required");
+  if(!v("message")) return alert("Type your concern");
+  await setDoc(doc(db,"chats",uid()),{
+    userId:uid(),
+    customerMessage:v("message"),
+    lastMessageAt:serverTimestamp(),
+    status:"new"
+  },{merge:true});
+  message.value="";
+  output.innerText="Message sent";
+};
 
 async function loadLatestPost(){
- const snap=await getDocs(collection(db,"posts"));
- let latest=null;
- snap.forEach(d=>{
-  if(!latest || d.data().updatedAt?.seconds > latest.updatedAt?.seconds){
-   latest={id:d.id,...d.data()};
-  }
- });
- if(!latest) return;
+  const snap=await getDocs(collection(db,"posts"));
+  let latest=null;
+  snap.forEach(d=>{
+    const data=d.data();
+    if(!latest || (data.updatedAt?.seconds||0)>(latest.updatedAt?.seconds||0)){
+      latest={id:d.id,...data};
+    }
+  });
+  if(!latest) return;
 
- const full=latest.content||"";
- const preview=full.substring(0,300)+(full.length>300?"...":"");
- const hrs=latest.updatedAt?.seconds
-  ?Math.floor((Date.now()/1000-latest.updatedAt.seconds)/3600):0;
+  currentPostId=latest.id;
+  const full=latest.content||"";
+  postPreview.innerText=full.substring(0,300)+(full.length>300?"...":"");
+  postFull.innerText=full;
 
- document.getElementById("postPreview").innerText=preview;
- document.getElementById("postFull").innerText=full;
- document.getElementById("postMeta").innerText=
-  `Updated ${hrs} hrs ago • Views ${latest.views||0}`;
+  const hrs=latest.updatedAt?.seconds
+    ?Math.floor((Date.now()/1000-latest.updatedAt.seconds)/3600):0;
+
+  postMeta.innerText=`Updated ${hrs} hrs ago • Views ${latest.views||0}`;
 }
 
 loadLatestPost();
