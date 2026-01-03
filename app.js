@@ -4,11 +4,13 @@ import {
   doc,
   setDoc,
   updateDoc,
-  getDoc,
   serverTimestamp,
   collection,
   getDocs,
-  increment
+  increment,
+  query,
+  orderBy,
+  limit
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* 🔐 Firebase Config */
@@ -40,7 +42,7 @@ async function addUser() {
     dob: val("dob"),
     tob: val("tob"),
     pob: val("pob"),
-    createdAt: serverTimestamp()
+    updatedAt: serverTimestamp()
   }, { merge: true });
 
   document.getElementById("output").innerText = "✅ Details submitted";
@@ -65,40 +67,46 @@ async function sendMessage() {
 
 /* 🏆 Load Latest Post (Hall of Fame) */
 async function loadLatestPost() {
-  const snap = await getDocs(collection(db, "posts"));
-  let latest = null;
 
-  snap.forEach(d => {
-    const data = d.data();
-    if (!latest || (data.updatedAt?.seconds || 0) > (latest.updatedAt?.seconds || 0)) {
-      latest = { id: d.id, ...data };
-    }
-  });
+  const q = query(
+    collection(db, "posts"),
+    orderBy("updatedAt", "desc"),
+    limit(1)
+  );
 
-  if (!latest) return;
+  const snap = await getDocs(q);
+  if (snap.empty) return;
 
-  // increment views (basic)
-  await updateDoc(doc(db, "posts", latest.id), {
+  const docSnap = snap.docs[0];
+  const post = docSnap.data();
+  const postRef = doc(db, "posts", docSnap.id);
+
+  /* 🔢 Increment views (basic phase) */
+  await updateDoc(postRef, {
     views: increment(1)
   });
 
-  const now = Date.now() / 1000;
-  const hrs = latest.updatedAt?.seconds
-    ? Math.floor((now - latest.updatedAt.seconds) / 3600)
+  /* ⏱ Hours ago */
+  const hrs = post.updatedAt?.seconds
+    ? Math.floor((Date.now() - post.updatedAt.seconds * 1000) / 3600000)
     : 0;
 
+  /* 🪄 Render preview + full */
   document.getElementById("postPreview").innerText =
-    latest.content.substring(0, 300) + (latest.content.length > 300 ? "..." : "");
+    post.content.length > 300
+      ? post.content.slice(0, 300) + "..."
+      : post.content;
 
-  document.getElementById("postFull").innerText = latest.content;
+  document.getElementById("postFull").innerText = post.content;
+
   document.getElementById("postMeta").innerText =
-    `Updated ${hrs} hrs ago • Views ${(latest.views || 0) + 1}`;
+    `Updated ${hrs <= 0 ? "just now" : hrs + " hrs ago"} • Views ${(post.views || 0) + 1}`;
 }
 
-/* 🔘 Expose to window */
+/* 🔘 Expose */
 window.addUser = addUser;
 window.sendMessage = sendMessage;
 window.loadLatestPost = loadLatestPost;
 
-/* 🚀 Auto load post on page open */
+/* 🚀 Auto load */
 loadLatestPost();
