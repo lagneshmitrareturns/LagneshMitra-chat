@@ -51,6 +51,31 @@ body {
   color: #e9d5ff;
 }
 
+/* ===== DROPDOWN MENU ===== */
+.dropdown {
+  position: absolute;
+  top: 60px;
+  right: 22px;
+  background: #24123d;
+  border-radius: 16px;
+  box-shadow: 0 18px 45px rgba(0,0,0,.7);
+  display: none;
+  overflow: hidden;
+  min-width: 180px;
+}
+
+.dropdown div {
+  padding: 14px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #e9d5ff;
+  transition: background 0.2s ease;
+}
+
+.dropdown div:hover {
+  background: #2f1850;
+}
+
 /* ===== HERO / EMPTY LANDING ===== */
 .hero {
   height: 100vh;
@@ -61,6 +86,8 @@ body {
   font-style: italic;
   font-size: 22px;
   color: #c4b5fd;
+  padding: 0 24px;
+  line-height: 1.8;
 }
 
 /* ===== FLOATING CHAT BUTTON ===== */
@@ -83,7 +110,7 @@ body {
 }
 
 .chat-btn:hover {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 /* ===== CHAT DRAWER ===== */
@@ -109,7 +136,8 @@ body {
 }
 
 /* ===== INPUTS ===== */
-input {
+input,
+textarea {
   width: 100%;
   padding: 13px 14px;
   margin-bottom: 12px;
@@ -120,11 +148,18 @@ input {
   color: #ffffff;
 }
 
-input::placeholder {
+textarea {
+  min-height: 90px;
+  resize: none;
+}
+
+input::placeholder,
+textarea::placeholder {
   color: #c4b5fd;
 }
 
-input:focus {
+input:focus,
+textarea:focus {
   outline: none;
   border-color: #ff5da2;
   background: #321a57;
