@@ -64,12 +64,14 @@ button.danger{
   color:#fff;
 }
 
+/* POST CARD */
 .post{
   margin-top:18px;
   padding:16px;
   background:#1f1433;
   border-radius:14px;
   box-shadow:0 10px 25px rgba(0,0,0,.5);
+  position:relative;
 }
 
 .post h3{
@@ -90,13 +92,36 @@ button.danger{
   line-height:1.6;
 }
 
-.actions{
-  margin-top:10px;
+/* THREE DOT MENU */
+.menu-btn{
+  position:absolute;
+  top:12px;
+  right:12px;
+  font-size:20px;
+  cursor:pointer;
+  color:#d8b4fe;
 }
 
-.actions button{
+.menu-box{
+  position:absolute;
+  top:36px;
+  right:12px;
+  background:#2a1650;
+  border-radius:10px;
+  display:none;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
+}
+
+.menu-box div{
+  padding:10px 14px;
   font-size:13px;
-  padding:8px 14px;
+  cursor:pointer;
+  color:#fff;
+}
+
+.menu-box div:hover{
+  background:#3b2463;
 }
 </style>
 </head>
@@ -168,7 +193,7 @@ window.addPost = async () => {
   loadPosts();
 };
 
-/* LOAD POSTS (LATEST FIRST) */
+/* LOAD POSTS */
 async function loadPosts(){
   posts.innerHTML="";
 
@@ -185,21 +210,36 @@ async function loadPosts(){
       ? Math.floor((Date.now() - p.updatedAt.seconds*1000)/3600000)
       : 0;
 
-    posts.innerHTML += `
-      <div class="post">
-        <h3>Hall of Fame Post</h3>
-        <div class="meta">
-          Views: ${p.views || 0} • Updated ${hrs} hrs ago
-        </div>
-        <div class="post-content">${p.content}</div>
-        <div class="actions">
-          <button onclick="editPost('${d.id}')">Edit</button>
-          <button class="danger" onclick="deletePost('${d.id}')">Delete</button>
-        </div>
+    const div = document.createElement("div");
+    div.className = "post";
+    div.innerHTML = `
+      <div class="menu-btn" onclick="toggleMenu('${d.id}')">⋮</div>
+      <div class="menu-box" id="menu-${d.id}">
+        <div onclick="editPost('${d.id}')">Edit</div>
+        <div onclick="deletePost('${d.id}')">Delete</div>
+        <div onclick="openLanding()">Open Landing</div>
       </div>
+
+      <h3>Hall of Fame Post</h3>
+      <div class="meta">
+        Views: ${p.views || 0} • Updated ${hrs <= 0 ? "just now" : hrs + " hrs ago"}
+      </div>
+      <div class="post-content">${p.content}</div>
     `;
+    posts.appendChild(div);
   });
 }
+
+/* MENU */
+window.toggleMenu = (id)=>{
+  const box = document.getElementById("menu-"+id);
+  box.style.display = box.style.display==="block"?"none":"block";
+};
+
+/* OPEN LANDING */
+window.openLanding = ()=>{
+  window.open("/", "_blank");
+};
 
 /* EDIT */
 window.editPost = async (id)=>{
