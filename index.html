@@ -6,8 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
+/* ===== RESET ===== */
 *{box-sizing:border-box;margin:0;padding:0}
 
+/* ===== BODY ===== */
 body{
   font-family:"Segoe UI",Roboto,Arial,sans-serif;
   background:linear-gradient(135deg,#1b0f2e,#2b1055);
@@ -46,7 +48,7 @@ body{
   color:#e9d5ff;
 }
 
-/* ===== DROPDOWN MENU ===== */
+/* ===== DROPDOWN ===== */
 .dropdown{
   position:absolute;
   top:60px;
@@ -65,26 +67,53 @@ body{
   color:#e9d5ff;
 }
 
-.dropdown div:hover{
-  background:#2f1850;
-}
+.dropdown div:hover{background:#2f1850}
 
-/* ===== HERO / IDEOLOGY ===== */
+/* ===== HERO / POST AREA ===== */
 .hero{
   height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
-  text-align:center;
-  font-style:italic;
   padding:40px;
 }
 
-.hero p{
+/* ===== POST CARD ===== */
+.post-card{
   max-width:720px;
-  font-size:20px;
-  line-height:1.7;
+  background:#24123d;
+  padding:26px;
+  border-radius:22px;
+  box-shadow:0 20px 50px rgba(0,0,0,.7);
+  cursor:pointer;
+}
+
+.post-card h3{
+  color:#ff5da2;
+  font-style:italic;
+  margin-bottom:6px;
+}
+
+.meta{
+  font-size:12px;
   color:#c4b5fd;
+  margin-bottom:14px;
+}
+
+.post-preview,
+.post-full{
+  font-size:18px;
+  line-height:1.75;
+  color:#e9d5ff;
+}
+
+.post-full{display:none}
+
+.read-more{
+  margin-top:14px;
+  font-size:13px;
+  color:#ff5da2;
+  font-style:italic;
 }
 
 /* ===== CHAT BUTTON ===== */
@@ -104,7 +133,7 @@ body{
   z-index:300;
 }
 
-/* ===== CHAT DRAWER ===== */
+/* ===== CHAT BOX ===== */
 .chat-box{
   position:fixed;
   bottom:110px;
@@ -112,7 +141,7 @@ body{
   width:380px;
   max-height:75vh;
   background:#24123d;
-  border-radius:18px;
+  border-radius:20px;
   padding:18px;
   display:none;
   box-shadow:0 20px 45px rgba(0,0,0,.7);
@@ -137,10 +166,7 @@ input,textarea{
   font-size:14px;
 }
 
-textarea{
-  min-height:90px;
-  resize:none;
-}
+textarea{min-height:90px;resize:none}
 
 input::placeholder,
 textarea::placeholder{color:#c4b5fd}
@@ -164,34 +190,6 @@ button{
   font-size:14px;
   color:#e9d5ff;
 }
-
-/* ===== USERS PANEL ===== */
-.bottom-panel{
-  position:fixed;
-  bottom:0;left:0;width:100%;
-  background:#1f1433;
-  padding:8px 12px;
-  max-height:130px;
-  overflow-y:auto;
-  box-shadow:0 -10px 30px rgba(0,0,0,.7);
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:12px;
-}
-
-th{
-  background:#ff5da2;
-  color:#1b0f2e;
-  padding:6px;
-}
-
-td{
-  padding:6px;
-  border-bottom:1px solid #3b2463;
-}
 </style>
 </head>
 
@@ -212,20 +210,21 @@ td{
   </div>
 </div>
 
-<!-- HERO -->
+<!-- POST AREA -->
 <div class="hero">
-  <p>
-    Astrology. Psychology. Destiny Engineering.<br><br>
-    LagneshMitra is not prediction.<br>
-    It is pattern recognition, karmic timing,<br>
-    and conscious life design.
-  </p>
+  <div class="post-card" onclick="togglePost()">
+    <h3>Hall of Fame</h3>
+    <div class="meta" id="postMeta"></div>
+    <div class="post-preview" id="postPreview"></div>
+    <div class="post-full" id="postFull"></div>
+    <div class="read-more">Tap to expand</div>
+  </div>
 </div>
 
 <!-- CHAT BUTTON -->
 <div class="chat-btn" onclick="toggleChat()">💬</div>
 
-<!-- CHAT DRAWER -->
+<!-- CHAT BOX -->
 <div class="chat-box" id="chatBox">
   <h3>Talk to LagneshMitra</h3>
 
@@ -235,20 +234,12 @@ td{
   <input id="dob" placeholder="DOB (DD-MM-YYYY)">
   <input id="tob" placeholder="TOB (HH:MM AM/PM)">
   <input id="pob" placeholder="Place of Birth">
-
   <textarea id="message" placeholder="Type your concern here..."></textarea>
 
   <button onclick="addUser()">Submit Details</button>
   <button onclick="sendMessage()">Send Message</button>
 
   <div id="output"></div>
-</div>
-
-<!-- USERS PANEL -->
-<div class="bottom-panel">
-  <table id="usersTable">
-    <tr><th>Mobile</th><th>Name</th><th>DOB</th><th>POB</th></tr>
-  </table>
 </div>
 
 <script type="module">
@@ -270,16 +261,22 @@ const db=getFirestore(app);
 
 const v=id=>document.getElementById(id).value.trim();
 const uid=()=>v("mobile");
-const msg=()=>document.getElementById("message").value.trim();
 
 window.toggleChat=()=>{
- const box=document.getElementById("chatBox");
- box.style.display=box.style.display==="block"?"none":"block";
+ const b=document.getElementById("chatBox");
+ b.style.display=b.style.display==="block"?"none":"block";
 }
 
 window.toggleMenu=()=>{
  const m=document.getElementById("menuBox");
  m.style.display=m.style.display==="block"?"none":"block";
+}
+
+let expanded=false;
+window.togglePost=()=>{
+ expanded=!expanded;
+ document.getElementById("postFull").style.display=expanded?"block":"none";
+ document.getElementById("postPreview").style.display=expanded?"none":"block";
 }
 
 window.addUser=async()=>{
@@ -290,35 +287,41 @@ window.addUser=async()=>{
   createdAt:serverTimestamp()
  });
  document.getElementById("output").innerText="Details submitted";
- loadData();
 }
 
 window.sendMessage=async()=>{
- if(!uid()) return alert("Mobile required");
- if(!msg()) return alert("Please type a message");
-
  await setDoc(doc(db,"chats",uid()),{
   userId:uid(),
-  customerMessage:msg(),
+  customerMessage:v("message"),
   lastMessageAt:serverTimestamp(),
   status:"new"
  });
-
  document.getElementById("output").innerText="Message sent";
  document.getElementById("message").value="";
 }
 
-async function loadData(){
- usersTable.innerHTML="<tr><th>Mobile</th><th>Name</th><th>DOB</th><th>POB</th></tr>";
- const snap=await getDocs(collection(db,"users"));
+async function loadLatestPost(){
+ const snap=await getDocs(collection(db,"posts"));
+ let latest=null;
  snap.forEach(d=>{
-  const u=d.data();
-  usersTable.innerHTML+=`<tr>
-   <td>${d.id}</td><td>${u.name||""}</td>
-   <td>${u.dob||""}</td><td>${u.pob||""}</td></tr>`;
+  if(!latest || d.data().updatedAt?.seconds > latest.updatedAt?.seconds){
+   latest={id:d.id,...d.data()};
+  }
  });
+ if(!latest) return;
+
+ const full=latest.content||"";
+ const preview=full.substring(0,300)+(full.length>300?"...":"");
+ const hrs=latest.updatedAt?.seconds
+  ?Math.floor((Date.now()/1000-latest.updatedAt.seconds)/3600):0;
+
+ document.getElementById("postPreview").innerText=preview;
+ document.getElementById("postFull").innerText=full;
+ document.getElementById("postMeta").innerText=
+  `Updated ${hrs} hrs ago • Views ${latest.views||0}`;
 }
-loadData();
+
+loadLatestPost();
 </script>
 
 </body>
