@@ -31,7 +31,10 @@ const db = getFirestore(app);
 const val = id => document.getElementById(id)?.value.trim() || "";
 const uid = () => val("mobile");
 
-/* ⏱ Minutes-only formatter */
+/* 🔒 View count control (important) */
+let viewCounted = false;
+
+/* ⏱ Minutes formatter */
 function formatMinutesAgo(timestampSeconds) {
   const diffMs = Date.now() - timestampSeconds * 1000;
   const mins = Math.floor(diffMs / 60000);
@@ -96,12 +99,15 @@ async function loadLatestPost() {
   const post = snapDoc.data();
   const postRef = doc(db, "posts", snapDoc.id);
 
-  /* 🔢 Increment views (temporary logic) */
-  await updateDoc(postRef, {
-    views: increment(1)
-  });
+  /* 👁 Increment views ONLY ONCE per page load */
+  if (!viewCounted) {
+    await updateDoc(postRef, {
+      views: increment(1)
+    });
+    viewCounted = true;
+  }
 
-  /* ⏱ Minutes ago text */
+  /* ⏱ Time text (minutes only) */
   const timeText = post.updatedAt?.seconds
     ? formatMinutesAgo(post.updatedAt.seconds)
     : "just now";
@@ -115,17 +121,18 @@ async function loadLatestPost() {
   /* 🪄 Render */
   document.getElementById("postPreview").innerText = preview;
   document.getElementById("postFull").innerText = post.content;
+
   document.getElementById("postMeta").innerText =
     `Updated ${timeText} • Views ${(post.views || 0) + 1}`;
 }
 
-/* 🔘 Expose */
+/* 🔘 Expose globally */
 window.addUser = addUser;
 window.sendMessage = sendMessage;
 window.loadLatestPost = loadLatestPost;
 
-/* 🚀 Initial load */
+/* 🚀 Initial load (counts view once) */
 loadLatestPost();
 
-/* 🔁 Auto refresh every 1 minute */
+/* 🔁 Auto refresh every 1 minute (NO view increment) */
 setInterval(loadLatestPost, 60000);
