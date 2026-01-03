@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LagneshMitra – Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+/* ===== THEME ===== */
+body{
+  margin:0;
+  font-family:"Segoe UI",Roboto,Arial,sans-serif;
+  background:linear-gradient(135deg,#1b0f2e,#2b1055);
+  color:#fff;
+  min-height:100vh;
+}
+
+/* ===== HEADER ===== */
+.header{
+  padding:18px 22px;
+  font-size:22px;
+  font-style:italic;
+  color:#ff5da2;
+}
+.header span{
+  display:block;
+  font-size:12px;
+  color:#d8b4fe;
+}
+
+/* ===== CONTAINER ===== */
+.container{
+  max-width:900px;
+  margin:auto;
+  background:#24123d;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 18px 45px rgba(0,0,0,.6);
+}
+
+/* ===== EDITOR ===== */
+textarea{
+  width:100%;
+  min-height:200px;
+  padding:16px;
+  border-radius:14px;
+  border:none;
+  resize:vertical;
+  font-size:15px;
+  font-family:inherit;
+  background:#ffffff;
+  color:#111;
+}
+
+button{
+  padding:12px 18px;
+  border-radius:12px;
+  border:none;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:12px;
+  margin-right:8px;
+  background:linear-gradient(135deg,#ff5da2,#d946ef);
+  color:#1b0f2e;
+}
+
+button.danger{
+  background:#7f1d1d;
+  color:#fff;
+}
+
+/* ===== POSTS ===== */
+.post{
+  margin-top:18px;
+  padding:16px;
+  background:#1f1433;
+  border-radius:14px;
+  box-shadow:0 10px 25px rgba(0,0,0,.5);
+}
+
+.post h3{
+  margin:0 0 6px;
+  color:#ff5da2;
+  font-style:italic;
+}
+
+.meta{
+  font-size:12px;
+  color:#c4b5fd;
+  margin-bottom:10px;
+}
+
+.post-content{
+  white-space:pre-wrap;
+  font-size:15px;
+  line-height:1.6;
+  color:#f5f3ff;
+}
+
+.actions{
+  margin-top:10px;
+}
+
+.actions button{
+  font-size:13px;
+  padding:8px 14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  LagneshMitra – Admin Panel
+  <span>Hall of Fame • Post Control</span>
+</div>
+
+<div class="container">
+
+  <h3 style="font-style:italic;color:#d8b4fe;">Create / Update Post</h3>
+
+  <textarea id="postContent" placeholder="Write your post here..."></textarea>
+
+  <button onclick="addPost()">Add Post</button>
+  <button onclick="updatePost()">Update Post</button>
+
+  <div id="status" style="margin-top:10px;font-size:14px;"></div>
+
+  <hr style="margin:22px 0;border:none;height:1px;background:#3b2463;">
+
+  <h3 style="font-style:italic;color:#ff5da2;">🏆 Hall of Fame</h3>
+
+  <div id="posts"></div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, getDocs,
+  doc, deleteDoc, updateDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* FIREBASE */
+const firebaseConfig = {
+  apiKey:"AIzaSyCX8yGRJc5AcxSEaaC6AzNLZzxtOCz83Sk",
+  authDomain:"lagneshmitra-e57b8.firebaseapp.com",
+  projectId:"lagneshmitra-e57b8",
+  storageBucket:"lagneshmitra-e57b8.firebasestorage.app",
+  messagingSenderId:"420798143606",
+  appId:"1:420798143606:web:ace6aec7d195492a415357"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let selectedPostId = null;
+
+/* ADD POST */
+window.addPost = async () => {
+  const text = postContent.value.trim();
+  if(!text) return;
+
+  await addDoc(collection(db,"posts"),{
+    content:text,
+    views:0,
+    createdAt:serverTimestamp(),
+    updatedAt:serverTimestamp()
+  });
+
+  postContent.value="";
+  status.innerText="✅ Post added";
+  loadPosts();
+};
+
+/* LOAD POSTS */
+async function loadPosts(){
+  posts.innerHTML="";
+  const snap = await getDocs(collection(db,"posts"));
+  snap.forEach(d=>{
+    const p=d.data();
+    const hrs = p.updatedAt?.seconds
+      ? Math.floor((Date.now()/1000 - p.updatedAt.seconds)/3600)
+      : 0;
+
+    posts.innerHTML+=`
+      <div class="post">
+        <h3>Hall of Fame Post</h3>
+        <div class="meta">
+          Views: ${p.views} • Updated ${hrs} hrs ago
+        </div>
+        <div class="post-content">${p.content}</div>
+        <div class="actions">
+          <button onclick="editPost('${d.id}','${encodeURIComponent(p.content)}')">Edit</button>
+          <button class="danger" onclick="deletePost('${d.id}')">Delete</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+/* EDIT */
+window.editPost = (id,content)=>{
+  selectedPostId=id;
+  postContent.value=decodeURIComponent(content);
+  status.innerText="✏️ Editing post";
+};
+
+/* UPDATE */
+window.updatePost = async ()=>{
+  if(!selectedPostId) return alert("Select post first");
+  await updateDoc(doc(db,"posts",selectedPostId),{
+    content:postContent.value,
+    updatedAt:serverTimestamp()
+  });
+  selectedPostId=null;
+  postContent.value="";
+  status.innerText="✅ Post updated";
+  loadPosts();
+};
+
+/* DELETE */
+window.deletePost = async (id)=>{
+  if(!confirm("Delete this post?")) return;
+  await deleteDoc(doc(db,"posts",id));
+  loadPosts();
+};
+
+loadPosts();
+</script>
+
+</body>
+</html>
