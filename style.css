@@ -1,5 +1,5 @@
 /* =========================================
-   LagneshMitra – Premium Violet Empire Theme
+   LagneshMitra – Premium Violet Empire Theme (FIXED)
    ========================================= */
 
 * {
@@ -14,8 +14,9 @@ body {
   background: linear-gradient(135deg, #1b0f2e, #2b1055);
   color: #f5f3ff;
   line-height: 1.5;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto; /* 🔥 IMPORTANT FIX */
 }
 
 /* ===== TOP BAR ===== */
@@ -24,13 +25,15 @@ body {
   top: 0;
   left: 0;
   width: 100%;
+  height: 70px;
   padding: 16px 22px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 200;
+  z-index: 500;
 }
 
+/* ===== BRAND ===== */
 .brand {
   font-size: 22px;
   font-style: italic;
@@ -54,7 +57,7 @@ body {
 /* ===== DROPDOWN MENU ===== */
 .dropdown {
   position: absolute;
-  top: 60px;
+  top: 70px;
   right: 22px;
   background: #24123d;
   border-radius: 16px;
@@ -62,6 +65,7 @@ body {
   display: none;
   overflow: hidden;
   min-width: 180px;
+  z-index: 999; /* 🔥 FIX */
 }
 
 .dropdown div {
@@ -69,16 +73,17 @@ body {
   font-size: 14px;
   cursor: pointer;
   color: #e9d5ff;
-  transition: background 0.2s ease;
 }
 
 .dropdown div:hover {
   background: #2f1850;
 }
 
-/* ===== HERO / EMPTY LANDING ===== */
+/* ===== HERO / LANDING AREA ===== */
 .hero {
-  height: 100vh;
+  min-height: calc(100vh - 200px); /* 🔥 FIX */
+  margin-top: 70px;
+  margin-bottom: 130px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,7 +98,7 @@ body {
 /* ===== FLOATING CHAT BUTTON ===== */
 .chat-btn {
   position: fixed;
-  bottom: 26px;
+  bottom: 150px; /* 🔥 ABOVE BOTTOM PANEL */
   right: 26px;
   width: 70px;
   height: 70px;
@@ -106,20 +111,15 @@ body {
   cursor: pointer;
   box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
   z-index: 1000;
-  transition: transform 0.2s ease;
-}
-
-.chat-btn:hover {
-  transform: scale(1.06);
 }
 
 /* ===== CHAT DRAWER ===== */
 .chat-box {
   position: fixed;
-  bottom: 110px;
+  bottom: 220px; /* 🔥 FIX */
   right: 26px;
   width: 380px;
-  max-height: 75vh;
+  max-height: 65vh;
   background: #24123d;
   border-radius: 20px;
   padding: 18px;
@@ -127,12 +127,6 @@ body {
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
   overflow-y: auto;
   z-index: 999;
-}
-
-.chat-box h3 {
-  margin-bottom: 14px;
-  color: #ff5da2;
-  font-style: italic;
 }
 
 /* ===== INPUTS ===== */
@@ -148,23 +142,6 @@ textarea {
   color: #ffffff;
 }
 
-textarea {
-  min-height: 90px;
-  resize: none;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: #c4b5fd;
-}
-
-input:focus,
-textarea:focus {
-  outline: none;
-  border-color: #ff5da2;
-  background: #321a57;
-}
-
 /* ===== BUTTONS ===== */
 button {
   width: 100%;
@@ -177,25 +154,6 @@ button {
   margin-top: 8px;
   background: linear-gradient(135deg, #ff5da2, #d946ef);
   color: #1b0f2e;
-  box-shadow: 0 6px 18px rgba(217, 70, 239, 0.45);
-  transition: all 0.25s ease;
-}
-
-button:hover {
-  opacity: 0.92;
-  transform: translateY(-1px);
-  box-shadow: 0 10px 26px rgba(217, 70, 239, 0.6);
-}
-
-/* ===== STATUS / OUTPUT ===== */
-#output {
-  margin-top: 14px;
-  padding: 12px 14px;
-  background: #1f1433;
-  border-left: 4px solid #22d3ee;
-  border-radius: 10px;
-  font-size: 14px;
-  color: #e9d5ff;
 }
 
 /* ===== BOTTOM USERS PANEL ===== */
@@ -206,10 +164,10 @@ button:hover {
   width: 100%;
   background: #1f1433;
   padding: 8px 12px;
-  max-height: 130px;
+  height: 130px;
   overflow-y: auto;
   box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.7);
-  z-index: 300;
+  z-index: 400;
 }
 
 /* ===== TABLES ===== */
@@ -217,24 +175,6 @@ table {
   width: 100%;
   border-collapse: collapse;
   font-size: 12px;
-}
-
-th {
-  background: linear-gradient(135deg, #ff5da2, #c084fc);
-  color: #1b0f2e;
-  padding: 7px;
-  text-align: left;
-  font-weight: 600;
-}
-
-td {
-  padding: 7px;
-  border-bottom: 1px solid #3b2463;
-  color: #f3e8ff;
-}
-
-tr:nth-child(even) {
-  background: #2a1650;
 }
 
 /* ===== MOBILE ===== */
