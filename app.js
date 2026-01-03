@@ -3,9 +3,12 @@ import {
   getFirestore,
   doc,
   setDoc,
+  updateDoc,
+  getDoc,
   serverTimestamp,
   collection,
-  getDocs
+  getDocs,
+  increment
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* 🔐 Firebase Config */
@@ -23,106 +26,79 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 /* 🧠 Helpers */
-function getValue(id) {
-  return document.getElementById(id).value.trim();
-}
+const val = id => document.getElementById(id)?.value.trim() || "";
+const uid = () => val("mobile");
 
-function clearForm() {
-  ["name","mobile","gender","dob","tob","pob"].forEach(id => {
-    document.getElementById(id).value = "";
-  });
-}
-
-function getUserId() {
-  return getValue("mobile"); // mobile = unique ID
-}
-
-/* 👤 Add User */
+/* 👤 Add / Update User */
 async function addUser() {
-  const userId = getUserId();
-  if (!userId) return alert("Mobile number required");
+  if (!uid()) return alert("Mobile number required");
 
-  await setDoc(doc(db, "users", userId), {
-    name: getValue("name"),
-    mobile: userId,
-    gender: getValue("gender"),
-    dob: getValue("dob"),
-    tob: getValue("tob"),
-    pob: getValue("pob"),
-    hasActiveOrder: true,
+  await setDoc(doc(db, "users", uid()), {
+    name: val("name"),
+    mobile: uid(),
+    gender: val("gender"),
+    dob: val("dob"),
+    tob: val("tob"),
+    pob: val("pob"),
     createdAt: serverTimestamp()
-  });
+  }, { merge: true });
 
-  clearForm();
-  document.getElementById("output").innerText = "✅ User added";
-
-  loadData(); // 🔥 auto refresh table
+  document.getElementById("output").innerText = "✅ Details submitted";
 }
 
-/* 💬 Add Chat */
-async function addChat() {
-  const userId = getUserId();
-  if (!userId) return alert("Mobile required");
+/* 💬 Send Chat Message */
+async function sendMessage() {
+  if (!uid()) return alert("Mobile required");
+  if (!val("message")) return alert("Type your concern");
 
-  await setDoc(doc(db, "chats", userId), {
-    userId,
-    lastMessage: "Namaste! I want advanced analysis",
+  await setDoc(doc(db, "chats", uid()), {
+    userId: uid(),
+    lastMessage: val("message"),
     lastMessageAt: serverTimestamp(),
-    unread: true,
     status: "new",
-    paymentStatus: "not_received"
-  });
+    unread: true
+  }, { merge: true });
 
-  document.getElementById("output").innerText = "✅ Chat added";
-  loadData(); // 🔥 auto refresh table
+  document.getElementById("message").value = "";
+  document.getElementById("output").innerText = "📨 Message sent";
 }
 
-/* 📥 Load Firestore Data */
-async function loadData() {
-  // USERS
-  const usersSnap = await getDocs(collection(db, "users"));
-  let usersHTML = `
-    <table border="1" width="100%">
-      <tr><th>Mobile</th><th>Name</th><th>DOB</th><th>POB</th></tr>
-  `;
+/* 🏆 Load Latest Post (Hall of Fame) */
+async function loadLatestPost() {
+  const snap = await getDocs(collection(db, "posts"));
+  let latest = null;
 
-  usersSnap.forEach(doc => {
-    const d = doc.data();
-    usersHTML += `
-      <tr>
-        <td>${d.mobile}</td>
-        <td>${d.name}</td>
-        <td>${d.dob}</td>
-        <td>${d.pob}</td>
-      </tr>`;
+  snap.forEach(d => {
+    const data = d.data();
+    if (!latest || (data.updatedAt?.seconds || 0) > (latest.updatedAt?.seconds || 0)) {
+      latest = { id: d.id, ...data };
+    }
   });
 
-  usersHTML += "</table>";
-  document.getElementById("usersTable").innerHTML = usersHTML;
+  if (!latest) return;
 
-  // CHATS
-  const chatsSnap = await getDocs(collection(db, "chats"));
-  let chatsHTML = `
-    <table border="1" width="100%">
-      <tr><th>User</th><th>Last Message</th><th>Status</th><th>Payment</th></tr>
-  `;
-
-  chatsSnap.forEach(doc => {
-    const d = doc.data();
-    chatsHTML += `
-      <tr>
-        <td>${d.userId}</td>
-        <td>${d.lastMessage || "-"}</td>
-        <td>${d.status}</td>
-        <td>${d.paymentStatus}</td>
-      </tr>`;
+  // increment views (basic)
+  await updateDoc(doc(db, "posts", latest.id), {
+    views: increment(1)
   });
 
-  chatsHTML += "</table>";
-  document.getElementById("chatsTable").innerHTML = chatsHTML;
+  const now = Date.now() / 1000;
+  const hrs = latest.updatedAt?.seconds
+    ? Math.floor((now - latest.updatedAt.seconds) / 3600)
+    : 0;
+
+  document.getElementById("postPreview").innerText =
+    latest.content.substring(0, 300) + (latest.content.length > 300 ? "..." : "");
+
+  document.getElementById("postFull").innerText = latest.content;
+  document.getElementById("postMeta").innerText =
+    `Updated ${hrs} hrs ago • Views ${(latest.views || 0) + 1}`;
 }
 
-/* 🔘 Bind buttons */
+/* 🔘 Expose to window */
 window.addUser = addUser;
-window.addChat = addChat;
-window.loadData = loadData;
+window.sendMessage = sendMessage;
+window.loadLatestPost = loadLatestPost;
+
+/* 🚀 Auto load post on page open */
+loadLatestPost();
