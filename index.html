@@ -88,9 +88,7 @@
   color:#e9d5ff;
 }
 
-.post-full{
-  display:none;
-}
+.post-full{display:none}
 
 /* ---------- ZENO CLOUD ---------- */
 #zeno-cloud{
@@ -135,7 +133,7 @@
 
 <!-- HERO / HALL OF FAME -->
 <div class="hero">
-  <div class="post-card glass" onclick="togglePost()">
+  <div class="post-card glass" id="postCard">
     <h3>Hall of Fame</h3>
     <div class="meta" id="postMeta"></div>
     <div class="post-preview" id="postPreview"></div>
@@ -146,9 +144,7 @@
 <!-- ZENO EYE -->
 <div id="zeno-eye">
   <div class="ring"></div>
-  <div class="iris">
-    <div class="pupil"></div>
-  </div>
+  <div class="pupil"></div>
   <div class="lid"></div>
 </div>
 
@@ -171,51 +167,56 @@ const app = initializeApp({
 const db = getFirestore(app);
 
 /* MENU */
-window.toggleMenu=()=>menuBox.style.display=
-  menuBox.style.display==="block"?"none":"block";
+window.toggleMenu = () =>
+  menuBox.style.display = menuBox.style.display === "block" ? "none" : "block";
 
-/* POST */
-let expanded=false;
-let currentPost=null;
-
-window.togglePost = async () => {
-  if (!currentPost) return;
-
-  expanded = !expanded;
-
-  postFull.style.display = expanded ? "block" : "none";
-  postPreview.style.display = expanded ? "none" : "block";
-
-  if (expanded) {
-    await updateDoc(doc(db,"posts",currentPost.id),{
-      views: increment(1)
-    });
-  }
-};
+/* POST STATE */
+let expanded = false;
+let viewCounted = false;
+let currentPost = null;
 
 /* LOAD LATEST POST */
 async function loadLatestPost(){
-  const snap=await getDocs(collection(db,"posts"));
-  let latest=null;
+  const snap = await getDocs(collection(db,"posts"));
+  let latest = null;
 
   snap.forEach(d=>{
-    const data=d.data();
-    if(!latest || (data.updatedAt?.seconds||0)>(latest.updatedAt?.seconds||0)){
-      latest={id:d.id,...data};
+    const data = d.data();
+    if(!latest || (data.updatedAt?.seconds||0) > (latest.updatedAt?.seconds||0)){
+      latest = {id:d.id, ...data};
     }
   });
 
   if(!latest) return;
-  currentPost=latest;
+  currentPost = latest;
 
   postPreview.innerText =
-    latest.content.substring(0,260)+(latest.content.length>260?"...":"");
+    latest.content.slice(0,260) + (latest.content.length > 260 ? "..." : "");
   postFull.innerText = latest.content;
 
-  const hrs=Math.floor((Date.now()/1000-latest.updatedAt.seconds)/3600);
-  postMeta.innerText=`Updated ${hrs} hrs ago • Views ${latest.views||0}`;
+  const hrs = Math.floor((Date.now()/1000 - latest.updatedAt.seconds)/3600);
+  postMeta.innerText = `Updated ${hrs} hrs ago • Views ${latest.views||0}`;
 }
 loadLatestPost();
+
+/* 🖱 SAFE CLICK BINDING */
+document.addEventListener("DOMContentLoaded", () => {
+  const card = document.getElementById("postCard");
+  card.addEventListener("click", async () => {
+    if(!currentPost) return;
+
+    expanded = !expanded;
+    postFull.style.display = expanded ? "block" : "none";
+    postPreview.style.display = expanded ? "none" : "block";
+
+    if(expanded && !viewCounted){
+      await updateDoc(doc(db,"posts",currentPost.id),{
+        views: increment(1)
+      });
+      viewCounted = true;
+    }
+  });
+});
 
 /* ---------- ZENO ---------- */
 const eye=document.getElementById("zeno-eye");
@@ -226,17 +227,14 @@ eye.onclick=()=>{
   cloud.innerHTML=`
     <p>
       <strong>ZENO v1.0 — Test Protocol</strong><br><br>
-      I am observing this index page in read-only mode.<br><br>
       Hall of Fame detected.<br>
-      Content and metadata loaded.<br><br>
+      Content loaded.<br><br>
       Status: Standby.<br>
       Authority: BE001 override only.
     </p>
-    <button onclick="zenoClose()">Close</button>
+    <button onclick="cloud.style.display='none'">Close</button>
   `;
 };
-
-window.zenoClose=()=>cloud.style.display="none";
 </script>
 
 </body>
