@@ -1,6 +1,7 @@
 /* ================================
    LagneshMitra – Core Styling
-   FINAL STABLE BUILD + FIXED RING + MOBILE BUTTON
+   Premium Glass Violet + ZENO (REAL EYE)
+   FINAL PRODUCTION BUILD
    ================================ */
 
 /* ===== RESET ===== */
@@ -48,7 +49,7 @@ body {
   color: #d8b4fe;
 }
 
-/* ===== MENU ===== */
+/* ===== THREE DOT MENU ===== */
 .menu {
   font-size: 34px;
   cursor: pointer;
@@ -73,16 +74,15 @@ body {
   justify-content: center;
 }
 
-/* ===== GLASS ===== */
+/* ===== GLASS UTILITY ===== */
 .glass {
   background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(14px);
   border: 1px solid rgba(255,255,255,0.18);
   border-radius: 18px;
 }
 
 /* ==================================================
-   HALL OF FAME CARD (STABLE)
+   HALL OF FAME CARD — GPU SAFE
    ================================================== */
 
 .post-card {
@@ -91,28 +91,42 @@ body {
   max-width: 1100px;
   margin-top: 28px;
 
-  /* 🔥 MOBILE SAFE HEIGHT */
-  max-height: 480px;
-  padding: 32px 36px 72px;
+  max-height: 460px;
+  padding: 32px 36px 64px;
 
   border-radius: 26px;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.18);
   box-shadow: 0 22px 60px rgba(0,0,0,0.6);
-  backdrop-filter: blur(12px);
 
   overflow: hidden;
   transition: max-height 0.6s ease;
+
+  isolation: isolate;
+}
+
+/* SAFE BLUR LAYER */
+.post-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 26px;
+  z-index: -1;
 }
 
 .post-card.expanded {
   max-height: 6000px;
 }
 
+/* ===== HEAD ===== */
 .post-card h3 {
   font-size: 26px;
   margin-bottom: 14px;
   color: #ff5da2;
+  font-style: italic;
 }
 
 .meta {
@@ -127,32 +141,32 @@ body {
 .post-card:not(.expanded) .post-full { display: none; }
 .post-card.expanded .post-preview { display: none; }
 
-/* ===== BUTTON ===== */
+/* ===== EXPAND BUTTON ===== */
 #toggleBtn {
   position: absolute;
-  left: 50%;
-  bottom: 20px;
-  transform: translateX(-50%);
+  left: 36px;
+  bottom: 18px;
 
-  padding: 12px 22px;
+  padding: 12px 20px;
   background: linear-gradient(135deg, #ff5da2, #c084fc);
   border: none;
   border-radius: 14px;
+
   color: #1b0f2e;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 14px;
   cursor: pointer;
+
   z-index: 10;
 }
 
 .post-card.expanded #toggleBtn {
   position: static;
-  transform: none;
   margin-top: 28px;
 }
 
 /* ==================================================
-   ZENO EYE — RING VISIBILITY FIXED
+   ZENO — OBSERVING EYE (GPU ISOLATED)
    ================================================== */
 
 #zeno-eye {
@@ -162,44 +176,46 @@ body {
   width: 58px;
   height: 58px;
   border-radius: 50%;
+
   background: radial-gradient(
-    circle,
+    circle at center,
     #fdf4ff 14%,
     #c084fc 32%,
     #7c3aed 48%,
     #1b0f2e 70%
   );
+
   box-shadow:
     0 0 18px rgba(236,72,153,0.6),
-    0 0 36px rgba(124,58,237,0.5);
-  cursor: pointer;
-  z-index: 1000;
+    0 0 36px rgba(124,58,237,0.45);
 
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: visible;
+  overflow: hidden;
+
+  cursor: pointer;
+  z-index: 5000;
+
+  will-change: transform;
+  transform: translateZ(0);
 }
 
-/* 🔥 RING — THICK, GLOWING, GUARANTEED VISIBLE */
+/* RING — ROTATE + BREATH */
 #zeno-eye .ring {
   position: absolute;
-  inset: -3px;
+  inset: 3px;
   border-radius: 50%;
+  border: 2px solid rgba(255,93,162,0.55);
 
-  border: 3px solid rgba(255,93,162,0.9);
-  outline: 2px solid rgba(124,58,237,0.6);
+  animation:
+    ring-rotate 9s linear infinite,
+    ring-pulse 4.8s ease-in-out infinite;
 
-  box-shadow:
-    0 0 12px rgba(255,93,162,0.9),
-    0 0 26px rgba(124,58,237,0.8);
-
-  filter: drop-shadow(0 0 10px rgba(255,93,162,0.8));
-
-  animation: ring-orbit 8s linear infinite;
+  transform-origin: center;
 }
 
-/* pupil */
+/* PUPIL */
 #zeno-eye .pupil {
   width: 12px;
   height: 12px;
@@ -208,7 +224,7 @@ body {
   animation: pupil-move 4s ease-in-out infinite;
 }
 
-/* lid */
+/* BLINK */
 #zeno-eye .lid {
   position: absolute;
   inset: 0;
@@ -221,12 +237,19 @@ body {
 #zeno-cloud {
   position: fixed;
   right: 20px;
-  bottom: 92px;
+  bottom: 96px;
+
   width: 320px;
   padding: 18px;
-  background: rgba(36,18,61,0.95);
+  font-size: 14px;
+  color: #f5f3ff;
+
   border-radius: 16px;
-  z-index: 9999;
+  background: rgba(36,18,61,0.95);
+  backdrop-filter: blur(14px);
+
+  box-shadow: 0 20px 45px rgba(0,0,0,0.7);
+  z-index: 6000;
 }
 
 /* ===== ANIMATIONS ===== */
@@ -237,10 +260,15 @@ body {
   75% { transform: translate(1px,-1px); }
 }
 
-@keyframes ring-orbit {
-  0%   { transform: rotate(0deg) scale(1); }
-  50%  { transform: rotate(180deg) scale(1.12); }
-  100% { transform: rotate(360deg) scale(1); }
+@keyframes ring-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ring-pulse {
+  0%   { transform: scale(1);    opacity: 0.5; }
+  50%  { transform: scale(1.18); opacity: 0.9; }
+  100% { transform: scale(1);    opacity: 0.5; }
 }
 
 @keyframes blink {
@@ -252,9 +280,17 @@ body {
 @media (max-width: 600px) {
   body { padding-top: 120px; }
 
+  .brand { font-size: 28px; }
+  .menu { font-size: 30px; }
+
   .post-card {
-    max-height: 520px;
-    padding: 24px 24px 84px;
+    max-height: 420px;
+    padding: 24px 24px 72px;
+  }
+
+  #toggleBtn {
+    left: 24px;
+    bottom: 20px;
   }
 
   #zeno-eye {
