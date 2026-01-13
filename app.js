@@ -22,20 +22,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* 🔒 SINGLE SOURCE OF TRUTH */
+/* ================= STATE ================= */
 let currentPostRef = null;
 let expanded = false;
 let viewCounted = false;
 
-/* ⏱ Time formatter */
+/* 🔒 HARD LOCK (PREVENT DOUBLE TOGGLE) */
+let isToggling = false;
+
+/* ================= TIME FORMAT ================= */
 function formatMinutesAgo(seconds) {
   const mins = Math.floor((Date.now() - seconds * 1000) / 60000);
   if (mins <= 0) return "just now";
   return `${mins} mins ago`;
 }
 
-/* 🏆 Load Latest Hall of Fame Post
-   ⚠️ DOES NOT TOUCH EXPAND STATE */
+/* ================= LOAD LATEST POST =================
+   ⚠️ DOES NOT TOUCH expand / collapse state
+*/
 async function loadLatestPost() {
   const q = query(
     collection(db, "posts"),
@@ -66,30 +70,42 @@ async function loadLatestPost() {
     `Updated ${timeText} • Views ${post.views || 0}`;
 }
 
-/* 🧠 DOM SAFE BINDING */
+/* ================= CLICK BIND (SINGLE SOURCE) ================= */
 document.addEventListener("DOMContentLoaded", () => {
   const card = document.getElementById("postCard");
-
   if (!card) return;
 
-  card.addEventListener("click", async () => {
+  card.addEventListener("click", async (e) => {
+    e.stopPropagation();
+
+    /* 🚫 block phantom / double clicks */
+    if (isToggling) return;
     if (!currentPostRef) return;
+
+    isToggling = true;
 
     expanded = !expanded;
     card.classList.toggle("expanded", expanded);
 
-    /* 👁 Count view ONLY ON FIRST EXPAND */
+    /* 👁 Count view ONLY first real expand */
     if (expanded && !viewCounted) {
       await updateDoc(currentPostRef, {
         views: increment(1)
       });
       viewCounted = true;
     }
+
+    /* 🔓 release lock AFTER CSS animation finishes */
+    setTimeout(() => {
+      isToggling = false;
+    }, 650); // must be > CSS transition time
   });
 });
 
-/* 🚀 Initial load */
+/* ================= INIT ================= */
 loadLatestPost();
 
-/* 🔁 Auto refresh (SAFE — no collapse, no flicker) */
+/* ================= AUTO REFRESH =================
+   SAFE: no collapse, no expand reset
+*/
 setInterval(loadLatestPost, 60000);
