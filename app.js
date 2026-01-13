@@ -22,10 +22,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* 🔒 State (SINGLE SOURCE OF TRUTH) */
+/* 🔒 SINGLE SOURCE OF TRUTH */
 let currentPostRef = null;
 let expanded = false;
 let viewCounted = false;
+
+/* DOM CACHE (IMPORTANT) */
+const card = document.getElementById("postCard");
+const previewEl = document.getElementById("postPreview");
+const fullEl = document.getElementById("postFull");
+const metaEl = document.getElementById("postMeta");
 
 /* ⏱ Time formatter */
 function formatMinutesAgo(seconds) {
@@ -55,41 +61,35 @@ async function loadLatestPost() {
       ? post.content.slice(0, 260) + "..."
       : post.content;
 
-  document.getElementById("postPreview").innerText = preview;
-  document.getElementById("postFull").innerText = post.content;
+  previewEl.innerText = preview;
+  fullEl.innerText = post.content;
 
   const timeText = post.updatedAt?.seconds
     ? formatMinutesAgo(post.updatedAt.seconds)
     : "just now";
 
-  document.getElementById("postMeta").innerText =
+  metaEl.innerText =
     `Updated ${timeText} • Views ${post.views || 0}`;
 }
 
-/* 🔘 Toggle Hall of Fame
-   ✅ ONLY PLACE THAT CONTROLS EXPAND */
-async function togglePost() {
+/* 🔘 CLICK = ONLY EXPAND CONTROLLER */
+card.addEventListener("click", async () => {
   if (!currentPostRef) return;
 
   expanded = !expanded;
-
-  const card = document.querySelector(".post-card");
   card.classList.toggle("expanded", expanded);
 
-  /* 👁 Count view ONLY once */
+  /* 👁 Count view ONCE */
   if (expanded && !viewCounted) {
     await updateDoc(currentPostRef, {
       views: increment(1)
     });
     viewCounted = true;
   }
-}
-
-/* 🌐 Expose globally */
-window.togglePost = togglePost;
+});
 
 /* 🚀 Initial load */
 loadLatestPost();
 
-/* 🔁 Auto refresh (SAFE, no flicker, no collapse) */
+/* 🔁 Auto refresh (SAFE) */
 setInterval(loadLatestPost, 60000);
