@@ -40,6 +40,8 @@ body {
   font-style: italic;
   font-weight: 600;
   color: #ff5da2;
+  display: flex;
+  flex-direction: column;
 }
 
 .brand span {
@@ -61,7 +63,7 @@ body {
 }
 
 /* ==================================================
-   HALL OF FAME CARD — GPU CLEAN
+   HALL OF FAME CARD — GPU SAFE SCROLL
    ================================================== */
 
 .post-card {
@@ -75,23 +77,23 @@ body {
 
   border-radius: 26px;
 
-  /* 🔥 BLUR DIRECT — NO PSEUDO ELEMENT */
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  /* 🔒 NO BACKDROP FILTER (GPU SAFE) */
+  background: linear-gradient(
+    160deg,
+    rgba(255,255,255,0.10),
+    rgba(255,255,255,0.04)
+  );
 
   border: 1px solid rgba(255,255,255,0.18);
   box-shadow: 0 22px 60px rgba(0,0,0,0.6);
 
   overflow: hidden;
   transition: max-height 0.6s ease;
-
-  isolation: isolate;
 }
 
-/* expanded scroll */
+/* expanded scroll — BELOW TOPBAR */
 .post-card.expanded {
-  max-height: calc(100vh - 180px);
+  max-height: calc(100vh - 160px);
   overflow-y: auto;
 }
 
@@ -147,7 +149,7 @@ body {
 }
 
 /* ==================================================
-   ZENO — GPU ISOLATED
+   ZENO — GPU HARD ISOLATION
    ================================================== */
 
 #zeno-eye {
@@ -167,14 +169,14 @@ body {
   );
 
   box-shadow:
-    0 0 22px rgba(236,72,153,0.75),
-    0 0 44px rgba(124,58,237,0.55);
+    0 0 18px rgba(236,72,153,0.7),
+    0 0 32px rgba(124,58,237,0.5);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  overflow: visible;        /* only eye can overflow */
+  overflow: hidden;          /* 🔒 CRITICAL */
   cursor: pointer;
   z-index: 5000;
 
@@ -182,18 +184,18 @@ body {
   will-change: transform;
 }
 
-/* ring */
+/* ring — SAFE SCALE */
 #zeno-eye .ring {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 2px solid rgba(255,93,162,0.85);
+  border: 2px solid rgba(255,93,162,0.75);
 
   animation:
-    ring-rotate 8s linear infinite,
-    ring-orbit-pulse 5s ease-in-out infinite;
+    ring-rotate 10s linear infinite,
+    ring-pulse-safe 5s ease-in-out infinite;
 
-  will-change: transform, opacity;
+  pointer-events: none;
 }
 
 /* pupil */
@@ -227,10 +229,11 @@ body {
   to { transform: rotate(360deg); }
 }
 
-@keyframes ring-orbit-pulse {
-  0%   { transform: scale(1) rotate(0deg); opacity: 0.9; }
-  45%  { transform: scale(2.2) rotate(360deg); opacity: 0.35; }
-  100% { transform: scale(1) rotate(720deg); opacity: 0.9; }
+/* 🔒 GPU SAFE PULSE */
+@keyframes ring-pulse-safe {
+  0%   { transform: scale(1); opacity: 0.8; }
+  50%  { transform: scale(1.35); opacity: 0.4; }
+  100% { transform: scale(1); opacity: 0.8; }
 }
 
 @keyframes blink {
