@@ -50,11 +50,13 @@ body {
   backdrop-filter: blur(12px);
 
   /* COLLAPSED STATE */
-  max-height: 240px;          /* 4–5 lines only */
+  max-height: 240px;
   overflow: hidden;
   cursor: pointer;
 
-  transition: max-height 0.6s ease, box-shadow 0.35s ease;
+  transition:
+    max-height 0.65s ease,
+    box-shadow 0.35s ease;
 }
 
 /* Hover intent */
@@ -62,16 +64,15 @@ body {
   box-shadow: 0 26px 70px rgba(236,72,153,0.25);
 }
 
-/* EXPANDED STATE */
+/* ✅ EXPANDED STATE */
 .post-card.expanded {
-  max-height: 2000px;         /* full article */
+  max-height: 5000px; /* deliberately high */
 }
 
 /* ================================
-   CONTENT VISIBILITY CONTROL
+   CONTENT VISIBILITY (CSS ONLY)
    ================================ */
 
-/* Default (collapsed) */
 .post-preview {
   margin-top: 12px;
   display: block;
@@ -79,20 +80,27 @@ body {
 
 .post-full {
   margin-top: 18px;
-  display: none;
+  display: block;           /* ❗ IMPORTANT */
 }
 
-/* Expanded */
+/* collapsed illusion */
+.post-card:not(.expanded) .post-full {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* expanded */
 .post-card.expanded .post-preview {
   display: none;
 }
 
 .post-card.expanded .post-full {
-  display: block;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* ================================
-   ZENO – OBSERVING EYE (REALISTIC)
+   ZENO – OBSERVING EYE
    ================================ */
 
 #zeno-eye {
@@ -147,7 +155,7 @@ body {
   z-index: 2;
 }
 
-/* eyelid blink */
+/* blink */
 #zeno-eye .lid {
   position: absolute;
   inset: 0;
