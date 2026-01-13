@@ -49,8 +49,8 @@ body {
   box-shadow: 0 22px 60px rgba(0,0,0,0.6);
   backdrop-filter: blur(12px);
 
-  /* 🔑 COLLAPSED STATE */
-  max-height: 240px;              /* ~4–5 lines only */
+  /* COLLAPSED STATE */
+  max-height: 240px;          /* 4–5 lines only */
   overflow: hidden;
   cursor: pointer;
 
@@ -64,16 +64,31 @@ body {
 
 /* EXPANDED STATE */
 .post-card.expanded {
-  max-height: 2000px;             /* full article */
+  max-height: 2000px;         /* full article */
 }
 
-/* Text spacing */
+/* ================================
+   CONTENT VISIBILITY CONTROL
+   ================================ */
+
+/* Default (collapsed) */
 .post-preview {
   margin-top: 12px;
+  display: block;
 }
 
 .post-full {
   margin-top: 18px;
+  display: none;
+}
+
+/* Expanded */
+.post-card.expanded .post-preview {
+  display: none;
+}
+
+.post-card.expanded .post-full {
+  display: block;
 }
 
 /* ================================
