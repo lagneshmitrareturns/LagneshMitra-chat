@@ -19,120 +19,7 @@ body {
   color: #f5f3ff;
   line-height: 1.6;
   padding: 16px;
-  padding-top: 120px;   /* 🔑 REAL FIX FOR FIXED HEADER */
-  overflow-x: hidden;
-}
-
-/* ================================
-   HERO (NO HACKS)
-   ================================ */
-
-.hero {
-  display: flex;
-  justify-content: center;
-}
-
-/* ================================
-   GLASS UTILITY
-   ================================ */
-
-.glass {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 10px 35px rgba(0,0,0,0.45);
-  border-radius: 18px;
-}
-
-/* ================================
-   HALL OF FAME CARD (STABLE)
-   ================================ */
-
-.post-card {
-  width: 100%;
-  max-width: 1100px;
-  padding: 26px 32px;
-  border-radius: 26px;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.18);
-  box-shadow: 0 22px 60px rgba(0,0,0,0.6);
-  backdrop-filter: blur(12px);
-
-  /* COLLAPSED */
-  max-height: 240px;
-  overflow: hidden;
-  cursor: pointer;
-
-  transition:
-    max-height 0.6s ease,
-    box-shadow 0.35s ease;
-}
-
-.post-card:hover {
-  box-shadow: 0 26px 70px rgba(236,72,153,0.25);
-}
-
-/* EXPANDED */
-.post-card.expanded {
-  max-height: 6000px;
-}
-
-/* ================================
-   CONTENT VISIBILITY (NO JS FIGHT)
-   ================================ */
-
-.post-preview {
-  margin-top: 12px;
-  display: block;
-}
-
-.post-full {
-  margin-top: 18px;
-  display: block;
-}
-
-/* collapsed illusion */
-.post-card:not(.expanded) .post-full {
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-/* expanded */
-.post-card.expanded .post-preview {
-  display: none;
-}
-
-.post-card.expanded .post-full {
-  opacity: 1;
-  max-height: none;
-  pointer-events: auto;
-}
-
-/* ================================
-   LagneshMitra – Core Styling
-   Premium Glass Violet + ZENO (REAL EYE)
-   ================================ */
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* ================================
-   BODY & BACKGROUND
-   ================================ */
-
-body {
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  background: radial-gradient(circle at top, #2b1055, #160a26 60%);
-  color: #f5f3ff;
-  line-height: 1.6;
-  padding: 16px;
-  padding-top: 130px;          /* ✅ fixed header clearance */
+  padding-top: 140px;              /* ✅ fixed header clearance */
   overflow-x: hidden;
 }
 
@@ -154,7 +41,7 @@ body {
 }
 
 .brand {
-  font-size: 36px;             /* ✅ BIG brand */
+  font-size: 36px;                 /* ✅ BIG & CLEAR */
   font-style: italic;
   font-weight: 600;
   letter-spacing: 0.6px;
@@ -171,9 +58,10 @@ body {
 
 /* three dots */
 .menu {
-  font-size: 34px;             /* ✅ clearly visible */
+  font-size: 34px;
   cursor: pointer;
   color: #e9d5ff;
+  user-select: none;
 }
 
 /* dropdown */
@@ -194,7 +82,6 @@ body {
 .hero {
   display: flex;
   justify-content: center;
-  margin-top: 18px;            /* ✅ separation from brand */
 }
 
 /* ================================
@@ -217,8 +104,8 @@ body {
 .post-card {
   width: 100%;
   max-width: 1100px;
-  margin-top: 26px;            /* ✅ not stuck to brand */
-  padding: 30px 36px;          /* ✅ inner spacing fix */
+  margin-top: 28px;                /* ✅ not glued to header */
+  padding: 32px 36px;              /* ✅ inner spacing fixed */
   border-radius: 26px;
   background: rgba(255,255,255,0.07);
   border: 1px solid rgba(255,255,255,0.18);
@@ -349,27 +236,6 @@ body {
 }
 
 /* ================================
-   ZENO ANIMATIONS
-   ================================ */
-
-@keyframes pupil-move {
-  0%,100% { transform: translate(0,0); }
-  25% { transform: translate(2px,1px); }
-  50% { transform: translate(-1px,2px); }
-  75% { transform: translate(1px,-1px); }
-}
-
-@keyframes ring-rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes blink {
-  0%,92%,100% { transform: translateY(-100%); }
-  94%,96% { transform: translateY(0); }
-}
-
-/* ================================
    ZENO CLOUD
    ================================ */
 
@@ -415,4 +281,4 @@ body {
     width: 52px;
     height: 52px;
   }
-   }
+}
