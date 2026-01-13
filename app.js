@@ -22,12 +22,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* ================= STATE ================= */
+/* ================= STATE (SINGLE SOURCE OF TRUTH) ================= */
 let currentPostRef = null;
 let expanded = false;
 let viewCounted = false;
 
-/* 🔒 HARD LOCK (PREVENT DOUBLE TOGGLE) */
+/* 🔒 HARD LOCK — kills ghost / double click on mobile & desktop */
 let isToggling = false;
 
 /* ================= TIME FORMAT ================= */
@@ -59,26 +59,32 @@ async function loadLatestPost() {
       ? post.content.slice(0, 260) + "..."
       : post.content;
 
-  document.getElementById("postPreview").innerText = preview;
-  document.getElementById("postFull").innerText = post.content;
+  const previewEl = document.getElementById("postPreview");
+  const fullEl = document.getElementById("postFull");
+  const metaEl = document.getElementById("postMeta");
+
+  if (!previewEl || !fullEl || !metaEl) return;
+
+  previewEl.innerText = preview;
+  fullEl.innerText = post.content;
 
   const timeText = post.updatedAt?.seconds
     ? formatMinutesAgo(post.updatedAt.seconds)
     : "just now";
 
-  document.getElementById("postMeta").innerText =
-    `Updated ${timeText} • Views ${post.views || 0}`;
+  metaEl.innerText = `Updated ${timeText} • Views ${post.views || 0}`;
 }
 
-/* ================= CLICK BIND (SINGLE SOURCE) ================= */
+/* ================= CLICK BIND (ONE TIME ONLY) ================= */
 document.addEventListener("DOMContentLoaded", () => {
   const card = document.getElementById("postCard");
   if (!card) return;
 
   card.addEventListener("click", async (e) => {
+    e.preventDefault();
     e.stopPropagation();
 
-    /* 🚫 block phantom / double clicks */
+    /* 🚫 absolute protection */
     if (isToggling) return;
     if (!currentPostRef) return;
 
@@ -87,18 +93,22 @@ document.addEventListener("DOMContentLoaded", () => {
     expanded = !expanded;
     card.classList.toggle("expanded", expanded);
 
-    /* 👁 Count view ONLY first real expand */
+    /* 👁 Count view ONLY on FIRST real expand */
     if (expanded && !viewCounted) {
-      await updateDoc(currentPostRef, {
-        views: increment(1)
-      });
-      viewCounted = true;
+      try {
+        await updateDoc(currentPostRef, {
+          views: increment(1)
+        });
+        viewCounted = true;
+      } catch (err) {
+        console.error("View increment failed:", err);
+      }
     }
 
-    /* 🔓 release lock AFTER CSS animation finishes */
+    /* 🔓 Unlock AFTER animation (matches CSS transition) */
     setTimeout(() => {
       isToggling = false;
-    }, 650); // must be > CSS transition time
+    }, 700);
   });
 });
 
@@ -106,6 +116,8 @@ document.addEventListener("DOMContentLoaded", () => {
 loadLatestPost();
 
 /* ================= AUTO REFRESH =================
-   SAFE: no collapse, no expand reset
+   SAFE: no collapse, no expand reset, no rebind
 */
-setInterval(loadLatestPost, 60000);
+setInterval(() => {
+  loadLatestPost();
+}, 60000);
