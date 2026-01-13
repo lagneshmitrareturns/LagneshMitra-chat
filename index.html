@@ -16,7 +16,7 @@
     <span>Decision Intelligence</span>
   </div>
 
-  <!-- THREE DOTS (RIGHT + BIGGER) -->
+  <!-- THREE DOTS -->
   <div class="menu" id="menuBtn"
        style="
          position:absolute;
@@ -26,9 +26,7 @@
          padding:8px 12px;
          cursor:pointer;
          user-select:none;
-       ">
-    ⋮
-  </div>
+       ">⋮</div>
 
   <div class="dropdown glass" id="menuBox" style="display:none">
     <p><strong>Core Thinking</strong></p>
@@ -47,9 +45,25 @@
 <div class="hero">
   <div class="post-card glass" id="postCard">
     <h3>Hall of Fame</h3>
+
     <div class="meta" id="postMeta"></div>
     <div class="post-preview" id="postPreview"></div>
     <div class="post-full" id="postFull"></div>
+
+    <!-- ✅ EXPLICIT TOGGLE BUTTON -->
+    <button id="toggleBtn"
+      style="
+        margin-top:18px;
+        padding:10px 18px;
+        background:#ff5da2;
+        border:none;
+        border-radius:10px;
+        color:#1b0f2e;
+        font-weight:600;
+        cursor:pointer;
+      ">
+      Expand
+    </button>
   </div>
 </div>
 
@@ -60,7 +74,6 @@
   <div class="lid"></div>
 </div>
 
-<!-- ZENO CLOUD -->
 <div id="zeno-cloud" class="glass" style="display:none"></div>
 
 <script type="module">
@@ -96,9 +109,11 @@ document.body.addEventListener("click", () => {
 let expanded = false;
 let viewCounted = false;
 let currentPost = null;
-let isToggling = false;   // 🔒 HARD LOCK (FIX)
+let isToggling = false;
 
-/* LOAD POST */
+const postCard = document.getElementById("postCard");
+const toggleBtn = document.getElementById("toggleBtn");
+
 async function loadLatestPost(){
   const snap = await getDocs(collection(db,"posts"));
   let latest = null;
@@ -129,17 +144,16 @@ async function loadLatestPost(){
 }
 loadLatestPost();
 
-/* ✅ FIXED TOGGLE (NO DOUBLE CONTRACT) */
-postCard.onclick = async (e) => {
+/* ✅ SINGLE SOURCE TOGGLE (BULLETPROOF) */
+toggleBtn.onclick = async (e) => {
   e.stopPropagation();
-
-  if (!currentPost) return;
-  if (isToggling) return;   // 🚫 block spam click
+  if (!currentPost || isToggling) return;
 
   isToggling = true;
-
   expanded = !expanded;
+
   postCard.classList.toggle("expanded", expanded);
+  toggleBtn.innerText = expanded ? "Collapse" : "Expand";
 
   if (expanded && !viewCounted){
     await updateDoc(doc(db,"posts", currentPost.id),{
@@ -148,7 +162,6 @@ postCard.onclick = async (e) => {
     viewCounted = true;
   }
 
-  // unlock after CSS animation
   setTimeout(() => {
     isToggling = false;
   }, 650);
@@ -157,15 +170,10 @@ postCard.onclick = async (e) => {
 /* ================= ZENO ================= */
 const eye = document.getElementById("zeno-eye");
 const cloud = document.getElementById("zeno-cloud");
-
 let zenoState = 0;
 
 eye.onclick = () => {
-  if (zenoState === 0) {
-    openProtocol();
-  } else {
-    closeZeno();
-  }
+  zenoState === 0 ? openProtocol() : closeZeno();
 };
 
 function openProtocol(){
@@ -174,12 +182,10 @@ function openProtocol(){
   cloud.innerHTML = `
     <p><strong>ZENO v1.0 — Test Protocol Model</strong></p>
     <p>
-      I am operating in diagnostic mode.<br><br>
-      I can currently:<br>
-      • Observe page structure<br>
-      • Detect active modules<br>
-      • Validate content loading<br>
-      • Monitor interaction logic
+      Diagnostic mode active.<br><br>
+      • Structure check<br>
+      • Module scan<br>
+      • Interaction monitor
     </p>
     <button onclick="zenoContinue()">Continue</button>
     <button onclick="closeZeno()">Close</button>
@@ -189,19 +195,13 @@ function openProtocol(){
 window.zenoContinue = () => {
   zenoState = 2;
   cloud.innerHTML = `
-    <p><strong>Index Page Status Report</strong></p>
+    <p><strong>Index Page Status</strong></p>
     <ul>
       <li>Header: stable</li>
-      <li>Three-dot menu: operational</li>
-      <li>Hall of Fame: active</li>
-      <li>Expansion logic: functional</li>
-      <li>Firebase connection: live</li>
+      <li>Hall of Fame: stable</li>
+      <li>Expand logic: fixed</li>
+      <li>Firebase: live</li>
     </ul>
-    <p>
-      System state: NORMAL<br>
-      Mode: Standby<br>
-      Authority: BE001 override only
-    </p>
     <button onclick="closeZeno()">Close</button>
   `;
 };
@@ -218,7 +218,6 @@ window.closeZeno = () => {
 (() => {
   const eye = document.getElementById("zeno-eye");
   if (!eye) return;
-
   let t = false;
   setInterval(() => {
     t = !t;
