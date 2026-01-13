@@ -6,102 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="style.css">
-
-<style>
-/* ---------- TOP BAR ---------- */
-.topbar{
-  position:fixed;
-  top:0;left:0;width:100%;
-  height:70px;
-  padding:16px 22px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  z-index:500;
-}
-
-.brand{
-  font-size:22px;
-  font-style:italic;
-  font-weight:600;
-  color:#ff5da2;
-}
-.brand span{
-  display:block;
-  font-size:12px;
-  color:#d8b4fe;
-}
-
-/* ---------- MENU ---------- */
-.menu{
-  font-size:26px;
-  cursor:pointer;
-  color:#e9d5ff;
-}
-
-/* ---------- DROPDOWN ---------- */
-.dropdown{
-  position:absolute;
-  top:70px;
-  right:22px;
-  width:340px;
-  padding:18px;
-  display:none;
-  z-index:999;
-}
-
-/* ---------- HERO ---------- */
-.hero{
-  min-height:calc(100vh - 120px);
-  margin-top:120px;
-  display:flex;
-  justify-content:center;
-  padding:40px 18px;
-}
-
-/* ---------- HALL OF FAME ---------- */
-.post-card{
-  width:100%;
-  max-width:1100px;
-  padding:34px 36px;
-  border-radius:26px;
-  cursor:pointer;
-}
-
-.post-card h3{
-  color:#ff5da2;
-  font-style:italic;
-  margin-bottom:10px;
-  font-size:24px;
-}
-
-.meta{
-  font-size:13px;
-  color:#c4b5fd;
-  margin-bottom:18px;
-}
-
-.post-preview,
-.post-full{
-  font-size:18px;
-  line-height:1.8;
-  color:#e9d5ff;
-}
-
-.post-full{display:none}
-
-/* ---------- ZENO CLOUD ---------- */
-#zeno-cloud{
-  position:fixed;
-  right:20px;
-  bottom:90px;
-  width:320px;
-  padding:18px;
-  font-size:14px;
-  display:none;
-  z-index:998;
-}
-</style>
 </head>
 
 <body>
@@ -119,21 +23,18 @@
     <p>Interpretation before prediction</p>
     <p>Decisions before remedies</p>
     <p>Structure before emotion</p>
-
     <hr style="margin:12px 0;opacity:.3">
-
-    <p>
-      <a href="admin-posts.html" target="_blank"
-         style="color:#ff5da2;text-decoration:none;font-weight:600;">
-        Admin Panel
-      </a>
-    </p>
+    <a href="admin-posts.html" target="_blank"
+       style="color:#ff5da2;font-weight:600;text-decoration:none">
+      Admin Panel
+    </a>
   </div>
 </div>
 
-<!-- HERO / HALL OF FAME -->
+<!-- HERO -->
 <div class="hero">
-  <div class="post-card glass" id="postCard">
+  <!-- 🔑 SINGLE CLICK SOURCE -->
+  <div class="post-card glass" id="postCard" onclick="togglePost()">
     <h3>Hall of Fame</h3>
     <div class="meta" id="postMeta"></div>
     <div class="post-preview" id="postPreview"></div>
@@ -141,14 +42,13 @@
   </div>
 </div>
 
-<!-- ZENO EYE -->
+<!-- ZENO -->
 <div id="zeno-eye">
   <div class="ring"></div>
   <div class="pupil"></div>
   <div class="lid"></div>
 </div>
 
-<!-- ZENO CLOUD -->
 <div id="zeno-cloud" class="glass"></div>
 
 <script type="module">
@@ -168,22 +68,24 @@ const db = getFirestore(app);
 
 /* MENU */
 window.toggleMenu = () =>
-  menuBox.style.display = menuBox.style.display === "block" ? "none" : "block";
+  menuBox.style.display =
+    menuBox.style.display === "block" ? "none" : "block";
 
-/* POST STATE */
+/* STATE */
 let expanded = false;
 let viewCounted = false;
 let currentPost = null;
 
-/* LOAD LATEST POST */
+/* LOAD POST */
 async function loadLatestPost(){
   const snap = await getDocs(collection(db,"posts"));
   let latest = null;
 
   snap.forEach(d=>{
     const data = d.data();
-    if(!latest || (data.updatedAt?.seconds||0) > (latest.updatedAt?.seconds||0)){
-      latest = {id:d.id, ...data};
+    if(!latest || (data.updatedAt?.seconds||0) >
+       (latest.updatedAt?.seconds||0)){
+      latest = {id:d.id,...data};
     }
   });
 
@@ -191,49 +93,33 @@ async function loadLatestPost(){
   currentPost = latest;
 
   postPreview.innerText =
-    latest.content.slice(0,260) + (latest.content.length > 260 ? "..." : "");
+    latest.content.slice(0,260) +
+    (latest.content.length>260?"...":"");
+
   postFull.innerText = latest.content;
 
-  const hrs = Math.floor((Date.now()/1000 - latest.updatedAt.seconds)/3600);
-  postMeta.innerText = `Updated ${hrs} hrs ago • Views ${latest.views||0}`;
+  const hrs = Math.floor(
+    (Date.now()/1000 - latest.updatedAt.seconds)/3600
+  );
+
+  postMeta.innerText =
+    `Updated ${hrs} hrs ago • Views ${latest.views||0}`;
 }
 loadLatestPost();
 
-/* 🖱 SAFE CLICK BINDING */
-document.addEventListener("DOMContentLoaded", () => {
-  const card = document.getElementById("postCard");
-  card.addEventListener("click", async () => {
-    if(!currentPost) return;
+/* 🔥 SINGLE TOGGLE SOURCE */
+window.togglePost = async () => {
+  if(!currentPost) return;
 
-    expanded = !expanded;
-    postFull.style.display = expanded ? "block" : "none";
-    postPreview.style.display = expanded ? "none" : "block";
+  expanded = !expanded;
+  postCard.classList.toggle("expanded", expanded);
 
-    if(expanded && !viewCounted){
-      await updateDoc(doc(db,"posts",currentPost.id),{
-        views: increment(1)
-      });
-      viewCounted = true;
-    }
-  });
-});
-
-/* ---------- ZENO ---------- */
-const eye=document.getElementById("zeno-eye");
-const cloud=document.getElementById("zeno-cloud");
-
-eye.onclick=()=>{
-  cloud.style.display="block";
-  cloud.innerHTML=`
-    <p>
-      <strong>ZENO v1.0 — Test Protocol</strong><br><br>
-      Hall of Fame detected.<br>
-      Content loaded.<br><br>
-      Status: Standby.<br>
-      Authority: BE001 override only.
-    </p>
-    <button onclick="cloud.style.display='none'">Close</button>
-  `;
+  if(expanded && !viewCounted){
+    await updateDoc(doc(db,"posts",currentPost.id),{
+      views: increment(1)
+    });
+    viewCounted = true;
+  }
 };
 </script>
 
