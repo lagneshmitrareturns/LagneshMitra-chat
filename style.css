@@ -1,6 +1,7 @@
-/* =========================================
-   LagneshMitra – Premium Violet Empire Theme (FIXED)
-   ========================================= */
+/* ================================
+   LagneshMitra – Core Styling
+   Premium Glass Violet + ZENO
+   ================================ */
 
 * {
   box-sizing: border-box;
@@ -8,184 +9,260 @@
   padding: 0;
 }
 
-/* ===== BODY / LANDING ===== */
+/* ================================
+   BODY & BACKGROUND
+   ================================ */
+
 body {
   font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  background: linear-gradient(135deg, #1b0f2e, #2b1055);
+  background: radial-gradient(circle at top, #2b1055, #160a26 60%);
   color: #f5f3ff;
   line-height: 1.5;
-  min-height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto; /* 🔥 IMPORTANT FIX */
+  padding: 16px;
 }
 
-/* ===== TOP BAR ===== */
-.topbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 70px;
-  padding: 16px 22px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 500;
+/* ================================
+   GLASS UTILITY (GLOBAL)
+   ================================ */
+
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 35px rgba(0,0,0,0.45);
+  border-radius: 16px;
 }
 
-/* ===== BRAND ===== */
-.brand {
-  font-size: 22px;
-  font-style: italic;
+/* ================================
+   CONTAINER
+   ================================ */
+
+.container {
+  max-width: 720px;
+  margin: auto;
+  padding: 22px;
+  border-radius: 18px;
+  background: rgba(36,18,61,0.55);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 16px 45px rgba(0,0,0,0.55);
+}
+
+/* ================================
+   HEADINGS
+   ================================ */
+
+h1, h2, h3 {
   font-weight: 600;
+  margin-bottom: 12px;
+  color: #fdf4ff;
+}
+
+h2 {
+  font-size: 22px;
   color: #ff5da2;
 }
 
-.brand span {
-  display: block;
-  font-size: 12px;
-  font-style: italic;
+h3 {
+  font-size: 17px;
   color: #d8b4fe;
 }
 
-.menu {
-  font-size: 26px;
-  cursor: pointer;
-  color: #e9d5ff;
+/* ================================
+   DIVIDER
+   ================================ */
+
+.divider {
+  height: 2px;
+  background: linear-gradient(90deg, #ff5da2, #c084fc);
+  margin: 16px 0;
+  border-radius: 2px;
 }
 
-/* ===== DROPDOWN MENU ===== */
-.dropdown {
-  position: absolute;
-  top: 70px;
-  right: 22px;
-  background: #24123d;
-  border-radius: 16px;
-  box-shadow: 0 18px 45px rgba(0,0,0,.7);
-  display: none;
-  overflow: hidden;
-  min-width: 180px;
-  z-index: 999; /* 🔥 FIX */
-}
+/* ================================
+   INPUTS
+   ================================ */
 
-.dropdown div {
-  padding: 14px 18px;
-  font-size: 14px;
-  cursor: pointer;
-  color: #e9d5ff;
-}
-
-.dropdown div:hover {
-  background: #2f1850;
-}
-
-/* ===== HERO / LANDING AREA ===== */
-.hero {
-  min-height: calc(100vh - 200px); /* 🔥 FIX */
-  margin-top: 70px;
-  margin-bottom: 130px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-style: italic;
-  font-size: 22px;
-  color: #c4b5fd;
-  padding: 0 24px;
-  line-height: 1.8;
-}
-
-/* ===== FLOATING CHAT BUTTON ===== */
-.chat-btn {
-  position: fixed;
-  bottom: 150px; /* 🔥 ABOVE BOTTOM PANEL */
-  right: 26px;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #ff5da2, #c084fc);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 30px;
-  cursor: pointer;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
-  z-index: 1000;
-}
-
-/* ===== CHAT DRAWER ===== */
-.chat-box {
-  position: fixed;
-  bottom: 220px; /* 🔥 FIX */
-  right: 26px;
-  width: 380px;
-  max-height: 65vh;
-  background: #24123d;
-  border-radius: 20px;
-  padding: 18px;
-  display: none;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
-  overflow-y: auto;
-  z-index: 999;
-}
-
-/* ===== INPUTS ===== */
-input,
-textarea {
+input {
   width: 100%;
-  padding: 13px 14px;
+  padding: 12px 14px;
   margin-bottom: 12px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid #3b2463;
   font-size: 15px;
   background: #2f1850;
   color: #ffffff;
 }
 
-/* ===== BUTTONS ===== */
+input::placeholder {
+  color: #c4b5fd;
+}
+
+input:focus {
+  outline: none;
+  border-color: #ff5da2;
+  background: #321a57;
+}
+
+/* ================================
+   BUTTONS
+   ================================ */
+
 button {
-  width: 100%;
-  padding: 13px;
-  border-radius: 12px;
+  padding: 12px 18px;
+  border-radius: 10px;
   border: none;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 8px;
+  margin-right: 8px;
+  margin-top: 6px;
+}
+
+.btn-primary {
   background: linear-gradient(135deg, #ff5da2, #d946ef);
   color: #1b0f2e;
 }
 
-/* ===== BOTTOM USERS PANEL ===== */
-.bottom-panel {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: #1f1433;
-  padding: 8px 12px;
-  height: 130px;
-  overflow-y: auto;
-  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.7);
-  z-index: 400;
+.btn-secondary {
+  background: #3b2463;
+  color: #f5f3ff;
 }
 
-/* ===== TABLES ===== */
+button:hover {
+  opacity: 0.9;
+}
+
+/* ================================
+   OUTPUT / STATUS
+   ================================ */
+
+#output {
+  margin-top: 16px;
+  padding: 12px;
+  background: #1f1433;
+  border-left: 4px solid #22d3ee;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #e9d5ff;
+}
+
+/* ================================
+   TABLES
+   ================================ */
+
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  margin-top: 12px;
+  font-size: 14px;
+  background: #24123d;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-/* ===== MOBILE ===== */
-@media (max-width: 600px) {
-  .chat-box {
-    width: calc(100% - 32px);
-    right: 16px;
-  }
+th {
+  background: linear-gradient(135deg, #ff5da2, #c084fc);
+  color: #1b0f2e;
+  padding: 10px;
+  text-align: left;
+  font-weight: 600;
+}
 
-  .hero {
-    font-size: 18px;
-    padding: 0 16px;
+td {
+  padding: 10px;
+  border-bottom: 1px solid #3b2463;
+  color: #f3e8ff;
+}
+
+tr:nth-child(even) {
+  background: #2a1650;
+}
+
+/* ================================
+   HALL OF FAME CARD
+   ================================ */
+
+.hof-card {
+  padding: 22px 26px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* ================================
+   ZENO EYE (BIRTH)
+   ================================ */
+
+#zeno-eye {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f472b6, #7c3aed);
+  box-shadow: 0 0 22px rgba(236,72,153,0.7);
+  cursor: pointer;
+  z-index: 999;
+}
+
+/* Observation Ring */
+#zeno-eye::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.35);
+  animation: zeno-rotate 6s linear infinite;
+}
+
+/* Pulse */
+#zeno-eye::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: rgba(168,85,247,0.35);
+  animation: zeno-pulse 2.5s ease-out infinite;
+}
+
+@keyframes zeno-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes zeno-pulse {
+  0% { transform: scale(0.7); opacity: 0.6; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* ================================
+   ZENO CLOUD
+   ================================ */
+
+#zeno-cloud {
+  position: fixed;
+  right: 20px;
+  bottom: 90px;
+  width: 280px;
+  padding: 16px;
+  font-size: 14px;
+  color: #f5f3ff;
+  z-index: 998;
+}
+
+/* ================================
+   MOBILE OPTIMISATION
+   ================================ */
+
+@media (max-width: 600px) {
+  h2 {
+    font-size: 20px;
+  }
+  button {
+    width: 100%;
+    margin-right: 0;
   }
 }
