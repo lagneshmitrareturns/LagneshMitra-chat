@@ -17,10 +17,11 @@
     <span>Decision Intelligence</span>
   </div>
 
-  <!-- three dots RIGHT CORNER -->
-  <div class="menu" onclick="toggleMenu()">⋮</div>
+  <!-- FIXED THREE DOTS -->
+  <div class="menu" onclick="toggleMenu()" style="position:absolute;right:18px;">
+    ⋮
+  </div>
 
-  <!-- dropdown -->
   <div class="dropdown glass" id="menuBox">
     <p><strong>Core Thinking</strong></p>
     <p>Interpretation before prediction</p>
@@ -36,18 +37,12 @@
 
 <!-- ================= HERO ================= -->
 <div class="hero">
-
-  <!-- 🔑 SINGLE SOURCE OF TRUTH -->
   <div class="post-card glass" id="postCard" onclick="togglePost()">
     <h3>Hall of Fame</h3>
-
     <div class="meta" id="postMeta"></div>
-
     <div class="post-preview" id="postPreview"></div>
-
     <div class="post-full" id="postFull"></div>
   </div>
-
 </div>
 
 <!-- ================= ZENO ================= -->
@@ -59,7 +54,6 @@
 
 <div id="zeno-cloud" class="glass"></div>
 
-<!-- ================= SCRIPT ================= -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
@@ -90,7 +84,7 @@ let expanded = false;
 let viewCounted = false;
 let currentPost = null;
 
-/* LOAD LATEST POST */
+/* LOAD POST */
 async function loadLatestPost(){
   const snap = await getDocs(collection(db,"posts"));
   let latest = null;
@@ -108,7 +102,7 @@ async function loadLatestPost(){
 
   postPreview.innerText =
     latest.content.slice(0,260) +
-    (latest.content.length > 260 ? "..." : "");
+    (latest.content.length>260?"...":"");
 
   postFull.innerText = latest.content;
 
@@ -117,11 +111,11 @@ async function loadLatestPost(){
   );
 
   postMeta.innerText =
-    `Updated ${hrs} hrs ago • Views ${latest.views || 0}`;
+    `Updated ${hrs} hrs ago • Views ${latest.views||0}`;
 }
 loadLatestPost();
 
-/* 🔥 SINGLE TOGGLE – DO NOT DUPLICATE */
+/* SINGLE TOGGLE */
 window.togglePost = async () => {
   if(!currentPost) return;
 
@@ -136,7 +130,7 @@ window.togglePost = async () => {
   }
 };
 
-/* ================= ZENO ================= */
+/* ================= ZENO – RESTORED 2 STEP ================= */
 const eye = document.getElementById("zeno-eye");
 const cloud = document.getElementById("zeno-cloud");
 
@@ -145,10 +139,22 @@ eye.onclick = () => {
   cloud.innerHTML = `
     <p>
       <strong>ZENO v1.0 — Test Protocol</strong><br><br>
-      Hall of Fame detected.<br>
-      Content loaded.<br><br>
-      Status: Standby.<br>
-      Authority: BE001 override only.
+      System scan initiated.<br>
+      Hall of Fame detected.<br><br>
+    </p>
+    <button onclick="zenoContinue()">Continue</button>
+  `;
+};
+
+window.zenoContinue = () => {
+  cloud.innerHTML = `
+    <p>
+      <strong>Observation Report</strong><br><br>
+      • Header: stable<br>
+      • Hall of Fame: active<br>
+      • Expansion logic: CSS-driven<br><br>
+      Status: Standby<br>
+      Authority: BE001 override only
     </p>
     <button onclick="cloud.style.display='none'">Close</button>
   `;
@@ -156,4 +162,4 @@ eye.onclick = () => {
 </script>
 
 </body>
-      </html>
+</html>
