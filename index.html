@@ -50,8 +50,8 @@
     <div class="post-preview" id="postPreview"></div>
     <div class="post-full" id="postFull"></div>
 
-    <!-- ✅ EXPLICIT TOGGLE BUTTON -->
-    <button id="toggleBtn"
+    <!-- ✅ RENAMED BUTTON ID -->
+    <button id="toggleBtnExpand"
       style="
         margin-top:18px;
         padding:10px 18px;
@@ -112,7 +112,7 @@ let currentPost = null;
 let isToggling = false;
 
 const postCard = document.getElementById("postCard");
-const toggleBtn = document.getElementById("toggleBtn");
+const toggleBtn = document.getElementById("toggleBtnExpand"); // ✅ UPDATED ID
 
 async function loadLatestPost(){
   const snap = await getDocs(collection(db,"posts"));
@@ -144,7 +144,7 @@ async function loadLatestPost(){
 }
 loadLatestPost();
 
-/* ✅ SINGLE SOURCE TOGGLE (BULLETPROOF) */
+/* ✅ SINGLE SOURCE TOGGLE (BUTTON ONLY) */
 toggleBtn.onclick = async (e) => {
   e.stopPropagation();
   if (!currentPost || isToggling) return;
