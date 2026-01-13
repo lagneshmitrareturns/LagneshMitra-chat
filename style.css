@@ -103,8 +103,7 @@ body {
   width: 100%;
   max-width: 1100px;
   margin-top: 28px;
-  padding: 32px 36px;
-  padding-bottom: 44px;
+  padding: 32px 36px 44px;
   border-radius: 26px;
   background: rgba(255,255,255,0.07);
   border: 1px solid rgba(255,255,255,0.18);
@@ -113,19 +112,17 @@ body {
 
   max-height: 240px;
   overflow: hidden;
-  cursor: pointer;
+
+  /* ❌ card itself no longer clickable */
+  cursor: default;
 
   transition:
     max-height 0.6s ease,
     box-shadow 0.35s ease;
 
-  /* 🔒 CRITICAL FIX — stops double contract */
+  /* 🔒 browser reflow lock */
   will-change: max-height;
   contain: layout paint;
-}
-
-.post-card:hover {
-  box-shadow: 0 26px 70px rgba(236,72,153,0.25);
 }
 
 .post-card.expanded {
@@ -151,14 +148,12 @@ body {
 
 .post-preview {
   margin-top: 10px;
-  display: block;
   padding-bottom: 6px;
 }
 
 .post-full {
   margin-top: 18px;
   padding-bottom: 6px;
-  display: block;
 }
 
 .post-card:not(.expanded) .post-full {
@@ -178,8 +173,28 @@ body {
   pointer-events: auto;
 }
 
-.post-card > *:last-child {
-  margin-bottom: 8px;
+/* ================================
+   🔘 EXPAND / COLLAPSE BUTTON
+   ================================ */
+
+#toggleBtn {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #ff5da2, #c084fc);
+  border: none;
+  border-radius: 12px;
+  color: #1b0f2e;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 6px 20px rgba(236,72,153,0.35);
+}
+
+#toggleBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(236,72,153,0.45);
 }
 
 /* ================================
@@ -207,6 +222,8 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+
+  transform: translateZ(0);
 }
 
 #zeno-eye::after {
@@ -301,8 +318,7 @@ body {
 
   .post-card {
     max-height: 220px;
-    padding: 24px;
-    padding-bottom: 34px;
+    padding: 24px 24px 34px;
     margin-top: 20px;
   }
 
@@ -310,29 +326,4 @@ body {
     width: 52px;
     height: 52px;
   }
-}
-
-/* ================================
-   🔥 ZENO FORCE ANIMATION PATCH
-   ================================ */
-
-#zeno-eye,
-#zeno-eye * {
-  animation-play-state: running !important;
-  will-change: transform;
-}
-
-#zeno-eye {
-  transform: translateZ(0);
-}
-
-/* ================================
-   DESKTOP GPU SAFETY
-   ================================ */
-
-#zeno-eye .ring,
-#zeno-eye .pupil,
-#zeno-eye .lid {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
+   }
