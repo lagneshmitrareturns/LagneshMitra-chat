@@ -85,7 +85,7 @@ async function sendMessage() {
   document.getElementById("output").innerText = "📨 Message sent";
 }
 
-/* 🏆 Load Latest Hall of Fame Post (NO VIEW COUNT) */
+/* 🏆 Load Latest Hall of Fame Post (NO VIEW COUNT HERE) */
 async function loadLatestPost() {
   const q = query(
     collection(db, "posts"),
@@ -100,14 +100,29 @@ async function loadLatestPost() {
   const post = snapDoc.data();
   currentPostRef = doc(db, "posts", snapDoc.id);
 
-  /* ✂️ Preview (compact – 4/5 lines feel) */
+  /* ✂️ Compact preview (4–5 lines feel) */
   const preview =
     post.content.length > 260
       ? post.content.slice(0, 260) + "..."
       : post.content;
 
-  document.getElementById("postPreview").innerText = preview;
-  document.getElementById("postFull").innerText = post.content;
+  const previewEl = document.getElementById("postPreview");
+  const fullEl = document.getElementById("postFull");
+  const card = document.querySelector(".post-card");
+
+  previewEl.innerText = preview;
+  fullEl.innerText = post.content;
+
+  /* 🔁 Preserve expand state on refresh */
+  if (expanded) {
+    card.classList.add("expanded");
+    previewEl.style.display = "none";
+    fullEl.style.display = "block";
+  } else {
+    card.classList.remove("expanded");
+    previewEl.style.display = "block";
+    fullEl.style.display = "none";
+  }
 
   const timeText = post.updatedAt?.seconds
     ? formatMinutesAgo(post.updatedAt.seconds)
@@ -117,16 +132,21 @@ async function loadLatestPost() {
     `Updated ${timeText} • Views ${post.views || 0}`;
 }
 
-/* 🔘 Toggle Hall of Fame (CSS-DRIVEN) */
+/* 🔘 Toggle Hall of Fame (CLICK TO EXPAND / COLLAPSE) */
 async function togglePost() {
   if (!currentPostRef) return;
 
   expanded = !expanded;
 
   const card = document.querySelector(".post-card");
-  card.classList.toggle("expanded", expanded);
+  const previewEl = document.getElementById("postPreview");
+  const fullEl = document.getElementById("postFull");
 
-  /* 👁 Count view ONLY on first expand */
+  card.classList.toggle("expanded", expanded);
+  previewEl.style.display = expanded ? "none" : "block";
+  fullEl.style.display = expanded ? "block" : "none";
+
+  /* 👁 Count view ONLY once */
   if (expanded && !viewCounted) {
     await updateDoc(currentPostRef, {
       views: increment(1)
@@ -143,5 +163,5 @@ window.togglePost = togglePost;
 /* 🚀 Initial load */
 loadLatestPost();
 
-/* 🔁 Auto refresh every 60s (safe) */
+/* 🔁 Auto refresh every 60s (SAFE) */
 setInterval(loadLatestPost, 60000);
