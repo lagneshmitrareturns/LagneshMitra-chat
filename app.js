@@ -85,7 +85,7 @@ async function sendMessage() {
   document.getElementById("output").innerText = "📨 Message sent";
 }
 
-/* 🏆 Load Latest Hall of Fame Post (NO VIEW COUNT HERE) */
+/* 🏆 Load Latest Hall of Fame Post (NO VIEW COUNT) */
 async function loadLatestPost() {
   const q = query(
     collection(db, "posts"),
@@ -100,7 +100,7 @@ async function loadLatestPost() {
   const post = snapDoc.data();
   currentPostRef = doc(db, "posts", snapDoc.id);
 
-  /* Preview = short (4–5 lines feel) */
+  /* ✂️ Preview (compact – 4/5 lines feel) */
   const preview =
     post.content.length > 260
       ? post.content.slice(0, 260) + "..."
@@ -117,16 +117,14 @@ async function loadLatestPost() {
     `Updated ${timeText} • Views ${post.views || 0}`;
 }
 
-/* 🔘 Toggle Hall of Fame (VIEW COUNT HERE) */
+/* 🔘 Toggle Hall of Fame (CSS-DRIVEN) */
 async function togglePost() {
   if (!currentPostRef) return;
 
   expanded = !expanded;
 
-  document.getElementById("postFull").style.display =
-    expanded ? "block" : "none";
-  document.getElementById("postPreview").style.display =
-    expanded ? "none" : "block";
+  const card = document.querySelector(".post-card");
+  card.classList.toggle("expanded", expanded);
 
   /* 👁 Count view ONLY on first expand */
   if (expanded && !viewCounted) {
@@ -137,7 +135,7 @@ async function togglePost() {
   }
 }
 
-/* 🔘 Expose globally */
+/* 🌐 Expose globally */
 window.addUser = addUser;
 window.sendMessage = sendMessage;
 window.togglePost = togglePost;
@@ -145,5 +143,5 @@ window.togglePost = togglePost;
 /* 🚀 Initial load */
 loadLatestPost();
 
-/* 🔁 Auto refresh every 60s (SAFE, no views) */
+/* 🔁 Auto refresh every 60s (safe) */
 setInterval(loadLatestPost, 60000);
