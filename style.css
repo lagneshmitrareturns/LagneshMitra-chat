@@ -74,7 +74,7 @@ body {
   justify-content: center;
 }
 
-/* ===== GLASS UTILITY ===== */
+/* ===== GLASS ===== */
 .glass {
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.18);
@@ -82,7 +82,7 @@ body {
 }
 
 /* ==================================================
-   HALL OF FAME CARD — STABLE + MOBILE SAFE
+   HALL OF FAME CARD — SCROLL LOCKED
    ================================================== */
 
 .post-card {
@@ -91,8 +91,8 @@ body {
   max-width: 1100px;
   margin-top: 28px;
 
-  max-height: 520px;              /* 🔥 SAFE COLLAPSED HEIGHT */
-  padding: 32px 36px 84px;        /* 🔥 BUTTON CLEAR SPACE */
+  max-height: 520px;
+  padding: 32px 36px 84px;
 
   border-radius: 26px;
   background: rgba(255,255,255,0.08);
@@ -104,23 +104,24 @@ body {
   isolation: isolate;
 }
 
-/* BLUR LAYER (PATCH SAFE) */
 .post-card::before {
   content: "";
   position: absolute;
   inset: 0;
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border-radius: 26px;
   z-index: -1;
 }
 
+/* EXPANDED → INTERNAL SCROLL */
 .post-card.expanded {
-  max-height: 6000px;
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
-/* ===== CONTENT ===== */
+/* CONTENT */
 .post-card h3 {
   font-size: 26px;
   margin-bottom: 14px;
@@ -139,6 +140,15 @@ body {
 
 .post-card:not(.expanded) .post-full { display: none; }
 .post-card.expanded .post-preview { display: none; }
+
+/* SCROLLBAR */
+.post-card.expanded::-webkit-scrollbar {
+  width: 6px;
+}
+.post-card.expanded::-webkit-scrollbar-thumb {
+  background: linear-gradient(#ff5da2, #7c3aed);
+  border-radius: 10px;
+}
 
 /* ===== EXPAND BUTTON ===== */
 #toggleBtn {
@@ -165,7 +175,7 @@ body {
 }
 
 /* ==================================================
-   ZENO — OBSERVING EYE (VISIBLY ALIVE)
+   ZENO — OBSERVING EYE (GRAND PULSE)
    ================================================== */
 
 #zeno-eye {
@@ -191,26 +201,23 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
 
+  overflow: visible; /* 🔥 allow ring to go outside */
   cursor: pointer;
   z-index: 5000;
-
   transform: translateZ(0);
-  will-change: transform;
 }
 
-/* 🔥 RING — FULLY VISIBLE */
+/* RING */
 #zeno-eye .ring {
   position: absolute;
-  inset: 0;                       /* 🔥 FULL SIZE */
+  inset: 0;
   border-radius: 50%;
-
-  border: 2px solid rgba(255,93,162,0.75);
+  border: 2px solid rgba(255,93,162,0.8);
 
   animation:
     ring-rotate 8s linear infinite,
-    ring-pulse 4.5s ease-in-out infinite;
+    ring-orbit-pulse 5s ease-in-out infinite;
 }
 
 /* PUPIL */
@@ -231,21 +238,18 @@ body {
   animation: blink 6s infinite;
 }
 
-/* ===== ZENO CLOUD ===== */
+/* ZENO CLOUD */
 #zeno-cloud {
   position: fixed;
   right: 20px;
   bottom: 96px;
-
   width: 320px;
   padding: 18px;
   font-size: 14px;
   color: #f5f3ff;
-
   border-radius: 16px;
   background: rgba(36,18,61,0.95);
   backdrop-filter: blur(14px);
-
   box-shadow: 0 20px 45px rgba(0,0,0,0.7);
   z-index: 6000;
 }
@@ -263,10 +267,12 @@ body {
   to { transform: rotate(360deg); }
 }
 
-@keyframes ring-pulse {
-  0%   { transform: scale(1); opacity: 0.6; }
-  50%  { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.6; }
+/* 🔥 GRAND ORBIT PULSE */
+@keyframes ring-orbit-pulse {
+  0%   { transform: scale(1) rotate(0deg); opacity: 0.8; }
+  40%  { transform: scale(2.4) rotate(180deg); opacity: 0.35; }
+  60%  { transform: scale(2.4) rotate(360deg); opacity: 0.35; }
+  100% { transform: scale(1) rotate(720deg); opacity: 0.8; }
 }
 
 @keyframes blink {
@@ -274,16 +280,15 @@ body {
   94%,96% { transform: translateY(0); }
 }
 
-/* ===== MOBILE (CRITICAL FIX) ===== */
+/* ===== MOBILE ===== */
 @media (max-width: 600px) {
   body { padding-top: 120px; }
-
   .brand { font-size: 28px; }
   .menu { font-size: 30px; }
 
   .post-card {
-    max-height: 560px;            /* 🔥 BUTTON NEVER HIDES */
-    padding: 24px 24px 110px;     /* 🔥 MOBILE SAFE ZONE */
+    max-height: 560px;
+    padding: 24px 24px 120px;
   }
 
   #toggleBtn {
@@ -295,4 +300,4 @@ body {
     width: 52px;
     height: 52px;
   }
-     }
+}
