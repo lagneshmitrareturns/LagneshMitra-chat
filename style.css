@@ -1,7 +1,6 @@
 /* ================================
    LagneshMitra – Core Styling
-   Premium Glass Violet + ZENO (REAL EYE)
-   FINAL PRODUCTION BUILD (LOCKED)
+   GPU PATCH KILL • FINAL LOCK
    ================================ */
 
 /* ===== RESET ===== */
@@ -44,28 +43,15 @@ body {
 }
 
 .brand span {
-  display: block;
   font-size: 14px;
   color: #d8b4fe;
 }
 
-/* ===== THREE DOT MENU ===== */
 .menu {
   font-size: 34px;
   cursor: pointer;
   color: #e9d5ff;
-  position: relative;
   z-index: 2000;
-}
-
-.dropdown {
-  position: absolute;
-  top: 92px;
-  right: 28px;
-  width: 320px;
-  padding: 18px;
-  display: none;
-  z-index: 2100;
 }
 
 /* ===== HERO ===== */
@@ -74,15 +60,8 @@ body {
   justify-content: center;
 }
 
-/* ===== GLASS ===== */
-.glass {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.18);
-  border-radius: 18px;
-}
-
 /* ==================================================
-   HALL OF FAME CARD — SCROLL LOCKED
+   HALL OF FAME CARD — GPU CLEAN
    ================================================== */
 
 .post-card {
@@ -95,33 +74,37 @@ body {
   padding: 32px 36px 84px;
 
   border-radius: 26px;
+
+  /* 🔥 BLUR DIRECT — NO PSEUDO ELEMENT */
   background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
   border: 1px solid rgba(255,255,255,0.18);
   box-shadow: 0 22px 60px rgba(0,0,0,0.6);
 
   overflow: hidden;
   transition: max-height 0.6s ease;
+
   isolation: isolate;
 }
 
-.post-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(12px);
-  border-radius: 26px;
-  z-index: -1;
-}
-
-/* EXPANDED → INTERNAL SCROLL */
+/* expanded scroll */
 .post-card.expanded {
   max-height: calc(100vh - 180px);
   overflow-y: auto;
-  scroll-behavior: smooth;
 }
 
-/* CONTENT */
+/* scrollbar */
+.post-card.expanded::-webkit-scrollbar {
+  width: 6px;
+}
+.post-card.expanded::-webkit-scrollbar-thumb {
+  background: linear-gradient(#ff5da2, #7c3aed);
+  border-radius: 10px;
+}
+
+/* content */
 .post-card h3 {
   font-size: 26px;
   margin-bottom: 14px;
@@ -141,16 +124,7 @@ body {
 .post-card:not(.expanded) .post-full { display: none; }
 .post-card.expanded .post-preview { display: none; }
 
-/* SCROLLBAR */
-.post-card.expanded::-webkit-scrollbar {
-  width: 6px;
-}
-.post-card.expanded::-webkit-scrollbar-thumb {
-  background: linear-gradient(#ff5da2, #7c3aed);
-  border-radius: 10px;
-}
-
-/* ===== EXPAND BUTTON ===== */
+/* ===== BUTTON ===== */
 #toggleBtn {
   position: absolute;
   left: 36px;
@@ -163,10 +137,8 @@ body {
 
   color: #1b0f2e;
   font-weight: 700;
-  font-size: 14px;
   cursor: pointer;
-
-  z-index: 20;
+  z-index: 10;
 }
 
 .post-card.expanded #toggleBtn {
@@ -175,7 +147,7 @@ body {
 }
 
 /* ==================================================
-   ZENO — OBSERVING EYE (GRAND PULSE)
+   ZENO — GPU ISOLATED
    ================================================== */
 
 #zeno-eye {
@@ -202,25 +174,29 @@ body {
   align-items: center;
   justify-content: center;
 
-  overflow: visible; /* 🔥 allow ring to go outside */
+  overflow: visible;        /* only eye can overflow */
   cursor: pointer;
   z-index: 5000;
+
   transform: translateZ(0);
+  will-change: transform;
 }
 
-/* RING */
+/* ring */
 #zeno-eye .ring {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 2px solid rgba(255,93,162,0.8);
+  border: 2px solid rgba(255,93,162,0.85);
 
   animation:
     ring-rotate 8s linear infinite,
     ring-orbit-pulse 5s ease-in-out infinite;
+
+  will-change: transform, opacity;
 }
 
-/* PUPIL */
+/* pupil */
 #zeno-eye .pupil {
   width: 12px;
   height: 12px;
@@ -229,29 +205,13 @@ body {
   animation: pupil-move 4s ease-in-out infinite;
 }
 
-/* BLINK */
+/* blink */
 #zeno-eye .lid {
   position: absolute;
   inset: 0;
   background: linear-gradient(to bottom, #1b0f2e, #2b1055);
   transform: translateY(-100%);
   animation: blink 6s infinite;
-}
-
-/* ZENO CLOUD */
-#zeno-cloud {
-  position: fixed;
-  right: 20px;
-  bottom: 96px;
-  width: 320px;
-  padding: 18px;
-  font-size: 14px;
-  color: #f5f3ff;
-  border-radius: 16px;
-  background: rgba(36,18,61,0.95);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 20px 45px rgba(0,0,0,0.7);
-  z-index: 6000;
 }
 
 /* ===== ANIMATIONS ===== */
@@ -267,12 +227,10 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* 🔥 GRAND ORBIT PULSE */
 @keyframes ring-orbit-pulse {
-  0%   { transform: scale(1) rotate(0deg); opacity: 0.8; }
-  40%  { transform: scale(2.4) rotate(180deg); opacity: 0.35; }
-  60%  { transform: scale(2.4) rotate(360deg); opacity: 0.35; }
-  100% { transform: scale(1) rotate(720deg); opacity: 0.8; }
+  0%   { transform: scale(1) rotate(0deg); opacity: 0.9; }
+  45%  { transform: scale(2.2) rotate(360deg); opacity: 0.35; }
+  100% { transform: scale(1) rotate(720deg); opacity: 0.9; }
 }
 
 @keyframes blink {
@@ -283,6 +241,7 @@ body {
 /* ===== MOBILE ===== */
 @media (max-width: 600px) {
   body { padding-top: 120px; }
+
   .brand { font-size: 28px; }
   .menu { font-size: 30px; }
 
