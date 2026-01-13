@@ -322,3 +322,13 @@ body {
 #zeno-eye {
   transform: translateZ(0);
 }
+
+/* ================================
+   ZENO – DESKTOP SAFE GPU PATCH
+   ================================ */
+
+#zeno-eye .pupil,
+#zeno-eye .ring,
+#zeno-eye .lid {
+  will-change: transform;
+}
