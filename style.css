@@ -1,7 +1,8 @@
-/* =====================================================
-   LagneshMitra – HARD STABLE CORE
-   Post Card + Expand + ZENO (NO COLLISION)
-   ===================================================== */
+/* ================================
+   LagneshMitra – Core Styling
+   Premium Glass Violet + ZENO (REAL EYE)
+   FINAL STABLE BUILD
+   ================================ */
 
 /* ===== RESET ===== */
 * {
@@ -21,9 +22,7 @@ body {
   overflow-x: hidden;
 }
 
-/* =====================================================
-   TOP BAR
-   ===================================================== */
+/* ===== TOP BAR ===== */
 .topbar {
   position: fixed;
   top: 0;
@@ -50,65 +49,84 @@ body {
   color: #d8b4fe;
 }
 
+/* ===== THREE DOT MENU ===== */
 .menu {
   font-size: 34px;
   cursor: pointer;
   color: #e9d5ff;
-  z-index: 1300;
+  position: relative;
+  z-index: 2000;
 }
 
-/* =====================================================
-   HERO
-   ===================================================== */
+.dropdown {
+  position: absolute;
+  top: 92px;
+  right: 28px;
+  width: 320px;
+  padding: 18px;
+  display: none;
+  z-index: 2100;
+}
+
+/* ===== HERO ===== */
 .hero {
   display: flex;
   justify-content: center;
 }
 
-/* =====================================================
-   HALL OF FAME CARD (FIXED)
-   ===================================================== */
+/* ===== GLASS UTILITY ===== */
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 18px;
+}
+
+/* ==================================================
+   HALL OF FAME CARD — FINAL STABLE VERSION
+   ================================================== */
+
 .post-card {
+  position: relative;
   width: 100%;
   max-width: 1100px;
   margin-top: 28px;
 
-  padding: 32px 36px;
-  border-radius: 26px;
+  /* 🔥 KEY FIXES */
+  max-height: 430px;                 /* COLLAPSED HEIGHT */
+  padding: 32px 36px 52px;           /* EXTRA BOTTOM SPACE */
 
+  border-radius: 26px;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.18);
   box-shadow: 0 22px 60px rgba(0,0,0,0.6);
   backdrop-filter: blur(12px);
 
-  /* 👇 CRITICAL FIX */
-  max-height: 380px;       /* enough space for content + button */
   overflow: hidden;
-
   transition: max-height 0.6s ease;
 }
 
-/* EXPANDED */
+/* ===== EXPANDED ===== */
 .post-card.expanded {
   max-height: 6000px;
 }
 
-/* HEADINGS */
+/* ===== HEAD ===== */
 .post-card h3 {
   font-size: 26px;
   margin-bottom: 14px;
   color: #ff5da2;
+  font-style: italic;
 }
 
 .meta {
   font-size: 13px;
   color: #c4b5fd;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
-/* =====================================================
-   CONTENT VISIBILITY
-   ===================================================== */
+/* ===== CONTENT VISIBILITY ===== */
 .post-preview {
   margin-top: 10px;
 }
@@ -117,44 +135,51 @@ body {
   margin-top: 18px;
 }
 
+/* hide full when collapsed */
 .post-card:not(.expanded) .post-full {
   display: none;
 }
 
+/* hide preview when expanded */
 .post-card.expanded .post-preview {
   display: none;
 }
 
-/* =====================================================
-   EXPAND / COLLAPSE BUTTON (NO ABSOLUTE)
-   ===================================================== */
+/* ===== EXPAND / COLLAPSE BUTTON ===== */
 #toggleBtn {
-  display: inline-block;
-  margin-top: 20px;
+  position: absolute;
+  left: 36px;
+  bottom: 16px;
 
-  padding: 10px 20px;
+  padding: 10px 18px;
   background: linear-gradient(135deg, #ff5da2, #c084fc);
   border: none;
-  border-radius: 14px;
+  border-radius: 12px;
 
   color: #1b0f2e;
   font-weight: 700;
   font-size: 14px;
-
   cursor: pointer;
-  box-shadow: 0 6px 18px rgba(236,72,153,0.4);
+
+  z-index: 5;
 }
 
-/* =====================================================
-   ZENO EYE (100% ISOLATED)
-   ===================================================== */
+/* when expanded → normal flow */
+.post-card.expanded #toggleBtn {
+  position: static;
+  margin-top: 24px;
+}
+
+/* ==================================================
+   ZENO — OBSERVING EYE (ISOLATED & SAFE)
+   ================================================== */
+
 #zeno-eye {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
-
-  width: 56px;
-  height: 56px;
+  right: 22px;
+  bottom: 22px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
 
   background: radial-gradient(
@@ -165,16 +190,17 @@ body {
     #1b0f2e 70%
   );
 
-  box-shadow: 0 0 24px rgba(236,72,153,0.9);
+  box-shadow: 0 0 26px rgba(236,72,153,0.8);
   cursor: pointer;
+  z-index: 1000;
 
-  z-index: 5000; /* 👈 NO CLASH POSSIBLE */
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
+/* eye ring */
 #zeno-eye .ring {
   position: absolute;
   inset: 0;
@@ -183,15 +209,16 @@ body {
   animation: ring-rotate 10s linear infinite;
 }
 
+/* pupil */
 #zeno-eye .pupil {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   background: radial-gradient(circle, #ff5da2, #7c3aed);
-  box-shadow: 0 0 8px rgba(255,93,162,0.9);
   animation: pupil-move 4s ease-in-out infinite;
 }
 
+/* lid */
 #zeno-eye .lid {
   position: absolute;
   inset: 0;
@@ -200,33 +227,7 @@ body {
   animation: blink 6s infinite;
 }
 
-/* =====================================================
-   ZENO CLOUD
-   ===================================================== */
-#zeno-cloud {
-  position: fixed;
-  right: 20px;
-  bottom: 92px;
-
-  width: 300px;
-  padding: 16px;
-
-  background: rgba(36,18,61,0.95);
-  backdrop-filter: blur(14px);
-  border-radius: 16px;
-
-  color: #f5f3ff;
-  font-size: 14px;
-
-  box-shadow: 0 18px 40px rgba(0,0,0,0.7);
-  display: none;
-
-  z-index: 4900;
-}
-
-/* =====================================================
-   ANIMATIONS
-   ===================================================== */
+/* ===== ZENO ANIMATIONS ===== */
 @keyframes pupil-move {
   0%,100% { transform: translate(0,0); }
   25% { transform: translate(2px,1px); }
@@ -244,18 +245,23 @@ body {
   94%,96% { transform: translateY(0); }
 }
 
-/* =====================================================
-   MOBILE
-   ===================================================== */
+/* ===== MOBILE ===== */
 @media (max-width: 600px) {
-  body { padding-top: 120px; }
+  body {
+    padding-top: 120px;
+  }
 
-  .brand { font-size: 28px; }
-  .menu { font-size: 30px; }
+  .brand {
+    font-size: 28px;
+  }
+
+  .menu {
+    font-size: 30px;
+  }
 
   .post-card {
-    padding: 24px;
-    max-height: 420px;
+    max-height: 380px;
+    padding: 24px 24px 48px;
   }
 
   #zeno-eye {
