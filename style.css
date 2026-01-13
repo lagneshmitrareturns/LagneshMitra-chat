@@ -1,6 +1,6 @@
 /* =====================================================
-   LagneshMitra – STABLE CORE STYLE
-   Hall of Fame + Expand + ZENO Eye (LOCKED)
+   LagneshMitra – HARD STABLE CORE
+   Post Card + Expand + ZENO (NO COLLISION)
    ===================================================== */
 
 /* ===== RESET ===== */
@@ -66,14 +66,14 @@ body {
 }
 
 /* =====================================================
-   HALL OF FAME CARD (STABLE)
+   HALL OF FAME CARD (FIXED)
    ===================================================== */
 .post-card {
-  position: relative;
   width: 100%;
   max-width: 1100px;
   margin-top: 28px;
-  padding: 32px 36px 80px; /* 👈 bottom space for button */
+
+  padding: 32px 36px;
   border-radius: 26px;
 
   background: rgba(255,255,255,0.08);
@@ -81,7 +81,8 @@ body {
   box-shadow: 0 22px 60px rgba(0,0,0,0.6);
   backdrop-filter: blur(12px);
 
-  max-height: 320px; /* 👈 COLLAPSED HEIGHT (FIXED) */
+  /* 👇 CRITICAL FIX */
+  max-height: 380px;       /* enough space for content + button */
   overflow: hidden;
 
   transition: max-height 0.6s ease;
@@ -116,24 +117,20 @@ body {
   margin-top: 18px;
 }
 
-/* hide full when collapsed */
 .post-card:not(.expanded) .post-full {
   display: none;
 }
 
-/* hide preview when expanded */
 .post-card.expanded .post-preview {
   display: none;
 }
 
 /* =====================================================
-   EXPAND / COLLAPSE BUTTON (BULLETPROOF)
+   EXPAND / COLLAPSE BUTTON (NO ABSOLUTE)
    ===================================================== */
 #toggleBtn {
-  position: absolute;
-  left: 50%;
-  bottom: 22px;
-  transform: translateX(-50%);
+  display: inline-block;
+  margin-top: 20px;
 
   padding: 10px 20px;
   background: linear-gradient(135deg, #ff5da2, #c084fc);
@@ -146,15 +143,10 @@ body {
 
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(236,72,153,0.4);
-  z-index: 10;
-}
-
-#toggleBtn:hover {
-  box-shadow: 0 10px 26px rgba(236,72,153,0.55);
 }
 
 /* =====================================================
-   ZENO EYE (ISOLATED – NO COLLISION)
+   ZENO EYE (100% ISOLATED)
    ===================================================== */
 #zeno-eye {
   position: fixed;
@@ -176,14 +168,13 @@ body {
   box-shadow: 0 0 24px rgba(236,72,153,0.9);
   cursor: pointer;
 
-  z-index: 5000;
+  z-index: 5000; /* 👈 NO CLASH POSSIBLE */
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
-/* eye parts */
 #zeno-eye .ring {
   position: absolute;
   inset: 0;
@@ -210,12 +201,12 @@ body {
 }
 
 /* =====================================================
-   ZENO CLOUD (POPUP)
+   ZENO CLOUD
    ===================================================== */
 #zeno-cloud {
   position: fixed;
   right: 20px;
-  bottom: 92px; /* 👈 always above eye */
+  bottom: 92px;
 
   width: 300px;
   padding: 16px;
@@ -263,8 +254,8 @@ body {
   .menu { font-size: 30px; }
 
   .post-card {
-    padding: 24px 24px 80px;
-    max-height: 340px;
+    padding: 24px;
+    max-height: 420px;
   }
 
   #zeno-eye {
