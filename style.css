@@ -1,3 +1,8 @@
+/* ================================
+   LagneshMitra – Core Styling
+   Premium Glass Violet + ZENO (REAL EYE)
+   ================================ */
+
 /* ===== RESET ===== */
 * {
   box-sizing: border-box;
@@ -10,8 +15,10 @@ body {
   font-family: "Segoe UI", Roboto, Arial, sans-serif;
   background: radial-gradient(circle at top, #2b1055, #160a26 60%);
   color: #f5f3ff;
+  line-height: 1.6;
   padding: 16px;
   padding-top: 140px;
+  overflow-x: hidden;
 }
 
 /* ===== TOP BAR ===== */
@@ -23,14 +30,15 @@ body {
   height: 100px;
   padding: 22px 28px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  z-index: 1000;
+  justify-content: space-between;
+  z-index: 1200;
 }
 
 .brand {
   font-size: 36px;
   font-style: italic;
+  font-weight: 600;
   color: #ff5da2;
 }
 
@@ -44,6 +52,18 @@ body {
   font-size: 34px;
   cursor: pointer;
   color: #e9d5ff;
+  position: relative;
+  z-index: 2000;
+}
+
+.dropdown {
+  position: absolute;
+  top: 92px;
+  right: 28px;
+  width: 320px;
+  padding: 18px;
+  display: none;
+  z-index: 2100;
 }
 
 /* ===== HERO ===== */
@@ -52,16 +72,70 @@ body {
   justify-content: center;
 }
 
-/* ===== HALL OF FAME CARD ===== */
+/* ===== CARD ===== */
 .post-card {
+  position: relative;
   width: 100%;
   max-width: 1100px;
   margin-top: 28px;
-  padding: 32px;
+  padding: 32px 36px 56px;
   border-radius: 26px;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.18);
   box-shadow: 0 22px 60px rgba(0,0,0,0.6);
+  backdrop-filter: blur(12px);
+
+  /* 🔒 DEFAULT COLLAPSED */
+  max-height: 260px;
+  overflow: hidden;
+
+  transition: max-height 0.6s ease;
+}
+
+/* EXPANDED */
+.post-card.expanded {
+  max-height: 6000px;
+}
+
+.post-card h3 {
+  font-size: 26px;
+  margin-bottom: 14px;
+  color: #ff5da2;
+}
+
+/* ===== CONTENT VISIBILITY ===== */
+.post-preview {
+  margin-top: 10px;
+}
+
+.post-full {
+  margin-top: 18px;
+}
+
+/* 🔒 hide full by default */
+.post-card:not(.expanded) .post-full {
+  display: none;
+}
+
+/* 🔓 hide preview when expanded */
+.post-card.expanded .post-preview {
+  display: none;
+}
+
+/* ===== EXPAND BUTTON ===== */
+#toggleBtn {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #ff5da2, #c084fc);
+  border: none;
+  border-radius: 12px;
+  color: #1b0f2e;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 5;
 }
 
 /* ===== ZENO EYE ===== */
@@ -72,7 +146,68 @@ body {
   width: 58px;
   height: 58px;
   border-radius: 50%;
-  background: radial-gradient(circle, #fdf4ff, #7c3aed);
-  box-shadow: 0 0 20px rgba(236,72,153,0.8);
-  z-index: 1001;
+  background: radial-gradient(
+    circle at center,
+    #fdf4ff 14%,
+    #c084fc 32%,
+    #7c3aed 48%,
+    #1b0f2e 70%
+  );
+  box-shadow: 0 0 26px rgba(236,72,153,0.8);
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* eye inner */
+#zeno-eye .ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.3);
+  animation: ring-rotate 10s linear infinite;
+}
+
+#zeno-eye .pupil {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ff5da2, #7c3aed);
+  animation: pupil-move 4s ease-in-out infinite;
+}
+
+#zeno-eye .lid {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, #1b0f2e, #2b1055);
+  transform: translateY(-100%);
+  animation: blink 6s infinite;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes pupil-move {
+  0%,100% { transform: translate(0,0); }
+  25% { transform: translate(2px,1px); }
+  50% { transform: translate(-1px,2px); }
+  75% { transform: translate(1px,-1px); }
+}
+
+@keyframes ring-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes blink {
+  0%,92%,100% { transform: translateY(-100%); }
+  94%,96% { transform: translateY(0); }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 600px) {
+  body { padding-top: 120px; }
+  .brand { font-size: 28px; }
+  .menu { font-size: 30px; }
 }
