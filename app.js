@@ -27,7 +27,7 @@ let currentPostRef = null;
 let expanded = false;
 let viewCounted = false;
 
-/* 🔒 HARD LOCK — kills ghost / double click on mobile & desktop */
+/* 🔒 HARD LOCK — kills ghost / double click */
 let isToggling = false;
 
 /* ================= TIME FORMAT ================= */
@@ -38,7 +38,7 @@ function formatMinutesAgo(seconds) {
 }
 
 /* ================= LOAD LATEST POST =================
-   ⚠️ DOES NOT TOUCH expand / collapse state
+   ⚠️ NEVER touches expand / collapse state
 */
 async function loadLatestPost() {
   const q = query(
@@ -75,25 +75,28 @@ async function loadLatestPost() {
   metaEl.innerText = `Updated ${timeText} • Views ${post.views || 0}`;
 }
 
-/* ================= CLICK BIND (ONE TIME ONLY) ================= */
+/* ================= TOGGLE LOGIC (BUTTON ONLY) ================= */
 document.addEventListener("DOMContentLoaded", () => {
   const card = document.getElementById("postCard");
-  if (!card) return;
+  const toggleBtn = document.getElementById("toggleBtn");
 
-  card.addEventListener("click", async (e) => {
+  if (!card || !toggleBtn) return;
+
+  toggleBtn.addEventListener("click", async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    /* 🚫 absolute protection */
-    if (isToggling) return;
     if (!currentPostRef) return;
+    if (isToggling) return;
 
     isToggling = true;
 
     expanded = !expanded;
     card.classList.toggle("expanded", expanded);
 
-    /* 👁 Count view ONLY on FIRST real expand */
+    toggleBtn.innerText = expanded ? "Collapse" : "Expand";
+
+    /* 👁 Count view ONLY first expand */
     if (expanded && !viewCounted) {
       try {
         await updateDoc(currentPostRef, {
@@ -105,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /* 🔓 Unlock AFTER animation (matches CSS transition) */
+    /* 🔓 unlock AFTER CSS transition */
     setTimeout(() => {
       isToggling = false;
     }, 700);
