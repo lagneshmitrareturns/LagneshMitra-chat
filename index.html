@@ -145,7 +145,7 @@ postCard.onclick = async () => {
 const eye = document.getElementById("zeno-eye");
 const cloud = document.getElementById("zeno-cloud");
 
-let zenoState = 0; // 0=closed, 1=protocol, 2=report
+let zenoState = 0;
 
 eye.onclick = () => {
   if (zenoState === 0) {
@@ -198,6 +198,23 @@ window.closeZeno = () => {
   cloud.style.display = "none";
   cloud.innerHTML = "";
 };
+</script>
+
+<!-- ================= ZENO HEARTBEAT (ADD ONLY) ================= -->
+<script>
+/* FORCE GPU REPAINT — DESKTOP FIX */
+(() => {
+  const eye = document.getElementById("zeno-eye");
+  if (!eye) return;
+
+  let t = false;
+  setInterval(() => {
+    t = !t;
+    eye.style.transform = t
+      ? "translateZ(0) scale(1.0001)"
+      : "translateZ(0) scale(1)";
+  }, 900);
+})();
 </script>
 
 </body>
