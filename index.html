@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>LagneshMitra – Decision Intelligence</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -17,12 +16,10 @@
     <span>Decision Intelligence</span>
   </div>
 
-  <!-- FIXED THREE DOTS -->
-  <div class="menu" onclick="toggleMenu()" style="position:absolute;right:18px;">
-    ⋮
-  </div>
+  <!-- THREE DOTS -->
+  <div class="menu" id="menuBtn">⋮</div>
 
-  <div class="dropdown glass" id="menuBox">
+  <div class="dropdown glass" id="menuBox" style="display:none">
     <p><strong>Core Thinking</strong></p>
     <p>Interpretation before prediction</p>
     <p>Decisions before remedies</p>
@@ -37,7 +34,7 @@
 
 <!-- ================= HERO ================= -->
 <div class="hero">
-  <div class="post-card glass" id="postCard" onclick="togglePost()">
+  <div class="post-card glass" id="postCard">
     <h3>Hall of Fame</h3>
     <div class="meta" id="postMeta"></div>
     <div class="post-preview" id="postPreview"></div>
@@ -52,20 +49,17 @@
   <div class="lid"></div>
 </div>
 
-<div id="zeno-cloud" class="glass"></div>
+<!-- CLOUD (HIDDEN BY DEFAULT) -->
+<div id="zeno-cloud" class="glass" style="display:none"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
-  getFirestore,
-  doc,
-  updateDoc,
-  collection,
-  getDocs,
-  increment
+  getFirestore, doc, updateDoc,
+  collection, getDocs, increment
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* FIREBASE */
+/* ================= FIREBASE ================= */
 const app = initializeApp({
   apiKey:"AIzaSyCX8yGRJc5AcxSEaaC6AzNLZzxtOCz83Sk",
   authDomain:"lagneshmitra-e57b8.firebaseapp.com",
@@ -73,18 +67,25 @@ const app = initializeApp({
 });
 const db = getFirestore(app);
 
-/* MENU */
-window.toggleMenu = () => {
+/* ================= MENU ================= */
+const menuBtn = document.getElementById("menuBtn");
+const menuBox = document.getElementById("menuBox");
+
+menuBtn.onclick = (e) => {
+  e.stopPropagation();
   menuBox.style.display =
     menuBox.style.display === "block" ? "none" : "block";
 };
 
-/* STATE */
+document.body.addEventListener("click", () => {
+  menuBox.style.display = "none";
+});
+
+/* ================= HALL OF FAME ================= */
 let expanded = false;
 let viewCounted = false;
 let currentPost = null;
 
-/* LOAD POST */
 async function loadLatestPost(){
   const snap = await getDocs(collection(db,"posts"));
   let latest = null;
@@ -115,8 +116,7 @@ async function loadLatestPost(){
 }
 loadLatestPost();
 
-/* SINGLE TOGGLE */
-window.togglePost = async () => {
+postCard.onclick = async () => {
   if(!currentPost) return;
 
   expanded = !expanded;
@@ -130,34 +130,52 @@ window.togglePost = async () => {
   }
 };
 
-/* ================= ZENO – RESTORED 2 STEP ================= */
+/* ================= ZENO ================= */
 const eye = document.getElementById("zeno-eye");
 const cloud = document.getElementById("zeno-cloud");
 
+let zenoState = 0; // 0=closed, 1=protocol, 2=report
+
 eye.onclick = () => {
+  if (zenoState === 0) {
+    openProtocol();
+  } else {
+    closeZeno();
+  }
+};
+
+function openProtocol(){
+  zenoState = 1;
   cloud.style.display = "block";
   cloud.innerHTML = `
+    <p><strong>ZENO v1.0 — Test Protocol</strong></p>
     <p>
-      <strong>ZENO v1.0 — Test Protocol</strong><br><br>
       System scan initiated.<br>
-      Hall of Fame detected.<br><br>
+      Hall of Fame detected.
     </p>
     <button onclick="zenoContinue()">Continue</button>
+    <button onclick="closeZeno()">Close</button>
+  `;
+}
+
+window.zenoContinue = () => {
+  zenoState = 2;
+  cloud.innerHTML = `
+    <p><strong>Observation Report</strong></p>
+    <ul>
+      <li>Header: stable</li>
+      <li>Hall of Fame: active</li>
+      <li>Expansion logic: CSS-driven</li>
+    </ul>
+    <p>Status: Standby<br>Authority: BE001 override only</p>
+    <button onclick="closeZeno()">Close</button>
   `;
 };
 
-window.zenoContinue = () => {
-  cloud.innerHTML = `
-    <p>
-      <strong>Observation Report</strong><br><br>
-      • Header: stable<br>
-      • Hall of Fame: active<br>
-      • Expansion logic: CSS-driven<br><br>
-      Status: Standby<br>
-      Authority: BE001 override only
-    </p>
-    <button onclick="cloud.style.display='none'">Close</button>
-  `;
+window.closeZeno = () => {
+  zenoState = 0;
+  cloud.style.display = "none";
+  cloud.innerHTML = "";
 };
 </script>
 
