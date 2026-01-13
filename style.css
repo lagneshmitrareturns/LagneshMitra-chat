@@ -1,7 +1,7 @@
 /* ================================
    LagneshMitra – Core Styling
    Premium Glass Violet + ZENO (REAL EYE)
-   FINAL PRODUCTION BUILD
+   FINAL PRODUCTION BUILD (LOCKED)
    ================================ */
 
 /* ===== RESET ===== */
@@ -82,7 +82,7 @@ body {
 }
 
 /* ==================================================
-   HALL OF FAME CARD — GPU SAFE
+   HALL OF FAME CARD — STABLE + MOBILE SAFE
    ================================================== */
 
 .post-card {
@@ -91,8 +91,8 @@ body {
   max-width: 1100px;
   margin-top: 28px;
 
-  max-height: 460px;
-  padding: 32px 36px 64px;
+  max-height: 520px;              /* 🔥 SAFE COLLAPSED HEIGHT */
+  padding: 32px 36px 84px;        /* 🔥 BUTTON CLEAR SPACE */
 
   border-radius: 26px;
   background: rgba(255,255,255,0.08);
@@ -101,11 +101,10 @@ body {
 
   overflow: hidden;
   transition: max-height 0.6s ease;
-
   isolation: isolate;
 }
 
-/* SAFE BLUR LAYER */
+/* BLUR LAYER (PATCH SAFE) */
 .post-card::before {
   content: "";
   position: absolute;
@@ -121,7 +120,7 @@ body {
   max-height: 6000px;
 }
 
-/* ===== HEAD ===== */
+/* ===== CONTENT ===== */
 .post-card h3 {
   font-size: 26px;
   margin-bottom: 14px;
@@ -145,9 +144,9 @@ body {
 #toggleBtn {
   position: absolute;
   left: 36px;
-  bottom: 18px;
+  bottom: 28px;
 
-  padding: 12px 20px;
+  padding: 12px 22px;
   background: linear-gradient(135deg, #ff5da2, #c084fc);
   border: none;
   border-radius: 14px;
@@ -157,16 +156,16 @@ body {
   font-size: 14px;
   cursor: pointer;
 
-  z-index: 10;
+  z-index: 20;
 }
 
 .post-card.expanded #toggleBtn {
   position: static;
-  margin-top: 28px;
+  margin-top: 32px;
 }
 
 /* ==================================================
-   ZENO — OBSERVING EYE (GPU ISOLATED)
+   ZENO — OBSERVING EYE (VISIBLY ALIVE)
    ================================================== */
 
 #zeno-eye {
@@ -186,8 +185,8 @@ body {
   );
 
   box-shadow:
-    0 0 18px rgba(236,72,153,0.6),
-    0 0 36px rgba(124,58,237,0.45);
+    0 0 22px rgba(236,72,153,0.75),
+    0 0 44px rgba(124,58,237,0.55);
 
   display: flex;
   align-items: center;
@@ -197,22 +196,21 @@ body {
   cursor: pointer;
   z-index: 5000;
 
-  will-change: transform;
   transform: translateZ(0);
+  will-change: transform;
 }
 
-/* RING — ROTATE + BREATH */
+/* 🔥 RING — FULLY VISIBLE */
 #zeno-eye .ring {
   position: absolute;
-  inset: 3px;
+  inset: 0;                       /* 🔥 FULL SIZE */
   border-radius: 50%;
-  border: 2px solid rgba(255,93,162,0.55);
+
+  border: 2px solid rgba(255,93,162,0.75);
 
   animation:
-    ring-rotate 9s linear infinite,
-    ring-pulse 4.8s ease-in-out infinite;
-
-  transform-origin: center;
+    ring-rotate 8s linear infinite,
+    ring-pulse 4.5s ease-in-out infinite;
 }
 
 /* PUPIL */
@@ -266,9 +264,9 @@ body {
 }
 
 @keyframes ring-pulse {
-  0%   { transform: scale(1);    opacity: 0.5; }
-  50%  { transform: scale(1.18); opacity: 0.9; }
-  100% { transform: scale(1);    opacity: 0.5; }
+  0%   { transform: scale(1); opacity: 0.6; }
+  50%  { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.6; }
 }
 
 @keyframes blink {
@@ -276,7 +274,7 @@ body {
   94%,96% { transform: translateY(0); }
 }
 
-/* ===== MOBILE ===== */
+/* ===== MOBILE (CRITICAL FIX) ===== */
 @media (max-width: 600px) {
   body { padding-top: 120px; }
 
@@ -284,17 +282,17 @@ body {
   .menu { font-size: 30px; }
 
   .post-card {
-    max-height: 420px;
-    padding: 24px 24px 72px;
+    max-height: 560px;            /* 🔥 BUTTON NEVER HIDES */
+    padding: 24px 24px 110px;     /* 🔥 MOBILE SAFE ZONE */
   }
 
   #toggleBtn {
     left: 24px;
-    bottom: 20px;
+    bottom: 36px;
   }
 
   #zeno-eye {
     width: 52px;
     height: 52px;
   }
-}
+     }
