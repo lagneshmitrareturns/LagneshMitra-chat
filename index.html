@@ -16,8 +16,19 @@
     <span>Decision Intelligence</span>
   </div>
 
-  <!-- THREE DOTS -->
-  <div class="menu" id="menuBtn">⋮</div>
+  <!-- THREE DOTS (RIGHT + BIGGER) -->
+  <div class="menu" id="menuBtn"
+       style="
+         position:absolute;
+         right:18px;
+         top:14px;
+         font-size:38px;
+         padding:8px 12px;
+         cursor:pointer;
+         user-select:none;
+       ">
+    ⋮
+  </div>
 
   <div class="dropdown glass" id="menuBox" style="display:none">
     <p><strong>Core Thinking</strong></p>
@@ -49,7 +60,7 @@
   <div class="lid"></div>
 </div>
 
-<!-- CLOUD (HIDDEN BY DEFAULT) -->
+<!-- ZENO CLOUD -->
 <div id="zeno-cloud" class="glass" style="display:none"></div>
 
 <script type="module">
@@ -148,10 +159,14 @@ function openProtocol(){
   zenoState = 1;
   cloud.style.display = "block";
   cloud.innerHTML = `
-    <p><strong>ZENO v1.0 — Test Protocol</strong></p>
+    <p><strong>ZENO v1.0 — Test Protocol Model</strong></p>
     <p>
-      System scan initiated.<br>
-      Hall of Fame detected.
+      I am operating in diagnostic mode.<br><br>
+      I can currently:<br>
+      • Observe page structure<br>
+      • Detect active modules<br>
+      • Validate content loading<br>
+      • Monitor interaction logic
     </p>
     <button onclick="zenoContinue()">Continue</button>
     <button onclick="closeZeno()">Close</button>
@@ -161,13 +176,19 @@ function openProtocol(){
 window.zenoContinue = () => {
   zenoState = 2;
   cloud.innerHTML = `
-    <p><strong>Observation Report</strong></p>
+    <p><strong>Index Page Status Report</strong></p>
     <ul>
       <li>Header: stable</li>
+      <li>Three-dot menu: operational</li>
       <li>Hall of Fame: active</li>
-      <li>Expansion logic: CSS-driven</li>
+      <li>Expansion logic: functional</li>
+      <li>Firebase connection: live</li>
     </ul>
-    <p>Status: Standby<br>Authority: BE001 override only</p>
+    <p>
+      System state: NORMAL<br>
+      Mode: Standby<br>
+      Authority: BE001 override only
+    </p>
     <button onclick="closeZeno()">Close</button>
   `;
 };
