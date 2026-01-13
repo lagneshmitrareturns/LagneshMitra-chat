@@ -27,10 +27,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* 🧠 Helpers */
-const val = id => document.getElementById(id)?.value.trim() || "";
-const uid = () => val("mobile");
-
 /* 🔒 State */
 let currentPostRef = null;
 let expanded = false;
@@ -43,49 +39,7 @@ function formatMinutesAgo(seconds) {
   return `${mins} mins ago`;
 }
 
-/* 👤 Add / Update User */
-async function addUser() {
-  if (!uid()) return alert("Mobile number required");
-
-  await setDoc(
-    doc(db, "users", uid()),
-    {
-      name: val("name"),
-      mobile: uid(),
-      gender: val("gender"),
-      dob: val("dob"),
-      tob: val("tob"),
-      pob: val("pob"),
-      updatedAt: serverTimestamp()
-    },
-    { merge: true }
-  );
-
-  document.getElementById("output").innerText = "✅ Details submitted";
-}
-
-/* 💬 Send Chat */
-async function sendMessage() {
-  if (!uid()) return alert("Mobile required");
-  if (!val("message")) return alert("Type your concern");
-
-  await setDoc(
-    doc(db, "chats", uid()),
-    {
-      userId: uid(),
-      lastMessage: val("message"),
-      lastMessageAt: serverTimestamp(),
-      status: "new",
-      unread: true
-    },
-    { merge: true }
-  );
-
-  document.getElementById("message").value = "";
-  document.getElementById("output").innerText = "📨 Message sent";
-}
-
-/* 🏆 Load Latest Hall of Fame Post (NO VIEW COUNT HERE) */
+/* 🏆 Load Latest Hall of Fame Post */
 async function loadLatestPost() {
   const q = query(
     collection(db, "posts"),
@@ -100,29 +54,13 @@ async function loadLatestPost() {
   const post = snapDoc.data();
   currentPostRef = doc(db, "posts", snapDoc.id);
 
-  /* ✂️ Compact preview (4–5 lines feel) */
   const preview =
     post.content.length > 260
       ? post.content.slice(0, 260) + "..."
       : post.content;
 
-  const previewEl = document.getElementById("postPreview");
-  const fullEl = document.getElementById("postFull");
-  const card = document.querySelector(".post-card");
-
-  previewEl.innerText = preview;
-  fullEl.innerText = post.content;
-
-  /* 🔁 Preserve expand state on refresh */
-  if (expanded) {
-    card.classList.add("expanded");
-    previewEl.style.display = "none";
-    fullEl.style.display = "block";
-  } else {
-    card.classList.remove("expanded");
-    previewEl.style.display = "block";
-    fullEl.style.display = "none";
-  }
+  document.getElementById("postPreview").innerText = preview;
+  document.getElementById("postFull").innerText = post.content;
 
   const timeText = post.updatedAt?.seconds
     ? formatMinutesAgo(post.updatedAt.seconds)
@@ -130,23 +68,20 @@ async function loadLatestPost() {
 
   document.getElementById("postMeta").innerText =
     `Updated ${timeText} • Views ${post.views || 0}`;
+
+  // 🔁 IMPORTANT: do NOT touch expanded state here
 }
 
-/* 🔘 Toggle Hall of Fame (CLICK TO EXPAND / COLLAPSE) */
+/* 🔘 Toggle Hall of Fame (ONLY PLACE THAT CONTROLS EXPAND) */
 async function togglePost() {
   if (!currentPostRef) return;
 
   expanded = !expanded;
 
   const card = document.querySelector(".post-card");
-  const previewEl = document.getElementById("postPreview");
-  const fullEl = document.getElementById("postFull");
-
   card.classList.toggle("expanded", expanded);
-  previewEl.style.display = expanded ? "none" : "block";
-  fullEl.style.display = expanded ? "block" : "none";
 
-  /* 👁 Count view ONLY once */
+  /* 👁 Count view ONLY on first expand */
   if (expanded && !viewCounted) {
     await updateDoc(currentPostRef, {
       views: increment(1)
@@ -156,12 +91,10 @@ async function togglePost() {
 }
 
 /* 🌐 Expose globally */
-window.addUser = addUser;
-window.sendMessage = sendMessage;
 window.togglePost = togglePost;
 
 /* 🚀 Initial load */
 loadLatestPost();
 
-/* 🔁 Auto refresh every 60s (SAFE) */
+/* 🔁 Auto refresh (SAFE — does NOT break expand) */
 setInterval(loadLatestPost, 60000);
