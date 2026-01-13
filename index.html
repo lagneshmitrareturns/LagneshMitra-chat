@@ -96,7 +96,9 @@ document.body.addEventListener("click", () => {
 let expanded = false;
 let viewCounted = false;
 let currentPost = null;
+let isToggling = false;   // 🔒 HARD LOCK (FIX)
 
+/* LOAD POST */
 async function loadLatestPost(){
   const snap = await getDocs(collection(db,"posts"));
   let latest = null;
@@ -127,18 +129,29 @@ async function loadLatestPost(){
 }
 loadLatestPost();
 
-postCard.onclick = async () => {
-  if(!currentPost) return;
+/* ✅ FIXED TOGGLE (NO DOUBLE CONTRACT) */
+postCard.onclick = async (e) => {
+  e.stopPropagation();
+
+  if (!currentPost) return;
+  if (isToggling) return;   // 🚫 block spam click
+
+  isToggling = true;
 
   expanded = !expanded;
   postCard.classList.toggle("expanded", expanded);
 
-  if(expanded && !viewCounted){
-    await updateDoc(doc(db,"posts",currentPost.id),{
+  if (expanded && !viewCounted){
+    await updateDoc(doc(db,"posts", currentPost.id),{
       views: increment(1)
     });
     viewCounted = true;
   }
+
+  // unlock after CSS animation
+  setTimeout(() => {
+    isToggling = false;
+  }, 650);
 };
 
 /* ================= ZENO ================= */
@@ -200,9 +213,8 @@ window.closeZeno = () => {
 };
 </script>
 
-<!-- ================= ZENO HEARTBEAT (ADD ONLY) ================= -->
+<!-- ================= ZENO HEARTBEAT ================= -->
 <script>
-/* FORCE GPU REPAINT — DESKTOP FIX */
 (() => {
   const eye = document.getElementById("zeno-eye");
   if (!eye) return;
