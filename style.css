@@ -118,6 +118,10 @@ body {
   transition:
     max-height 0.6s ease,
     box-shadow 0.35s ease;
+
+  /* 🔒 CRITICAL FIX — stops double contract */
+  will-change: max-height;
+  contain: layout paint;
 }
 
 .post-card:hover {
@@ -310,7 +314,6 @@ body {
 
 /* ================================
    🔥 ZENO FORCE ANIMATION PATCH
-   (ANDROID / CHROME SAFE)
    ================================ */
 
 #zeno-eye,
@@ -324,32 +327,9 @@ body {
 }
 
 /* ================================
-   ZENO – DESKTOP SAFE GPU PATCH
+   DESKTOP GPU SAFETY
    ================================ */
 
-#zeno-eye .pupil,
-#zeno-eye .ring,
-#zeno-eye .lid {
-  will-change: transform;
-}
-
-/* ================================
-   ZENO – FORCE DESKTOP ANIMATION
-   ================================ */
-
-#zeno-eye .ring {
-  animation: ring-rotate 10s linear infinite !important;
-}
-
-#zeno-eye .pupil {
-  animation: pupil-move 4s ease-in-out infinite !important;
-}
-
-#zeno-eye .lid {
-  animation: blink 6s infinite !important;
-}
-
-/* Prevent desktop throttling */
 #zeno-eye .ring,
 #zeno-eye .pupil,
 #zeno-eye .lid {
