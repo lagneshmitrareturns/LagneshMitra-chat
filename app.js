@@ -31,13 +31,14 @@ const db = getFirestore(app);
 const val = id => document.getElementById(id)?.value.trim() || "";
 const uid = () => val("mobile");
 
-/* 🔒 View count control (important) */
+/* 🔒 State */
+let currentPostRef = null;
+let expanded = false;
 let viewCounted = false;
 
-/* ⏱ Minutes formatter */
-function formatMinutesAgo(timestampSeconds) {
-  const diffMs = Date.now() - timestampSeconds * 1000;
-  const mins = Math.floor(diffMs / 60000);
+/* ⏱ Time formatter */
+function formatMinutesAgo(seconds) {
+  const mins = Math.floor((Date.now() - seconds * 1000) / 60000);
   if (mins <= 0) return "just now";
   return `${mins} mins ago`;
 }
@@ -63,7 +64,7 @@ async function addUser() {
   document.getElementById("output").innerText = "✅ Details submitted";
 }
 
-/* 💬 Send Chat Message */
+/* 💬 Send Chat */
 async function sendMessage() {
   if (!uid()) return alert("Mobile required");
   if (!val("message")) return alert("Type your concern");
@@ -84,7 +85,7 @@ async function sendMessage() {
   document.getElementById("output").innerText = "📨 Message sent";
 }
 
-/* 🏆 Load Latest Hall of Fame Post */
+/* 🏆 Load Latest Hall of Fame Post (NO VIEW COUNT HERE) */
 async function loadLatestPost() {
   const q = query(
     collection(db, "posts"),
@@ -97,42 +98,52 @@ async function loadLatestPost() {
 
   const snapDoc = snap.docs[0];
   const post = snapDoc.data();
-  const postRef = doc(db, "posts", snapDoc.id);
+  currentPostRef = doc(db, "posts", snapDoc.id);
 
-  /* 👁 Increment views ONLY ONCE per page load */
-  if (!viewCounted) {
-    await updateDoc(postRef, {
-      views: increment(1)
-    });
-    viewCounted = true;
-  }
+  /* Preview = short (4–5 lines feel) */
+  const preview =
+    post.content.length > 260
+      ? post.content.slice(0, 260) + "..."
+      : post.content;
 
-  /* ⏱ Time text (minutes only) */
+  document.getElementById("postPreview").innerText = preview;
+  document.getElementById("postFull").innerText = post.content;
+
   const timeText = post.updatedAt?.seconds
     ? formatMinutesAgo(post.updatedAt.seconds)
     : "just now";
 
-  /* ✂️ Preview */
-  const preview =
-    post.content.length > 300
-      ? post.content.slice(0, 300) + "..."
-      : post.content;
-
-  /* 🪄 Render */
-  document.getElementById("postPreview").innerText = preview;
-  document.getElementById("postFull").innerText = post.content;
-
   document.getElementById("postMeta").innerText =
-    `Updated ${timeText} • Views ${(post.views || 0) + 1}`;
+    `Updated ${timeText} • Views ${post.views || 0}`;
+}
+
+/* 🔘 Toggle Hall of Fame (VIEW COUNT HERE) */
+async function togglePost() {
+  if (!currentPostRef) return;
+
+  expanded = !expanded;
+
+  document.getElementById("postFull").style.display =
+    expanded ? "block" : "none";
+  document.getElementById("postPreview").style.display =
+    expanded ? "none" : "block";
+
+  /* 👁 Count view ONLY on first expand */
+  if (expanded && !viewCounted) {
+    await updateDoc(currentPostRef, {
+      views: increment(1)
+    });
+    viewCounted = true;
+  }
 }
 
 /* 🔘 Expose globally */
 window.addUser = addUser;
 window.sendMessage = sendMessage;
-window.loadLatestPost = loadLatestPost;
+window.togglePost = togglePost;
 
-/* 🚀 Initial load (counts view once) */
+/* 🚀 Initial load */
 loadLatestPost();
 
-/* 🔁 Auto refresh every 1 minute (NO view increment) */
+/* 🔁 Auto refresh every 60s (SAFE, no views) */
 setInterval(loadLatestPost, 60000);
