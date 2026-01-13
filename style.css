@@ -1,6 +1,6 @@
 /* ================================
    LagneshMitra – Core Styling
-   Premium Glass Violet + ZENO
+   Premium Glass Violet + ZENO (EYE)
    ================================ */
 
 * {
@@ -17,12 +17,13 @@ body {
   font-family: "Segoe UI", Roboto, Arial, sans-serif;
   background: radial-gradient(circle at top, #2b1055, #160a26 60%);
   color: #f5f3ff;
-  line-height: 1.5;
+  line-height: 1.6;
   padding: 16px;
+  overflow-x: hidden;
 }
 
 /* ================================
-   GLASS UTILITY (GLOBAL)
+   GLASS UTILITY
    ================================ */
 
 .glass {
@@ -31,7 +32,7 @@ body {
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 10px 35px rgba(0,0,0,0.45);
-  border-radius: 16px;
+  border-radius: 18px;
 }
 
 /* ================================
@@ -39,13 +40,13 @@ body {
    ================================ */
 
 .container {
-  max-width: 720px;
+  max-width: 920px;
   margin: auto;
-  padding: 22px;
-  border-radius: 18px;
+  padding: 26px 28px;
+  border-radius: 22px;
   background: rgba(36,18,61,0.55);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 16px 45px rgba(0,0,0,0.55);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.6);
 }
 
 /* ================================
@@ -59,7 +60,7 @@ h1, h2, h3 {
 }
 
 h2 {
-  font-size: 22px;
+  font-size: 24px;
   color: #ff5da2;
 }
 
@@ -75,7 +76,7 @@ h3 {
 .divider {
   height: 2px;
   background: linear-gradient(90deg, #ff5da2, #c084fc);
-  margin: 16px 0;
+  margin: 18px 0;
   border-radius: 2px;
 }
 
@@ -83,25 +84,27 @@ h3 {
    INPUTS
    ================================ */
 
-input {
+input, textarea {
   width: 100%;
   padding: 12px 14px;
   margin-bottom: 12px;
   border-radius: 10px;
   border: 1px solid #3b2463;
   font-size: 15px;
-  background: #2f1850;
+  background: rgba(47,24,80,0.85);
   color: #ffffff;
 }
 
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: #c4b5fd;
 }
 
-input:focus {
+input:focus,
+textarea:focus {
   outline: none;
   border-color: #ff5da2;
-  background: #321a57;
+  background: rgba(50,26,87,0.95);
 }
 
 /* ================================
@@ -110,7 +113,7 @@ input:focus {
 
 button {
   padding: 12px 18px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: none;
   font-size: 15px;
   font-weight: 600;
@@ -140,9 +143,9 @@ button:hover {
 #output {
   margin-top: 16px;
   padding: 12px;
-  background: #1f1433;
+  background: rgba(31,20,51,0.9);
   border-left: 4px solid #22d3ee;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 14px;
   color: #e9d5ff;
 }
@@ -154,61 +157,78 @@ button:hover {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 12px;
+  margin-top: 14px;
   font-size: 14px;
-  background: #24123d;
-  border-radius: 10px;
+  background: rgba(36,18,61,0.9);
+  border-radius: 12px;
   overflow: hidden;
 }
 
 th {
   background: linear-gradient(135deg, #ff5da2, #c084fc);
   color: #1b0f2e;
-  padding: 10px;
+  padding: 12px;
   text-align: left;
   font-weight: 600;
 }
 
 td {
-  padding: 10px;
+  padding: 12px;
   border-bottom: 1px solid #3b2463;
   color: #f3e8ff;
 }
 
 tr:nth-child(even) {
-  background: #2a1650;
+  background: rgba(42,22,80,0.6);
 }
 
 /* ================================
-   HALL OF FAME CARD
+   HALL OF FAME – LONG RECTANGLE
    ================================ */
 
 .hof-card {
-  padding: 22px 26px;
-  margin-bottom: 16px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.15);
+  width: 100%;
+  min-height: 280px;
+  padding: 28px 32px;
+  margin-bottom: 22px;
+  border-radius: 22px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 22px 60px rgba(0,0,0,0.6);
+  backdrop-filter: blur(12px);
 }
 
 /* ================================
-   ZENO EYE (BIRTH)
+   ZENO – OBSERVING EYE (BIRTH FORM)
    ================================ */
 
 #zeno-eye {
   position: fixed;
   right: 22px;
   bottom: 22px;
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: radial-gradient(circle, #f472b6, #7c3aed);
-  box-shadow: 0 0 22px rgba(236,72,153,0.7);
+  background: radial-gradient(circle at center, #fdf4ff 12%, #7c3aed 40%, #1b0f2e 70%);
+  box-shadow: 0 0 24px rgba(236,72,153,0.75);
   cursor: pointer;
   z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Observation Ring */
+/* Eye pupil */
+#zeno-eye .pupil {
+  width: 12px;
+  height: 12px;
+  background: #ff5da2;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255,93,162,0.9);
+  animation: zeno-pupil 3s ease-in-out infinite;
+}
+
+/* Observation ring */
 #zeno-eye::after {
   content: "";
   position: absolute;
@@ -218,14 +238,14 @@ tr:nth-child(even) {
   animation: zeno-rotate 6s linear infinite;
 }
 
-/* Pulse */
+/* Awareness pulse */
 #zeno-eye::before {
   content: "";
   position: absolute;
   inset: -10px;
   border-radius: 50%;
   background: rgba(168,85,247,0.35);
-  animation: zeno-pulse 2.5s ease-out infinite;
+  animation: zeno-pulse 2.6s ease-out infinite;
 }
 
 @keyframes zeno-rotate {
@@ -235,7 +255,12 @@ tr:nth-child(even) {
 
 @keyframes zeno-pulse {
   0% { transform: scale(0.7); opacity: 0.6; }
-  100% { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes zeno-pupil {
+  0%,100% { transform: translate(0,0); }
+  50% { transform: translate(2px,1px); }
 }
 
 /* ================================
@@ -245,11 +270,15 @@ tr:nth-child(even) {
 #zeno-cloud {
   position: fixed;
   right: 20px;
-  bottom: 90px;
-  width: 280px;
-  padding: 16px;
+  bottom: 92px;
+  width: 300px;
+  padding: 18px;
   font-size: 14px;
   color: #f5f3ff;
+  border-radius: 16px;
+  background: rgba(36,18,61,0.85);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.7);
   z-index: 998;
 }
 
@@ -258,11 +287,7 @@ tr:nth-child(even) {
    ================================ */
 
 @media (max-width: 600px) {
-  h2 {
-    font-size: 20px;
-  }
-  button {
-    width: 100%;
-    margin-right: 0;
-  }
-}
+  h2 { font-size: 20px; }
+  .container { padding: 20px; }
+  button { width: 100%; margin-right: 0; }
+     }
