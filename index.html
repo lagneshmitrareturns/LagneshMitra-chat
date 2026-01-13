@@ -59,7 +59,7 @@
   padding:30px 18px;
 }
 
-/* ---------- HALL OF FAME (FULL WIDTH) ---------- */
+/* ---------- HALL OF FAME ---------- */
 .post-card{
   width:100%;
   max-width:1100px;
@@ -119,11 +119,21 @@
   </div>
   <div class="menu" onclick="toggleMenu()">⋮</div>
 
+  <!-- DROPDOWN PANEL -->
   <div class="dropdown glass" id="menuBox">
     <p><strong>Core Thinking</strong></p>
     <p>Interpretation before prediction</p>
     <p>Decisions before remedies</p>
     <p>Structure before emotion</p>
+
+    <hr style="margin:12px 0;opacity:.3">
+
+    <p>
+      <a href="admin-posts.html" target="_blank"
+         style="color:#ff5da2;text-decoration:none;font-weight:600;">
+        Admin Panel
+      </a>
+    </p>
   </div>
 </div>
 
@@ -138,8 +148,16 @@
   </div>
 </div>
 
-<!-- ZENO EYE -->
-<div id="zeno-eye"></div>
+<!-- ZENO EYE (FIXED STRUCTURE) -->
+<div id="zeno-eye">
+  <div class="ring"></div>
+
+  <div class="iris">
+    <div class="pupil"></div>
+  </div>
+
+  <div class="lid"></div>
+</div>
 
 <!-- ZENO CLOUD -->
 <div id="zeno-cloud" class="glass"></div>
@@ -216,7 +234,7 @@ eye.onclick=()=>{
       <strong>ZENO v1.0 — Test Protocol</strong><br><br>
       I am observing this index page in read-only mode.<br><br>
       Hall of Fame detected.<br>
-      Content + metadata loaded.<br><br>
+      Content and metadata loaded.<br><br>
       I am currently a diagnostic observer.<br><br>
       In future phases, I will evolve into the
       <strong>Central Brain of this ecosystem</strong>.
