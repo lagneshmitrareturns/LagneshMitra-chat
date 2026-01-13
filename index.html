@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LagneshMitra – Shaping the Future</title>
+<title>LagneshMitra – Decision Intelligence</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="style.css">
@@ -39,7 +39,7 @@
   color:#e9d5ff;
 }
 
-/* ---------- DROPDOWN (IDEOLOGY PANEL) ---------- */
+/* ---------- DROPDOWN ---------- */
 .dropdown{
   position:absolute;
   top:70px;
@@ -48,24 +48,6 @@
   padding:18px;
   display:none;
   z-index:999;
-}
-
-.dropdown h4{
-  font-size:13px;
-  opacity:.7;
-  margin-bottom:6px;
-}
-
-.dropdown p{
-  font-size:14px;
-  margin-bottom:6px;
-}
-
-.dropdown a{
-  display:block;
-  margin-top:6px;
-  color:#ff5da2;
-  text-decoration:none;
 }
 
 /* ---------- HERO ---------- */
@@ -80,8 +62,9 @@
 
 /* ---------- POST CARD ---------- */
 .post-card{
-  max-width:720px;
-  padding:26px;
+  max-width:900px;
+  width:100%;
+  padding:28px;
   border-radius:22px;
   cursor:pointer;
 }
@@ -117,8 +100,8 @@
   position:fixed;
   right:20px;
   bottom:90px;
-  width:280px;
-  padding:16px;
+  width:300px;
+  padding:18px;
   font-size:14px;
   display:none;
   z-index:998;
@@ -136,27 +119,16 @@
   </div>
   <div class="menu" onclick="toggleMenu()">⋮</div>
 
-  <!-- IDEOLOGY DROPDOWN -->
   <div class="dropdown glass" id="menuBox">
-    <h4>Core Thinking</h4>
-    <p>We do not predict.</p>
-    <p>We interpret.</p>
-    <p>Decisions before remedies.</p>
-
-    <h4>This Platform Is</h4>
-    <p>Structured Vedic analysis</p>
-    <p>Psychology-aware readings</p>
-
-    <h4>This Platform Is Not</h4>
-    <p>No daily horoscopes</p>
-    <p>No instant predictions</p>
-
-    <a href="#hall">Hall of Fame</a>
+    <p><strong>Core Thinking</strong></p>
+    <p>Interpretation before prediction</p>
+    <p>Decisions before remedies</p>
+    <p>Structure before emotion</p>
   </div>
 </div>
 
-<!-- HERO / HALL OF FAME -->
-<div class="hero" id="hall">
+<!-- HERO -->
+<div class="hero">
   <div class="post-card glass" onclick="togglePost()">
     <h3>Hall of Fame</h3>
     <div class="meta" id="postMeta"></div>
@@ -170,23 +142,16 @@
 <div id="zeno-eye"></div>
 
 <!-- ZENO CLOUD -->
-<div id="zeno-cloud" class="glass">
-  <p>
-    LagneshMitra,<br><br>
-    your index page listing is present.<br><br>
-    Do you want to read it?
-  </p>
-  <button onclick="zenoYes()">Yes</button>
-  <button onclick="zenoClose()">Close</button>
-</div>
+<div id="zeno-cloud" class="glass"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
-  getFirestore, doc, setDoc, updateDoc,
+  getFirestore, doc, updateDoc,
   serverTimestamp, collection, getDocs, increment
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+/* FIREBASE */
 const app = initializeApp({
   apiKey:"AIzaSyCX8yGRJc5AcxSEaaC6AzNLZzxtOCz83Sk",
   authDomain:"lagneshmitra-e57b8.firebaseapp.com",
@@ -194,69 +159,89 @@ const app = initializeApp({
 });
 const db = getFirestore(app);
 
+/* MENU */
 window.toggleMenu=()=>menuBox.style.display=
   menuBox.style.display==="block"?"none":"block";
 
-/* ---------- POST TOGGLE ---------- */
-let expanded=false, currentPostId=null;
+/* POST */
+let expanded=false;
+let currentPost=null;
 
 window.togglePost=async()=>{
-  if(!currentPostId) return;
+  if(!currentPost) return;
   expanded=!expanded;
   postFull.style.display=expanded?"block":"none";
   postPreview.style.display=expanded?"none":"block";
   readMore.innerText=expanded?"Tap to collapse":"Tap to expand";
 
   if(expanded){
-    await updateDoc(doc(db,"posts",currentPostId),{
+    await updateDoc(doc(db,"posts",currentPost.id),{
       views: increment(1)
     });
   }
 };
 
-/* ---------- LOAD POST ---------- */
+/* LOAD POST */
 async function loadLatestPost(){
   const snap=await getDocs(collection(db,"posts"));
   let latest=null;
+
   snap.forEach(d=>{
     const data=d.data();
     if(!latest || (data.updatedAt?.seconds||0)>(latest.updatedAt?.seconds||0)){
       latest={id:d.id,...data};
     }
   });
+
   if(!latest) return;
+  currentPost=latest;
 
-  currentPostId=latest.id;
-  const full=latest.content||"";
-  postPreview.innerText=full.substring(0,300)+(full.length>300?"...":"");
-  postFull.innerText=full;
+  postPreview.innerText =
+    latest.content.substring(0,320)+(latest.content.length>320?"...":"");
+  postFull.innerText = latest.content;
 
-  const hrs=latest.updatedAt?.seconds
-    ?Math.floor((Date.now()/1000-latest.updatedAt.seconds)/3600):0;
-
-  postMeta.innerText=`Updated ${hrs} hrs ago • Views ${latest.views||0}`;
+  const hrs = Math.floor((Date.now()/1000-latest.updatedAt.seconds)/3600);
+  postMeta.innerText =
+    `Updated ${hrs} hrs ago • Views ${latest.views||0}`;
 }
 loadLatestPost();
 
-/* ---------- ZENO ---------- */
+/* ZENO */
 const eye=document.getElementById("zeno-eye");
 const cloud=document.getElementById("zeno-cloud");
 
-eye.onclick=()=>cloud.style.display="block";
-function zenoClose(){cloud.style.display="none"}
-function zenoYes(){
+eye.onclick=()=>{
+  cloud.style.display="block";
   cloud.innerHTML=`
     <p>
-      Index Page — Active<br><br>
-      • Header: present<br>
-      • Dropdown: present<br>
-      • Hall of Fame: present<br>
-      • Color schema: applied<br><br>
-      Observation complete.
+      LagneshMitra,<br><br>
+      I am observing your index page.<br><br>
+      Hall of Fame detected.<br>
+      Latest insight loaded.<br><br>
+      Do you want a summary?
+    </p>
+    <button onclick="zenoYes()">Yes</button>
+    <button onclick="zenoClose()">Close</button>
+  `;
+};
+
+window.zenoClose=()=>cloud.style.display="none";
+
+window.zenoYes=()=>{
+  cloud.innerHTML=`
+    <p>
+      <strong>Observation Report</strong><br><br>
+      • Header: active<br>
+      • Ideology menu: active<br>
+      • Hall of Fame: active<br>
+      • Latest title loaded<br>
+      • Views tracking enabled<br><br>
+      System status: stable.<br><br>
+      ZENO is in standby mode.
     </p>
     <button onclick="zenoClose()">Close</button>
   `;
-}
+};
 </script>
 
 </body>
