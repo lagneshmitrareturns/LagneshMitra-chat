@@ -27,12 +27,6 @@ let currentPostRef = null;
 let expanded = false;
 let viewCounted = false;
 
-/* DOM CACHE (IMPORTANT) */
-const card = document.getElementById("postCard");
-const previewEl = document.getElementById("postPreview");
-const fullEl = document.getElementById("postFull");
-const metaEl = document.getElementById("postMeta");
-
 /* ⏱ Time formatter */
 function formatMinutesAgo(seconds) {
   const mins = Math.floor((Date.now() - seconds * 1000) / 60000);
@@ -61,35 +55,41 @@ async function loadLatestPost() {
       ? post.content.slice(0, 260) + "..."
       : post.content;
 
-  previewEl.innerText = preview;
-  fullEl.innerText = post.content;
+  document.getElementById("postPreview").innerText = preview;
+  document.getElementById("postFull").innerText = post.content;
 
   const timeText = post.updatedAt?.seconds
     ? formatMinutesAgo(post.updatedAt.seconds)
     : "just now";
 
-  metaEl.innerText =
+  document.getElementById("postMeta").innerText =
     `Updated ${timeText} • Views ${post.views || 0}`;
 }
 
-/* 🔘 CLICK = ONLY EXPAND CONTROLLER */
-card.addEventListener("click", async () => {
-  if (!currentPostRef) return;
+/* 🧠 DOM SAFE BINDING */
+document.addEventListener("DOMContentLoaded", () => {
+  const card = document.getElementById("postCard");
 
-  expanded = !expanded;
-  card.classList.toggle("expanded", expanded);
+  if (!card) return;
 
-  /* 👁 Count view ONCE */
-  if (expanded && !viewCounted) {
-    await updateDoc(currentPostRef, {
-      views: increment(1)
-    });
-    viewCounted = true;
-  }
+  card.addEventListener("click", async () => {
+    if (!currentPostRef) return;
+
+    expanded = !expanded;
+    card.classList.toggle("expanded", expanded);
+
+    /* 👁 Count view ONLY ON FIRST EXPAND */
+    if (expanded && !viewCounted) {
+      await updateDoc(currentPostRef, {
+        views: increment(1)
+      });
+      viewCounted = true;
+    }
+  });
 });
 
 /* 🚀 Initial load */
 loadLatestPost();
 
-/* 🔁 Auto refresh (SAFE) */
+/* 🔁 Auto refresh (SAFE — no collapse, no flicker) */
 setInterval(loadLatestPost, 60000);
