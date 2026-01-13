@@ -2,9 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import {
   getFirestore,
   doc,
-  setDoc,
   updateDoc,
-  serverTimestamp,
   collection,
   getDocs,
   increment,
@@ -17,17 +15,14 @@ import {
 const firebaseConfig = {
   apiKey: "AIzaSyCX8yGRJc5AcxSEaaC6AzNLZzxtOCz83Sk",
   authDomain: "lagneshmitra-e57b8.firebaseapp.com",
-  projectId: "lagneshmitra-e57b8",
-  storageBucket: "lagneshmitra-e57b8.firebasestorage.app",
-  messagingSenderId: "420798143606",
-  appId: "1:420798143606:web:ace6aec7d195492a415357"
+  projectId: "lagneshmitra-e57b8"
 };
 
 /* 🚀 Init */
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* 🔒 State */
+/* 🔒 State (SINGLE SOURCE OF TRUTH) */
 let currentPostRef = null;
 let expanded = false;
 let viewCounted = false;
@@ -39,7 +34,8 @@ function formatMinutesAgo(seconds) {
   return `${mins} mins ago`;
 }
 
-/* 🏆 Load Latest Hall of Fame Post */
+/* 🏆 Load Latest Hall of Fame Post
+   ⚠️ DOES NOT TOUCH EXPAND STATE */
 async function loadLatestPost() {
   const q = query(
     collection(db, "posts"),
@@ -68,11 +64,10 @@ async function loadLatestPost() {
 
   document.getElementById("postMeta").innerText =
     `Updated ${timeText} • Views ${post.views || 0}`;
-
-  // 🔁 IMPORTANT: do NOT touch expanded state here
 }
 
-/* 🔘 Toggle Hall of Fame (ONLY PLACE THAT CONTROLS EXPAND) */
+/* 🔘 Toggle Hall of Fame
+   ✅ ONLY PLACE THAT CONTROLS EXPAND */
 async function togglePost() {
   if (!currentPostRef) return;
 
@@ -81,7 +76,7 @@ async function togglePost() {
   const card = document.querySelector(".post-card");
   card.classList.toggle("expanded", expanded);
 
-  /* 👁 Count view ONLY on first expand */
+  /* 👁 Count view ONLY once */
   if (expanded && !viewCounted) {
     await updateDoc(currentPostRef, {
       views: increment(1)
@@ -96,5 +91,5 @@ window.togglePost = togglePost;
 /* 🚀 Initial load */
 loadLatestPost();
 
-/* 🔁 Auto refresh (SAFE — does NOT break expand) */
+/* 🔁 Auto refresh (SAFE, no flicker, no collapse) */
 setInterval(loadLatestPost, 60000);
