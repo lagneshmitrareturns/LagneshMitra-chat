@@ -1,7 +1,6 @@
 /* ================================
    LagneshMitra – Core Styling
-   HARD STABLE VERSION
-   Focus: Hall of Fame + Expand Button
+   STABLE LOCKED VERSION
    ================================ */
 
 /* ===== RESET ===== */
@@ -57,16 +56,6 @@ body {
   z-index: 2000;
 }
 
-.dropdown {
-  position: absolute;
-  top: 92px;
-  right: 28px;
-  width: 320px;
-  padding: 18px;
-  display: none;
-  z-index: 2100;
-}
-
 /* ===== HERO ===== */
 .hero {
   display: flex;
@@ -80,8 +69,8 @@ body {
   max-width: 1100px;
   margin-top: 28px;
 
-  /* 🔥 IMPORTANT: EXTRA BOTTOM SPACE */
-  padding: 32px 36px 96px;
+  /* 🔥 EXTRA SAFE SPACE */
+  padding: 32px 36px 120px;
 
   border-radius: 26px;
   background: rgba(255,255,255,0.08);
@@ -89,19 +78,17 @@ body {
   box-shadow: 0 22px 60px rgba(0,0,0,0.6);
   backdrop-filter: blur(12px);
 
-  /* 🔒 COLLAPSED STATE */
-  max-height: 360px;   /* 👈 deliberately tall */
+  /* 🔒 COLLAPSED HEIGHT (INCREASED) */
+  max-height: 520px;
   overflow: hidden;
 
   transition: max-height 0.6s ease;
 }
 
-/* ===== EXPANDED STATE ===== */
 .post-card.expanded {
-  max-height: 6000px;
+  max-height: 7000px;
 }
 
-/* ===== HEADINGS ===== */
 .post-card h3 {
   font-size: 26px;
   margin-bottom: 14px;
@@ -114,7 +101,7 @@ body {
   margin-bottom: 16px;
 }
 
-/* ===== CONTENT VISIBILITY ===== */
+/* ===== CONTENT ===== */
 .post-preview {
   margin-top: 10px;
 }
@@ -123,12 +110,10 @@ body {
   margin-top: 18px;
 }
 
-/* hide full content when collapsed */
 .post-card:not(.expanded) .post-full {
   display: none;
 }
 
-/* hide preview when expanded */
 .post-card.expanded .post-preview {
   display: none;
 }
@@ -137,10 +122,10 @@ body {
 #toggleBtn {
   position: absolute;
   left: 50%;
-  bottom: 24px;              /* 👈 SAFE GAP */
+  bottom: 32px;
   transform: translateX(-50%);
 
-  padding: 12px 22px;
+  padding: 12px 24px;
   background: linear-gradient(135deg, #ff5da2, #c084fc);
   border: none;
   border-radius: 14px;
@@ -157,11 +142,10 @@ body {
   transform: translateX(-50%) translateY(-1px);
 }
 
-/* expanded → button flows naturally */
 .post-card.expanded #toggleBtn {
   position: static;
   transform: none;
-  margin-top: 28px;
+  margin-top: 32px;
 }
 
 /* ===== MOBILE ===== */
@@ -179,7 +163,7 @@ body {
   }
 
   .post-card {
-    padding: 24px 24px 88px;
-    max-height: 380px;
+    padding: 24px 24px 120px;
+    max-height: 560px;
   }
 }
