@@ -52,44 +52,44 @@
 
 /* ---------- HERO ---------- */
 .hero{
-  min-height:calc(100vh - 160px);
-  margin-top:70px;
+  min-height:calc(100vh - 120px);
+  margin-top:90px;
   display:flex;
-  align-items:center;
   justify-content:center;
-  padding:40px;
+  padding:30px 18px;
 }
 
-/* ---------- POST CARD ---------- */
+/* ---------- HALL OF FAME (FULL WIDTH) ---------- */
 .post-card{
-  max-width:900px;
   width:100%;
-  padding:28px;
-  border-radius:22px;
+  max-width:1100px;
+  padding:34px 36px;
+  border-radius:26px;
   cursor:pointer;
 }
 
 .post-card h3{
   color:#ff5da2;
   font-style:italic;
-  margin-bottom:6px;
+  margin-bottom:10px;
+  font-size:24px;
 }
 
 .meta{
-  font-size:12px;
+  font-size:13px;
   color:#c4b5fd;
-  margin-bottom:14px;
+  margin-bottom:18px;
 }
 
 .post-preview,.post-full{
   font-size:18px;
-  line-height:1.75;
+  line-height:1.8;
   color:#e9d5ff;
 }
 .post-full{display:none}
 
 .read-more{
-  margin-top:14px;
+  margin-top:18px;
   font-size:13px;
   color:#ff5da2;
   font-style:italic;
@@ -100,7 +100,7 @@
   position:fixed;
   right:20px;
   bottom:90px;
-  width:300px;
+  width:320px;
   padding:18px;
   font-size:14px;
   display:none;
@@ -127,7 +127,7 @@
   </div>
 </div>
 
-<!-- HERO -->
+<!-- HERO / HALL OF FAME -->
 <div class="hero">
   <div class="post-card glass" onclick="togglePost()">
     <h3>Hall of Fame</h3>
@@ -148,7 +148,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
   getFirestore, doc, updateDoc,
-  serverTimestamp, collection, getDocs, increment
+  collection, getDocs, increment
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* FIREBASE */
@@ -181,7 +181,7 @@ window.togglePost=async()=>{
   }
 };
 
-/* LOAD POST */
+/* LOAD LATEST POST */
 async function loadLatestPost(){
   const snap=await getDocs(collection(db,"posts"));
   let latest=null;
@@ -197,16 +197,15 @@ async function loadLatestPost(){
   currentPost=latest;
 
   postPreview.innerText =
-    latest.content.substring(0,320)+(latest.content.length>320?"...":"");
+    latest.content.substring(0,360)+(latest.content.length>360?"...":"");
   postFull.innerText = latest.content;
 
-  const hrs = Math.floor((Date.now()/1000-latest.updatedAt.seconds)/3600);
-  postMeta.innerText =
-    `Updated ${hrs} hrs ago • Views ${latest.views||0}`;
+  const hrs=Math.floor((Date.now()/1000-latest.updatedAt.seconds)/3600);
+  postMeta.innerText=`Updated ${hrs} hrs ago • Views ${latest.views||0}`;
 }
 loadLatestPost();
 
-/* ZENO */
+/* ---------- ZENO v1.0 ---------- */
 const eye=document.getElementById("zeno-eye");
 const cloud=document.getElementById("zeno-cloud");
 
@@ -214,13 +213,15 @@ eye.onclick=()=>{
   cloud.style.display="block";
   cloud.innerHTML=`
     <p>
-      LagneshMitra,<br><br>
-      I am observing your index page.<br><br>
+      <strong>ZENO v1.0 — Test Protocol</strong><br><br>
+      I am observing this index page in read-only mode.<br><br>
       Hall of Fame detected.<br>
-      Latest insight loaded.<br><br>
-      Do you want a summary?
+      Content + metadata loaded.<br><br>
+      I am currently a diagnostic observer.<br><br>
+      In future phases, I will evolve into the
+      <strong>Central Brain of this ecosystem</strong>.
     </p>
-    <button onclick="zenoYes()">Yes</button>
+    <button onclick="zenoYes()">Continue</button>
     <button onclick="zenoClose()">Close</button>
   `;
 };
@@ -234,10 +235,11 @@ window.zenoYes=()=>{
       • Header: active<br>
       • Ideology menu: active<br>
       • Hall of Fame: active<br>
-      • Latest title loaded<br>
-      • Views tracking enabled<br><br>
-      System status: stable.<br><br>
-      ZENO is in standby mode.
+      • Latest insight: loaded<br>
+      • Views tracking: enabled<br><br>
+      System integrity: stable.<br><br>
+      Status: Standby.<br>
+      Authority: BE001 override only.
     </p>
     <button onclick="zenoClose()">Close</button>
   `;
