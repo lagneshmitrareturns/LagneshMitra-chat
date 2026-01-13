@@ -104,7 +104,7 @@ body {
   max-width: 1100px;
   margin-top: 28px;
   padding: 32px 36px;
-  padding-bottom: 44px;              /* ✅ ADDED: bottom breathing */
+  padding-bottom: 44px;
   border-radius: 26px;
   background: rgba(255,255,255,0.07);
   border: 1px solid rgba(255,255,255,0.18);
@@ -128,7 +128,6 @@ body {
   max-height: 6000px;
 }
 
-/* heading */
 .post-card h3 {
   font-size: 26px;
   margin-bottom: 14px;
@@ -136,7 +135,6 @@ body {
   font-style: italic;
 }
 
-/* meta */
 .meta {
   font-size: 13px;
   color: #c4b5fd;
@@ -150,12 +148,12 @@ body {
 .post-preview {
   margin-top: 10px;
   display: block;
-  padding-bottom: 6px;               /* ✅ ADDED */
+  padding-bottom: 6px;
 }
 
 .post-full {
   margin-top: 18px;
-  padding-bottom: 6px;               /* ✅ ADDED */
+  padding-bottom: 6px;
   display: block;
 }
 
@@ -176,7 +174,6 @@ body {
   pointer-events: auto;
 }
 
-/* ✅ FINAL SAFETY: last element never sticks to border */
 .post-card > *:last-child {
   margin-bottom: 8px;
 }
@@ -242,6 +239,27 @@ body {
 }
 
 /* ================================
+   ZENO ANIMATIONS
+   ================================ */
+
+@keyframes pupil-move {
+  0%,100% { transform: translate(0,0); }
+  25% { transform: translate(2px,1px); }
+  50% { transform: translate(-1px,2px); }
+  75% { transform: translate(1px,-1px); }
+}
+
+@keyframes ring-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes blink {
+  0%,92%,100% { transform: translateY(-100%); }
+  94%,96% { transform: translateY(0); }
+}
+
+/* ================================
    ZENO CLOUD
    ================================ */
 
@@ -280,7 +298,7 @@ body {
   .post-card {
     max-height: 220px;
     padding: 24px;
-    padding-bottom: 34px;           /* ✅ mobile breathing */
+    padding-bottom: 34px;
     margin-top: 20px;
   }
 
@@ -288,4 +306,19 @@ body {
     width: 52px;
     height: 52px;
   }
+}
+
+/* ================================
+   🔥 ZENO FORCE ANIMATION PATCH
+   (ANDROID / CHROME SAFE)
+   ================================ */
+
+#zeno-eye,
+#zeno-eye * {
+  animation-play-state: running !important;
+  will-change: transform;
+}
+
+#zeno-eye {
+  transform: translateZ(0);
 }
