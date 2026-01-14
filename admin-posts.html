@@ -14,8 +14,30 @@ body{
   min-height:100vh;
 }
 
+/* ===============================
+   LEFT SYSTEM LABEL
+   =============================== */
+.system-label{
+  position:fixed;
+  top:22px;
+  left:22px;
+  font-size:14px;
+  font-style:italic;
+  color:#d8b4fe;
+  opacity:0.85;
+  z-index:50;
+}
+.system-label strong{
+  display:block;
+  font-size:16px;
+  color:#ff5da2;
+}
+
+/* ===============================
+   HEADER (SHIFTED DOWN)
+   =============================== */
 .header{
-  padding:18px 22px;
+  padding:72px 22px 18px; /* 🔥 space after system label */
   font-size:22px;
   font-style:italic;
   color:#ff5da2;
@@ -127,6 +149,12 @@ button.danger{
 </head>
 
 <body>
+
+<!-- 🔥 SYSTEM LABEL -->
+<div class="system-label">
+  <strong>LagneshMitra Intelligence System</strong>
+  Version 1.0
+</div>
 
 <div class="header">
   LagneshMitra – Admin Panel
