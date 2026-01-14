@@ -155,7 +155,7 @@ body {
 }
 
 /* ==================================================
-   ZENO — EYE
+   ZENO — EYE (FIXED)
    ================================================== */
 
 #zeno-eye {
@@ -178,18 +178,25 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+
+  overflow: visible;              /* 🔥 CRITICAL FIX */
   cursor: pointer;
   z-index: 5000;
 }
 
+/* pupil ALWAYS visible */
+#zeno-eye .pupil {
+  position: relative;
+  z-index: 2;
+}
+
 /* ==================================================
-   🔥 ZENO MENU — FINAL FIX
-   OPENS ABOVE, NOT IN CONTENT FLOW
+   🔥 ZENO MENU — ABSOLUTE LOCK
+   OPENS ABOVE CONTENT ALWAYS
    ================================================== */
 
 #zeno-cloud {
-  position: fixed;                 /* 🔑 BREAK SCROLL FLOW */
+  position: fixed;                 /* 🔑 OUT OF FLOW */
   top: 120px;                      /* 🔑 BELOW TOPBAR */
   right: 22px;
 
@@ -205,7 +212,7 @@ body {
   border-radius: 16px;
   box-shadow: 0 25px 55px rgba(0,0,0,0.75);
 
-  z-index: 9000;                   /* 🔥 ABOVE EVERYTHING */
+  z-index: 9000;                   /* 🔥 ABOVE ALL */
 }
 
 /* ===== ANIMATIONS ===== */
