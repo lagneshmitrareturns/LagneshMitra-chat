@@ -13,15 +13,15 @@ body{
   background:linear-gradient(135deg,#1b0f2e,#2b1055);
   color:#fff;
   height:100vh;
-  overflow:hidden; /* 🔒 page never scrolls */
+  overflow:hidden;
 }
 
 /* ===== SYSTEM LABEL ===== */
 .system-label{
   position:fixed;
-  top:16px;
+  top:14px;
   left:18px;
-  z-index:50;
+  z-index:200;
   font-size:13px;
   font-style:italic;
   color:#d8b4fe;
@@ -32,45 +32,36 @@ body{
   color:#ff5da2;
 }
 
-/* ===== HEADER ===== */
-.header{
-  padding:64px 22px 12px;
-  font-size:22px;
-  font-style:italic;
-  color:#ff5da2;
-}
-.header span{
-  display:block;
-  font-size:12px;
-  color:#d8b4fe;
-}
-
-/* ===== ADMIN SHELL ===== */
-.admin-shell{
+/* ===== TOP COMMAND BAR ===== */
+.top-bar{
+  position:fixed;
+  top:54px;
+  left:0;
+  width:100%;
+  height:64px;
   display:flex;
-  height:calc(100vh - 120px);
-}
-
-/* ===== MENU (FROZEN) ===== */
-.admin-menu{
-  width:220px;
+  align-items:center;
+  gap:22px;
+  padding:0 22px;
   background:#1f1433;
-  padding:16px;
-  border-right:1px solid #3b2463;
-  box-sizing:border-box;
+  border-bottom:1px solid #3b2463;
+  z-index:150;
 }
 
-.admin-menu h4{
-  margin:14px 0 8px;
+.group{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.group-title{
   font-size:13px;
   color:#c4b5fd;
-  font-weight:500;
+  font-style:italic;
 }
 
-.admin-menu button{
-  width:100%;
-  margin-bottom:10px;
-  padding:10px;
+.top-bar button{
+  padding:8px 14px;
   border-radius:10px;
   border:none;
   cursor:pointer;
@@ -81,7 +72,11 @@ body{
 
 /* ===== WORKSPACE ===== */
 .workspace{
-  flex:1;
+  position:absolute;
+  top:118px;
+  left:0;
+  width:100%;
+  height:calc(100vh - 118px);
   background:#24123d;
   overflow:hidden;
 }
@@ -93,11 +88,11 @@ body{
   box-sizing:border-box;
 }
 
-/* EMPTY STATE */
-.empty-state{
+/* ===== EMPTY STATE ===== */
+.empty{
   color:#c4b5fd;
   font-style:italic;
-  opacity:.75;
+  opacity:.7;
 }
 
 /* ===== FORM ===== */
@@ -109,16 +104,16 @@ textarea{
   border:none;
   resize:vertical;
   font-size:15px;
-  background:#ffffff;
+  background:#fff;
   color:#111;
 }
 
-button.action{
+.action{
   margin-top:12px;
   margin-right:8px;
 }
 
-button.danger{
+.danger{
   background:#7f1d1d;
   color:#fff;
 }
@@ -147,36 +142,31 @@ button.danger{
 
 .post-content{
   white-space:pre-wrap;
-  font-size:15px;
   line-height:1.6;
 }
 
-/* ===== THREE DOT MENU ===== */
+/* ===== THREE DOT ===== */
 .menu-btn{
   position:absolute;
   top:12px;
   right:12px;
-  font-size:20px;
   cursor:pointer;
   color:#d8b4fe;
 }
 
 .menu-box{
   position:absolute;
-  top:36px;
+  top:34px;
   right:12px;
   background:#2a1650;
   border-radius:10px;
   display:none;
   overflow:hidden;
-  box-shadow:0 10px 30px rgba(0,0,0,.6);
 }
 
 .menu-box div{
   padding:10px 14px;
-  font-size:13px;
   cursor:pointer;
-  color:#fff;
 }
 
 .menu-box div:hover{
@@ -187,44 +177,41 @@ button.danger{
 
 <body>
 
-<!-- SYSTEM LABEL -->
+<!-- SYSTEM -->
 <div class="system-label">
   <strong>LagneshMitra Intelligence System</strong>
   Version 1.0
 </div>
 
-<div class="header">
-  LagneshMitra – Admin Panel
-  <span>Command Center</span>
+<!-- TOP MENU -->
+<div class="top-bar">
+  <div class="group">
+    <span class="group-title">Hall of Fame</span>
+    <button onclick="loadAdd()">➕ Add</button>
+    <button onclick="loadReplace()">♻ Replace</button>
+  </div>
+
+  <div class="group">
+    <span class="group-title">ZENO</span>
+    <button disabled>Controls</button>
+  </div>
+
+  <div class="group">
+    <span class="group-title">Mail</span>
+    <button disabled>Module</button>
+  </div>
+
+  <div class="group">
+    <span class="group-title">Payments</span>
+    <button disabled>Module</button>
+  </div>
 </div>
 
-<div class="admin-shell">
-
-  <!-- MENU -->
-  <div class="admin-menu">
-    <h4>Hall of Fame</h4>
-    <button onclick="loadAdd()">➕ Add Post</button>
-    <button onclick="loadReplace()">♻ Replace Post</button>
-
-    <h4>ZENO</h4>
-    <button disabled>Controls (soon)</button>
-
-    <h4>Mail</h4>
-    <button disabled>Mail Module</button>
-
-    <h4>Payments</h4>
-    <button disabled>Payment Module</button>
+<!-- WORKSPACE -->
+<div class="workspace">
+  <div class="workspace-inner" id="workspace">
+    <div class="empty">Select a module from the top menu</div>
   </div>
-
-  <!-- WORKSPACE -->
-  <div class="workspace">
-    <div class="workspace-inner" id="workspace">
-      <div class="empty-state">
-        Select a module from the left menu
-      </div>
-    </div>
-  </div>
-
 </div>
 
 <script type="module">
@@ -247,63 +234,56 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-let selectedPostId = null;
 const ws = document.getElementById("workspace");
+let selectedPostId=null;
 
-/* LOAD ADD */
-window.loadAdd = ()=>{
-  ws.innerHTML = `
-    <h3 style="color:#ff5da2;font-style:italic;">➕ Add Hall of Fame Post</h3>
-    <textarea id="postContent" placeholder="Write your post here..."></textarea>
+/* ADD */
+window.loadAdd=()=>{
+  ws.innerHTML=`
+    <h3 style="color:#ff5da2;">Add Hall of Fame Post</h3>
+    <textarea id="postContent"></textarea>
     <button class="action" onclick="addPost()">Publish</button>
     <button class="danger" onclick="clearWS()">Close</button>
-    <div id="status" style="margin-top:10px;"></div>
+    <div id="status"></div>
   `;
 };
 
-/* LOAD REPLACE */
-window.loadReplace = ()=>{
-  ws.innerHTML = `
-    <h3 style="color:#ff5da2;font-style:italic;">♻ Replace Hall of Fame Post</h3>
+/* REPLACE */
+window.loadReplace=()=>{
+  ws.innerHTML=`
+    <h3 style="color:#ff5da2;">Replace Post</h3>
     <div id="posts"></div>
-    <hr style="margin:18px 0;border:none;height:1px;background:#3b2463;">
-    <textarea id="postContent" placeholder="Edit selected post..."></textarea>
+    <textarea id="postContent"></textarea>
     <button class="action" onclick="updatePost()">Replace</button>
     <button class="danger" onclick="clearWS()">Close</button>
-    <div id="status" style="margin-top:10px;"></div>
+    <div id="status"></div>
   `;
   loadPosts();
 };
 
-window.clearWS = ()=>{
-  ws.innerHTML = `<div class="empty-state">Select a module from the left menu</div>`;
+window.clearWS=()=>{
+  ws.innerHTML=`<div class="empty">Select a module from the top menu</div>`;
 };
 
-/* ADD POST */
-window.addPost = async ()=>{
-  const text = postContent.value.trim();
-  if(!text) return;
+window.addPost=async()=>{
+  const text=postContent.value.trim();
+  if(!text)return;
   await addDoc(collection(db,"posts"),{
     content:text,
     views:0,
-    status:"published",
     createdAt:serverTimestamp(),
     updatedAt:serverTimestamp()
   });
-  postContent.value="";
-  status.innerText="✅ Post added";
+  status.innerText="✅ Added";
 };
 
-/* LOAD POSTS */
 async function loadPosts(){
   posts.innerHTML="";
-  const q = query(collection(db,"posts"),orderBy("updatedAt","desc"));
-  const snap = await getDocs(q);
-
+  const q=query(collection(db,"posts"),orderBy("updatedAt","desc"));
+  const snap=await getDocs(q);
   snap.forEach(d=>{
-    const p = d.data();
-    const div = document.createElement("div");
+    const p=d.data();
+    const div=document.createElement("div");
     div.className="post";
     div.innerHTML=`
       <div class="menu-btn" onclick="toggleMenu('${d.id}')">⋮</div>
@@ -319,32 +299,24 @@ async function loadPosts(){
   });
 }
 
-window.toggleMenu = id=>{
-  const b=document.getElementById("menu-"+id);
-  b.style.display=b.style.display==="block"?"none":"block";
+window.toggleMenu=id=>{
+  const m=document.getElementById("menu-"+id);
+  m.style.display=m.style.display==="block"?"none":"block";
 };
 
-window.editPost = async id=>{
+window.editPost=async id=>{
   const snap=await getDoc(doc(db,"posts",id));
-  if(!snap.exists())return;
   selectedPostId=id;
   postContent.value=snap.data().content;
 };
 
-window.updatePost = async ()=>{
-  if(!selectedPostId)return alert("Select post first");
+window.updatePost=async()=>{
+  if(!selectedPostId)return;
   await updateDoc(doc(db,"posts",selectedPostId),{
     content:postContent.value.trim(),
     updatedAt:serverTimestamp()
   });
-  selectedPostId=null;
-  status.innerText="✅ Post updated";
-};
-
-window.deletePost = async id=>{
-  if(!confirm("Delete this post?"))return;
-  await deleteDoc(doc(db,"posts",id));
-  loadPosts();
+  status.innerText="✅ Updated";
 };
 </script>
 
