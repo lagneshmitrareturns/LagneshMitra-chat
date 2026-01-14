@@ -50,18 +50,16 @@ body {
 }
 
 /* ================================
-   THREE DOT MENU — FINAL FIX
+   THREE DOT MENU
    ================================ */
 
 .menu {
-  font-size: 40px;                 /* 🔥 bigger dots */
+  font-size: 40px;
   cursor: pointer;
   color: #e9d5ff;
-
-  position: relative;              /* 🔑 anchor for dropdown */
+  position: relative;
   z-index: 3000;
-
-  padding: 6px 10px;               /* 🔥 proper touch area */
+  padding: 6px 10px;
   border-radius: 10px;
 }
 
@@ -69,23 +67,17 @@ body {
   background: rgba(255,255,255,0.08);
 }
 
-/* dropdown opens BELOW dots */
 .dropdown {
   position: absolute;
-  top: calc(100% + 12px);          /* 🔥 ALWAYS below */
+  top: calc(100% + 12px);
   right: 0;
-
   width: 320px;
   padding: 18px;
   display: none;
-
   background: rgba(36,18,61,0.95);
   backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-
   border-radius: 16px;
   box-shadow: 0 20px 45px rgba(0,0,0,0.7);
-
   z-index: 3100;
 }
 
@@ -96,7 +88,7 @@ body {
 }
 
 /* ==================================================
-   HALL OF FAME CARD — GPU SAFE SCROLL
+   HALL OF FAME CARD
    ================================================== */
 
 .post-card {
@@ -104,21 +96,16 @@ body {
   width: 100%;
   max-width: 1100px;
   margin-top: 28px;
-
   max-height: 520px;
   padding: 32px 36px 84px;
-
   border-radius: 26px;
-
   background: linear-gradient(
     160deg,
     rgba(255,255,255,0.10),
     rgba(255,255,255,0.04)
   );
-
   border: 1px solid rgba(255,255,255,0.18);
   box-shadow: 0 22px 60px rgba(0,0,0,0.6);
-
   overflow: hidden;
   transition: max-height 0.6s ease;
 }
@@ -128,16 +115,6 @@ body {
   overflow-y: auto;
 }
 
-/* scrollbar */
-.post-card.expanded::-webkit-scrollbar {
-  width: 6px;
-}
-.post-card.expanded::-webkit-scrollbar-thumb {
-  background: linear-gradient(#ff5da2, #7c3aed);
-  border-radius: 10px;
-}
-
-/* content */
 .post-card h3 {
   font-size: 26px;
   margin-bottom: 14px;
@@ -162,12 +139,10 @@ body {
   position: absolute;
   left: 36px;
   bottom: 28px;
-
   padding: 12px 22px;
   background: linear-gradient(135deg, #ff5da2, #c084fc);
   border: none;
   border-radius: 14px;
-
   color: #1b0f2e;
   font-weight: 700;
   cursor: pointer;
@@ -180,7 +155,7 @@ body {
 }
 
 /* ==================================================
-   ZENO — GPU HARD ISOLATION
+   ZENO — EYE
    ================================================== */
 
 #zeno-eye {
@@ -190,7 +165,6 @@ body {
   width: 58px;
   height: 58px;
   border-radius: 50%;
-
   background: radial-gradient(
     circle at center,
     #fdf4ff 14%,
@@ -198,53 +172,40 @@ body {
     #7c3aed 48%,
     #1b0f2e 70%
   );
-
   box-shadow:
     0 0 18px rgba(236,72,153,0.7),
     0 0 32px rgba(124,58,237,0.5);
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   overflow: hidden;
   cursor: pointer;
   z-index: 5000;
-
-  transform: translateZ(0);
-  will-change: transform;
 }
 
-/* ring */
-#zeno-eye .ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 2px solid rgba(255,93,162,0.75);
+/* ==================================================
+   🔥 ZENO MENU — FINAL FIX
+   OPENS ABOVE, NOT IN CONTENT FLOW
+   ================================================== */
 
-  animation:
-    ring-rotate 10s linear infinite,
-    ring-pulse-safe 5s ease-in-out infinite;
+#zeno-cloud {
+  position: fixed;                 /* 🔑 BREAK SCROLL FLOW */
+  top: 120px;                      /* 🔑 BELOW TOPBAR */
+  right: 22px;
 
-  pointer-events: none;
-}
+  width: 340px;
+  padding: 18px;
 
-/* pupil */
-#zeno-eye .pupil {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #ff5da2, #7c3aed);
-  animation: pupil-move 4s ease-in-out infinite;
-}
+  font-size: 14px;
+  color: #f5f3ff;
 
-/* blink */
-#zeno-eye .lid {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, #1b0f2e, #2b1055);
-  transform: translateY(-100%);
-  animation: blink 6s infinite;
+  background: rgba(36,18,61,0.96);
+  backdrop-filter: blur(16px);
+
+  border-radius: 16px;
+  box-shadow: 0 25px 55px rgba(0,0,0,0.75);
+
+  z-index: 9000;                   /* 🔥 ABOVE EVERYTHING */
 }
 
 /* ===== ANIMATIONS ===== */
@@ -276,13 +237,12 @@ body {
   body { padding-top: 120px; }
 
   .brand { font-size: 28px; }
-  .menu {
-    font-size: 34px;
-    padding: 8px 12px;
-  }
+  .menu { font-size: 34px; }
 
-  .dropdown {
-    width: 90vw;
+  #zeno-cloud {
+    width: 92vw;
+    right: 4vw;
+    top: 110px;
   }
 
   .post-card {
@@ -299,4 +259,4 @@ body {
     width: 52px;
     height: 52px;
   }
-                           }
+}
