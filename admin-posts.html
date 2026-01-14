@@ -121,6 +121,19 @@ body{
   opacity:.75;
 }
 
+/* ===== FULL HEIGHT FORM ===== */
+.form-shell{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+
+.form-shell textarea{
+  flex:1;
+  min-height:0;
+}
+
 /* ===== CLOSE X ===== */
 .close-x{
   position:absolute;
@@ -135,7 +148,6 @@ body{
 /* ===== FORM ===== */
 textarea{
   width:100%;
-  min-height:240px;
   padding:16px;
   border-radius:14px;
   border:none;
@@ -193,7 +205,6 @@ tr:hover{ background:#2a1650; cursor:pointer; }
     <button class="menu-main" disabled>Payments ▾</button>
   </div>
 
-  <!-- BACK TO INDEX -->
   <button class="menu-main back-btn" onclick="goHome()">↩ Back to Site</button>
 
 </div>
@@ -244,10 +255,12 @@ window.clearWS=()=>{
 window.loadAdd=()=>{
   selectedPostId=null;
   ws.innerHTML=`
-    <div class="close-x" onclick="clearWS()">✕</div>
-    <h3>Add Hall of Fame Post</h3>
-    <textarea id="postContent"></textarea>
-    <button class="action" onclick="savePost()">Publish</button>
+    <div class="form-shell">
+      <div class="close-x" onclick="clearWS()">✕</div>
+      <h3>Add Hall of Fame Post</h3>
+      <textarea id="postContent"></textarea>
+      <button class="action" onclick="savePost()">Publish</button>
+    </div>
   `;
 };
 
@@ -259,22 +272,26 @@ window.loadEditLatest=async()=>{
   const d=snap.docs[0];
   selectedPostId=d.id;
   ws.innerHTML=`
-    <div class="close-x" onclick="clearWS()">✕</div>
-    <h3>Edit Latest Post</h3>
-    <textarea id="postContent">${d.data().content}</textarea>
-    <button class="action" onclick="savePost()">Republish</button>
+    <div class="form-shell">
+      <div class="close-x" onclick="clearWS()">✕</div>
+      <h3>Edit Latest Post</h3>
+      <textarea id="postContent">${d.data().content}</textarea>
+      <button class="action" onclick="savePost()">Republish</button>
+    </div>
   `;
 };
 
 /* MANAGE */
 window.loadManage=async()=>{
   ws.innerHTML=`
-    <div class="close-x" onclick="clearWS()">✕</div>
-    <h3>Manage Posts</h3>
-    <table>
-      <thead><tr><th>Date</th><th>Preview</th><th>Views</th></tr></thead>
-      <tbody id="rows"></tbody>
-    </table>
+    <div class="form-shell">
+      <div class="close-x" onclick="clearWS()">✕</div>
+      <h3>Manage Posts</h3>
+      <table>
+        <thead><tr><th>Date</th><th>Preview</th><th>Views</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
   `;
   const q=query(collection(db,"posts"),orderBy("updatedAt","desc"));
   const snap=await getDocs(q);
@@ -292,10 +309,12 @@ window.editFromTable=async(id)=>{
   const snap=await getDoc(doc(db,"posts",id));
   selectedPostId=id;
   ws.innerHTML=`
-    <div class="close-x" onclick="clearWS()">✕</div>
-    <h3>Edit Post</h3>
-    <textarea id="postContent">${snap.data().content}</textarea>
-    <button class="action" onclick="savePost()">Republish</button>
+    <div class="form-shell">
+      <div class="close-x" onclick="clearWS()">✕</div>
+      <h3>Edit Post</h3>
+      <textarea id="postContent">${snap.data().content}</textarea>
+      <button class="action" onclick="savePost()">Republish</button>
+    </div>
   `;
 };
 
@@ -310,7 +329,8 @@ window.savePost=async()=>{
     });
   }else{
     await addDoc(collection(db,"posts"),{
-      content:text,views:0,
+      content:text,
+      views:0,
       createdAt:serverTimestamp(),
       updatedAt:serverTimestamp()
     });
