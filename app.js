@@ -149,9 +149,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* ================= ADMIN MENU HOOKS =================
    🔥 Any admin action auto-closes dropdown
+   🔒 Zero behavioural change
 */
 ["loadAdd", "loadEditLatest", "loadManage"].forEach(fn => {
-  if (window[fn]) {
+  if (typeof window[fn] === "function") {
     const original = window[fn];
     window[fn] = function (...args) {
       closeAllDropdowns();
