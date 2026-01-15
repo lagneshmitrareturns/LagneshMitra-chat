@@ -32,6 +32,15 @@ let viewCounted = false;
 /* 🔒 HARD LOCK — kills ghost / double click */
 let isToggling = false;
 
+/* ================= UTILS ================= */
+
+/* ⬇️ CLOSE ALL DROPDOWNS (ADMIN MENU SAFETY) */
+function closeAllDropdowns() {
+  document.querySelectorAll(".dropdown").forEach(d => {
+    d.style.display = "none";
+  });
+}
+
 /* ================= TIME FORMAT ================= */
 function formatMinutesAgo(seconds) {
   const mins = Math.floor((Date.now() - seconds * 1000) / 60000);
@@ -86,7 +95,7 @@ async function loadLatestPost() {
 
   if (!previewEl || !fullEl || !metaEl) return;
 
-  /* 🛡 If expanded → don’t disturb content (no jump) */
+  /* 🛡 If expanded → don’t disturb content */
   if (!expanded) {
     previewEl.innerText = preview;
     fullEl.innerText = post.content;
@@ -136,6 +145,19 @@ document.addEventListener("DOMContentLoaded", () => {
       isToggling = false;
     }, 700);
   });
+});
+
+/* ================= ADMIN MENU HOOKS =================
+   🔥 Any admin action auto-closes dropdown
+*/
+["loadAdd", "loadEditLatest", "loadManage"].forEach(fn => {
+  if (window[fn]) {
+    const original = window[fn];
+    window[fn] = function (...args) {
+      closeAllDropdowns();
+      return original.apply(this, args);
+    };
+  }
 });
 
 /* ================= INIT ================= */
