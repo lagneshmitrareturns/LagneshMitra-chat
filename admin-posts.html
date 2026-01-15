@@ -32,7 +32,7 @@ body{
   color:#ff5da2;
 }
 
-/* ===== TOP BAR ===== */
+/* ===== TOP COMMAND BAR ===== */
 .top-bar{
   position:fixed;
   top:54px;
@@ -135,18 +135,8 @@ textarea{
   font-size:15px;
   background:#fff;
   color:#111;
-}
-
-/* ===== ACTION BUTTON ===== */
-.action{
-  padding:16px;
-  border-radius:16px;
-  border:none;
-  font-size:16px;
-  font-weight:700;
-  cursor:pointer;
-  background:linear-gradient(135deg,#ff5da2,#d946ef);
-  color:#1b0f2e;
+  resize:none;
+  overflow-y:auto;
 }
 
 /* ===== CLOSE ===== */
@@ -162,7 +152,7 @@ textarea{
 /* ===== OPS PANEL ===== */
 .ops-toggle{
   position:absolute;
-  top:10px;
+  top:6px;
   right:44px;
   background:#2a1650;
   color:#fff;
@@ -190,6 +180,13 @@ textarea{
   border-radius:10px;
   cursor:pointer;
   font-size:13px;
+}
+
+/* 🔥 PRIMARY ACTION */
+.ops-panel .publish-btn{
+  background:linear-gradient(135deg,#ff5da2,#d946ef);
+  color:#1b0f2e;
+  font-weight:700;
 }
 
 /* ===== TABLE ===== */
@@ -295,11 +292,11 @@ window.loadAdd=()=>{
         <button>Insert Table</button>
         <button>Export PDF</button>
         <button>Print</button>
+        <button class="publish-btn" onclick="savePost()">Publish</button>
       </div>
 
       <h3>Add Hall of Fame Post</h3>
       <textarea id="postContent"></textarea>
-      <button class="action" onclick="savePost()">Publish</button>
     </div>
   `;
 };
@@ -323,11 +320,11 @@ window.loadEditLatest=async()=>{
         <button>Insert Table</button>
         <button>Export PDF</button>
         <button>Print</button>
+        <button class="publish-btn" onclick="savePost()">Republish</button>
       </div>
 
       <h3>Edit Latest Post</h3>
       <textarea id="postContent">${d.data().content}</textarea>
-      <button class="action" onclick="savePost()">Republish</button>
     </div>
   `;
 };
@@ -371,11 +368,11 @@ window.editFromTable=async(id)=>{
         <button>Insert Table</button>
         <button>Export PDF</button>
         <button>Print</button>
+        <button class="publish-btn" onclick="savePost()">Republish</button>
       </div>
 
       <h3>Edit Post</h3>
       <textarea id="postContent">${snap.data().content}</textarea>
-      <button class="action" onclick="savePost()">Republish</button>
     </div>
   `;
 };
