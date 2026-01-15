@@ -97,7 +97,7 @@ body {
   max-width: 1100px;
   margin-top: 28px;
   max-height: 520px;
-  padding: 32px 36px 84px;
+  padding: 32px 36px 96px;
   border-radius: 26px;
   background: linear-gradient(
     160deg,
@@ -128,177 +128,31 @@ body {
   margin-bottom: 16px;
 }
 
-.post-preview { margin-top: 10px; }
-.post-full { margin-top: 18px; }
-
-.post-card:not(.expanded) .post-full { display: none; }
-.post-card.expanded .post-preview { display: none; }
-
-/* ===== BUTTON ===== */
-#toggleBtn {
-  position: absolute;
-  left: 36px;
-  bottom: 28px;
-  padding: 12px 22px;
-  background: linear-gradient(135deg, #ff5da2, #c084fc);
-  border: none;
-  border-radius: 14px;
-  color: #1b0f2e;
-  font-weight: 700;
-  cursor: pointer;
-  z-index: 10;
+.post-preview {
+  margin-top: 10px;
 }
 
-.post-card.expanded #toggleBtn {
-  position: static;
-  margin-top: 32px;
+.post-full {
+  margin-top: 18px;
 }
 
-/* ================================
-   LagneshMitra – Core Styling
-   GPU PATCH KILL • FINAL LOCK
-   ================================ */
-
-/* ===== RESET ===== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* ===== BODY ===== */
-body {
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  background: radial-gradient(circle at top, #2b1055, #160a26 60%);
-  color: #f5f3ff;
-  line-height: 1.6;
-  padding: 16px;
-  padding-top: 140px;
-  overflow-x: hidden;
-}
-
-/* ===== TOP BAR ===== */
-.topbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  padding: 22px 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 1200;
-}
-
-.brand {
-  font-size: 36px;
-  font-style: italic;
-  font-weight: 600;
-  color: #ff5da2;
-  display: flex;
-  flex-direction: column;
-}
-
-.brand span {
-  font-size: 14px;
-  color: #d8b4fe;
-}
-
-/* ================================
-   THREE DOT MENU
-   ================================ */
-
-.menu {
-  font-size: 40px;
-  cursor: pointer;
-  color: #e9d5ff;
-  position: relative;
-  z-index: 3000;
-  padding: 6px 10px;
-  border-radius: 10px;
-}
-
-.menu:hover {
-  background: rgba(255,255,255,0.08);
-}
-
-.dropdown {
-  position: absolute;
-  top: calc(100% + 12px);
-  right: 0;
-  width: 320px;
-  padding: 18px;
+.post-card:not(.expanded) .post-full {
   display: none;
-  background: rgba(36,18,61,0.95);
-  backdrop-filter: blur(14px);
-  border-radius: 16px;
-  box-shadow: 0 20px 45px rgba(0,0,0,0.7);
-  z-index: 3100;
 }
 
-/* ===== HERO ===== */
-.hero {
-  display: flex;
-  justify-content: center;
+.post-card.expanded .post-preview {
+  display: none;
 }
 
-/* ==================================================
-   HALL OF FAME CARD
-   ================================================== */
-
-.post-card {
-  position: relative;
-  width: 100%;
-  max-width: 1100px;
-  margin-top: 28px;
-  max-height: 520px;
-  padding: 32px 36px 84px;
-  border-radius: 26px;
-  background: linear-gradient(
-    160deg,
-    rgba(255,255,255,0.10),
-    rgba(255,255,255,0.04)
-  );
-  border: 1px solid rgba(255,255,255,0.18);
-  box-shadow: 0 22px 60px rgba(0,0,0,0.6);
-  overflow: hidden;
-  transition: max-height 0.6s ease;
-}
-
-.post-card.expanded {
-  max-height: calc(100vh - 160px);
-  overflow-y: auto;
-}
-
-.post-card h3 {
-  font-size: 26px;
-  margin-bottom: 14px;
-  color: #ff5da2;
-  font-style: italic;
-}
-
-.meta {
-  font-size: 13px;
-  color: #c4b5fd;
-  margin-bottom: 16px;
-}
-
-.post-preview { margin-top: 10px; }
-.post-full { margin-top: 18px; }
-
-.post-card:not(.expanded) .post-full { display: none; }
-.post-card.expanded .post-preview { display: none; }
-
-/* ===== BUTTON ===== */
+/* ===== EXPAND BUTTON ===== */
 #toggleBtn {
   position: absolute;
   left: 36px;
   bottom: 28px;
-  padding: 12px 22px;
+  padding: 14px 26px;
   background: linear-gradient(135deg, #ff5da2, #c084fc);
   border: none;
-  border-radius: 14px;
+  border-radius: 16px;
   color: #1b0f2e;
   font-weight: 700;
   cursor: pointer;
@@ -311,7 +165,7 @@ body {
 }
 
 /* ==================================================
-   ZENO — EYE (FIXED)
+   ZENO — EYE (ALIVE)
    ================================================== */
 
 #zeno-eye {
@@ -337,8 +191,7 @@ body {
   overflow: hidden;
   cursor: pointer;
   z-index: 5000;
-
-  isolation: isolate; /* 🔥 CRITICAL */
+  isolation: isolate;
 }
 
 /* ring */
@@ -353,16 +206,14 @@ body {
   z-index: 1;
 }
 
-/* pupil — 🔥 FIXED + ALIVE */
+/* pupil — 🔥 alive but safe */
 #zeno-eye .pupil {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   background: radial-gradient(circle, #ff5da2, #7c3aed);
   z-index: 2;
-
   animation: pupil-move 6s ease-in-out infinite;
-  transform-origin: center;
 }
 
 /* blink */
@@ -376,7 +227,7 @@ body {
 }
 
 /* ==================================================
-   ZENO MENU — ALWAYS ABOVE EYE
+   ZENO CLOUD
    ================================================== */
 
 #zeno-cloud {
@@ -397,22 +248,20 @@ body {
 /* ===== ANIMATIONS ===== */
 @keyframes ring-rotate {
   from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes ring-pulse-safe {
-  0%   { transform: scale(1); opacity: 0.8; }
-  50%  { transform: scale(1.35); opacity: 0.4; }
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.35); opacity: 0.4; }
   100% { transform: scale(1); opacity: 0.8; }
 }
 
-/* 🔥 NEW — pupil movement */
 @keyframes pupil-move {
-  0%   { transform: translate(0,0); }
-  20%  { transform: translate(4px,-2px); }
-  40%  { transform: translate(-3px,2px); }
-  60%  { transform: translate(3px,3px); }
-  80%  { transform: translate(-2px,-3px); }
+  0% { transform: translate(0,0); }
+  25% { transform: translate(3px,-2px); }
+  50% { transform: translate(-3px,2px); }
+  75% { transform: translate(2px,3px); }
   100% { transform: translate(0,0); }
 }
 
@@ -431,7 +280,6 @@ body {
   #zeno-cloud {
     width: 92vw;
     right: 4vw;
-    bottom: calc(22px + 52px + 14px);
   }
 
   .post-card {
