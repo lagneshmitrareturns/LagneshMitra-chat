@@ -127,6 +127,7 @@ body{
   display:flex;
   flex-direction:column;
   position:relative;
+  gap:14px;
 }
 
 .form-shell textarea{
@@ -156,8 +157,18 @@ textarea{
   color:#111;
 }
 
-.action{ margin-top:14px; margin-right:8px; }
-.danger{ background:#7f1d1d; color:#fff; }
+/* ===== ACTION BUTTON ===== */
+.action{
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  background:linear-gradient(135deg,#ff5da2,#d946ef);
+  color:#1b0f2e;
+  width:100%;
+}
 
 /* ===== TABLE ===== */
 table{
@@ -185,11 +196,11 @@ tr:hover{ background:#2a1650; cursor:pointer; }
 <div class="top-bar">
 
   <div class="menu-group">
-    <button class="menu-main" onclick="toggleDD('hof-dd')">Hall of Fame ▾</button>
+    <button class="menu-main" onclick="toggleDD(event,'hof-dd')">Hall of Fame ▾</button>
     <div class="dropdown" id="hof-dd">
-      <button onclick="loadAdd()">➕ Add Post</button>
-      <button onclick="loadEditLatest()">✏ Edit Latest</button>
-      <button onclick="loadManage()">📋 Manage Posts</button>
+      <button onclick="menuAction(loadAdd)">➕ Add Post</button>
+      <button onclick="menuAction(loadEditLatest)">✏ Edit Latest</button>
+      <button onclick="menuAction(loadManage)">📋 Manage Posts</button>
     </div>
   </div>
 
@@ -206,7 +217,6 @@ tr:hover{ background:#2a1650; cursor:pointer; }
   </div>
 
   <button class="menu-main back-btn" onclick="goHome()">↩ Back to Site</button>
-
 </div>
 
 <div class="workspace">
@@ -235,15 +245,22 @@ let selectedPostId=null;
 /* NAV */
 window.goHome=()=>window.open("/", "_blank");
 
-/* DROPDOWN */
-window.toggleDD=id=>{
+/* ===== DROPDOWN LOGIC (FIXED) ===== */
+window.toggleDD = (e,id)=>{
+  e.stopPropagation();
+  const el = document.getElementById(id);
+  const open = el.style.display === "block";
   document.querySelectorAll(".dropdown").forEach(d=>d.style.display="none");
-  document.getElementById(id).style.display="block";
+  el.style.display = open ? "none" : "block";
 };
-document.addEventListener("click",e=>{
-  if(!e.target.closest(".menu-group")){
-    document.querySelectorAll(".dropdown").forEach(d=>d.style.display="none");
-  }
+
+window.menuAction = fn=>{
+  document.querySelectorAll(".dropdown").forEach(d=>d.style.display="none");
+  fn();
+};
+
+document.addEventListener("click",()=>{
+  document.querySelectorAll(".dropdown").forEach(d=>d.style.display="none");
 });
 
 /* CLEAR */
