@@ -24,6 +24,8 @@ const db = getFirestore(app);
 
 /* ================= STATE (SINGLE SOURCE OF TRUTH) ================= */
 let currentPostRef = null;
+let currentPostId = null;
+
 let expanded = false;
 let viewCounted = false;
 
@@ -38,7 +40,9 @@ function formatMinutesAgo(seconds) {
 }
 
 /* ================= LOAD LATEST POST =================
-   ⚠️ NEVER touches expand / collapse state
+   🔥 SAFE:
+   - does NOT collapse expanded card
+   - resets view counter ONLY if post changes
 */
 async function loadLatestPost() {
   const q = query(
@@ -52,7 +56,24 @@ async function loadLatestPost() {
 
   const snapDoc = snap.docs[0];
   const post = snapDoc.data();
-  currentPostRef = doc(db, "posts", snapDoc.id);
+  const newPostId = snapDoc.id;
+
+  /* 🧠 If new post arrived → reset counters */
+  if (currentPostId && currentPostId !== newPostId) {
+    viewCounted = false;
+    expanded = false;
+
+    const card = document.getElementById("postCard");
+    const toggleBtn = document.getElementById("toggleBtn");
+
+    if (card && toggleBtn) {
+      card.classList.remove("expanded");
+      toggleBtn.innerText = "Expand";
+    }
+  }
+
+  currentPostId = newPostId;
+  currentPostRef = doc(db, "posts", newPostId);
 
   const preview =
     post.content.length > 260
@@ -65,8 +86,11 @@ async function loadLatestPost() {
 
   if (!previewEl || !fullEl || !metaEl) return;
 
-  previewEl.innerText = preview;
-  fullEl.innerText = post.content;
+  /* 🛡 If expanded → don’t disturb content (no jump) */
+  if (!expanded) {
+    previewEl.innerText = preview;
+    fullEl.innerText = post.content;
+  }
 
   const timeText = post.updatedAt?.seconds
     ? formatMinutesAgo(post.updatedAt.seconds)
@@ -93,10 +117,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     expanded = !expanded;
     card.classList.toggle("expanded", expanded);
-
     toggleBtn.innerText = expanded ? "Collapse" : "Expand";
 
-    /* 👁 Count view ONLY first expand */
+    /* 👁 Count view ONLY on first expand */
     if (expanded && !viewCounted) {
       try {
         await updateDoc(currentPostRef, {
@@ -119,7 +142,9 @@ document.addEventListener("DOMContentLoaded", () => {
 loadLatestPost();
 
 /* ================= AUTO REFRESH =================
-   SAFE: no collapse, no expand reset, no rebind
+   🧠 SAFE:
+   - no expand reset
+   - no click rebinding
 */
 setInterval(() => {
   loadLatestPost();
