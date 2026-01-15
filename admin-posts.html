@@ -32,7 +32,7 @@ body{
   color:#ff5da2;
 }
 
-/* ===== TOP COMMAND BAR ===== */
+/* ===== TOP BAR ===== */
 .top-bar{
   position:fixed;
   top:54px;
@@ -48,7 +48,7 @@ body{
   z-index:200;
 }
 
-/* ===== MENU GROUP ===== */
+/* ===== MENU ===== */
 .menu-group{ position:relative; }
 
 .menu-main{
@@ -62,7 +62,6 @@ body{
   color:#1b0f2e;
 }
 
-/* BACK BUTTON */
 .back-btn{
   margin-left:auto;
   background:#2a1650;
@@ -90,10 +89,8 @@ body{
   padding:14px 18px;
   text-align:left;
   cursor:pointer;
-  font-size:14px;
 }
 .dropdown button:hover{ background:#3b2463; }
-.dropdown button:disabled{opacity:.5;}
 
 /* ===== WORKSPACE ===== */
 .workspace{
@@ -108,9 +105,8 @@ body{
 .workspace-inner{
   height:100%;
   overflow-y:auto;
-  padding:26px;
-  box-sizing:border-box;
-  max-width:860px;
+  padding:24px;
+  max-width:900px;
   margin:auto;
 }
 
@@ -121,36 +117,20 @@ body{
   opacity:.75;
 }
 
-/* ===== FULL HEIGHT FORM ===== */
+/* ===== FORM SHELL ===== */
 .form-shell{
   height:100%;
   display:flex;
   flex-direction:column;
+  gap:12px;
   position:relative;
-  gap:14px;
 }
 
-.form-shell textarea{
-  flex:1;
-  min-height:0;
-}
-
-/* ===== CLOSE X ===== */
-.close-x{
-  position:absolute;
-  top:18px;
-  right:18px;
-  font-size:18px;
-  cursor:pointer;
-  opacity:.7;
-}
-.close-x:hover{opacity:1;}
-
-/* ===== FORM ===== */
+/* ===== EDITOR ===== */
 textarea{
-  width:100%;
+  flex:1;
   padding:16px;
-  border-radius:14px;
+  border-radius:16px;
   border:none;
   font-size:15px;
   background:#fff;
@@ -159,22 +139,63 @@ textarea{
 
 /* ===== ACTION BUTTON ===== */
 .action{
-  padding:14px;
-  border-radius:14px;
+  padding:16px;
+  border-radius:16px;
   border:none;
-  font-size:15px;
+  font-size:16px;
   font-weight:700;
   cursor:pointer;
   background:linear-gradient(135deg,#ff5da2,#d946ef);
   color:#1b0f2e;
-  width:100%;
+}
+
+/* ===== CLOSE ===== */
+.close-x{
+  position:absolute;
+  top:6px;
+  right:6px;
+  cursor:pointer;
+  opacity:.7;
+}
+.close-x:hover{opacity:1;}
+
+/* ===== OPS PANEL ===== */
+.ops-toggle{
+  position:absolute;
+  top:10px;
+  right:44px;
+  background:#2a1650;
+  color:#fff;
+  border:none;
+  padding:10px 14px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.ops-panel{
+  display:none;
+  background:#1f1433;
+  border-radius:16px;
+  padding:14px;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.ops-panel button{
+  background:#3b2463;
+  color:#fff;
+  border:none;
+  padding:10px 14px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:13px;
 }
 
 /* ===== TABLE ===== */
 table{
   width:100%;
   border-collapse:collapse;
-  margin-top:16px;
 }
 th,td{
   padding:10px;
@@ -194,7 +215,6 @@ tr:hover{ background:#2a1650; cursor:pointer; }
 </div>
 
 <div class="top-bar">
-
   <div class="menu-group">
     <button class="menu-main" onclick="toggleDD(event,'hof-dd')">Hall of Fame ▾</button>
     <div class="dropdown" id="hof-dd">
@@ -204,17 +224,9 @@ tr:hover{ background:#2a1650; cursor:pointer; }
     </div>
   </div>
 
-  <div class="menu-group">
-    <button class="menu-main" disabled>ZENO ▾</button>
-  </div>
-
-  <div class="menu-group">
-    <button class="menu-main" disabled>Mail ▾</button>
-  </div>
-
-  <div class="menu-group">
-    <button class="menu-main" disabled>Payments ▾</button>
-  </div>
+  <button class="menu-main" disabled>ZENO ▾</button>
+  <button class="menu-main" disabled>Mail ▾</button>
+  <button class="menu-main" disabled>Payments ▾</button>
 
   <button class="menu-main back-btn" onclick="goHome()">↩ Back to Site</button>
 </div>
@@ -245,27 +257,27 @@ let selectedPostId=null;
 /* NAV */
 window.goHome=()=>window.open("/", "_blank");
 
-/* ===== DROPDOWN LOGIC (FIXED) ===== */
-window.toggleDD = (e,id)=>{
+/* DROPDOWN */
+window.toggleDD=(e,id)=>{
   e.stopPropagation();
-  const el = document.getElementById(id);
-  const open = el.style.display === "block";
+  const el=document.getElementById(id);
+  const open=el.style.display==="block";
   document.querySelectorAll(".dropdown").forEach(d=>d.style.display="none");
-  el.style.display = open ? "none" : "block";
+  el.style.display=open?"none":"block";
 };
-
-window.menuAction = fn=>{
+window.menuAction=fn=>{
   document.querySelectorAll(".dropdown").forEach(d=>d.style.display="none");
   fn();
 };
-
-document.addEventListener("click",()=>{
-  document.querySelectorAll(".dropdown").forEach(d=>d.style.display="none");
-});
+document.addEventListener("click",()=>document.querySelectorAll(".dropdown").forEach(d=>d.style.display="none"));
 
 /* CLEAR */
-window.clearWS=()=>{
-  ws.innerHTML=`<div class="empty">Select a module from the top menu</div>`;
+window.clearWS=()=>ws.innerHTML=`<div class="empty">Select a module from the top menu</div>`;
+
+/* OPS PANEL */
+window.toggleOps=()=>{
+  const p=document.getElementById("opsPanel");
+  p.style.display=p.style.display==="flex"?"none":"flex";
 };
 
 /* ADD */
@@ -274,6 +286,17 @@ window.loadAdd=()=>{
   ws.innerHTML=`
     <div class="form-shell">
       <div class="close-x" onclick="clearWS()">✕</div>
+      <button class="ops-toggle" onclick="toggleOps()">⚙ Controls</button>
+
+      <div class="ops-panel" id="opsPanel">
+        <button>Bold</button>
+        <button>Italic</button>
+        <button>Insert Image</button>
+        <button>Insert Table</button>
+        <button>Export PDF</button>
+        <button>Print</button>
+      </div>
+
       <h3>Add Hall of Fame Post</h3>
       <textarea id="postContent"></textarea>
       <button class="action" onclick="savePost()">Publish</button>
@@ -291,6 +314,17 @@ window.loadEditLatest=async()=>{
   ws.innerHTML=`
     <div class="form-shell">
       <div class="close-x" onclick="clearWS()">✕</div>
+      <button class="ops-toggle" onclick="toggleOps()">⚙ Controls</button>
+
+      <div class="ops-panel" id="opsPanel">
+        <button>Bold</button>
+        <button>Italic</button>
+        <button>Insert Image</button>
+        <button>Insert Table</button>
+        <button>Export PDF</button>
+        <button>Print</button>
+      </div>
+
       <h3>Edit Latest Post</h3>
       <textarea id="postContent">${d.data().content}</textarea>
       <button class="action" onclick="savePost()">Republish</button>
@@ -328,6 +362,17 @@ window.editFromTable=async(id)=>{
   ws.innerHTML=`
     <div class="form-shell">
       <div class="close-x" onclick="clearWS()">✕</div>
+      <button class="ops-toggle" onclick="toggleOps()">⚙ Controls</button>
+
+      <div class="ops-panel" id="opsPanel">
+        <button>Bold</button>
+        <button>Italic</button>
+        <button>Insert Image</button>
+        <button>Insert Table</button>
+        <button>Export PDF</button>
+        <button>Print</button>
+      </div>
+
       <h3>Edit Post</h3>
       <textarea id="postContent">${snap.data().content}</textarea>
       <button class="action" onclick="savePost()">Republish</button>
