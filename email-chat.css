@@ -1,19 +1,23 @@
-/* ================= EMAIL / CHAT SCOPE ================= */
+/* ================= EMAIL CHAT SCOPE ================= */
 .email-scope {
+  background: radial-gradient(circle at top, #1b0f2e, #0b0714);
+  min-height: 100vh;
+  padding: 20px 0;
   color: #fff;
   font-family: inherit;
 }
 
-/* ================= CONTAINER ================= */
+/* container */
 .email-scope .email-container {
   max-width: 760px;
   margin: 40px auto;
   padding: 28px;
 }
 
-/* ================= HEADINGS ================= */
-.email-scope .email-container h2 {
+/* headings */
+.email-scope h2 {
   margin-bottom: 6px;
+  color: #fff;
 }
 
 .email-scope .subtitle {
@@ -21,14 +25,15 @@
   margin-bottom: 24px;
 }
 
-/* ================= LABELS ================= */
+/* labels */
 .email-scope label {
   display: block;
   margin-top: 16px;
   font-weight: 600;
+  color: #eae6ff;
 }
 
-/* ================= INPUTS ================= */
+/* inputs */
 .email-scope input,
 .email-scope select,
 .email-scope textarea {
@@ -43,16 +48,18 @@
   outline: none;
 }
 
+/* placeholders */
 .email-scope input::placeholder,
 .email-scope textarea::placeholder {
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.5);
 }
 
+/* textarea */
 .email-scope textarea {
   resize: vertical;
 }
 
-/* ================= BIRTH DETAILS BOX ================= */
+/* birth box */
 .email-scope .birth-box {
   margin-top: 20px;
   padding: 16px;
@@ -62,9 +69,10 @@
 
 .email-scope .birth-box h4 {
   margin-bottom: 10px;
+  color: #fff;
 }
 
-/* ================= SEND BUTTON ================= */
+/* send button */
 .email-scope .send-btn {
   margin-top: 28px;
   width: 100%;
@@ -76,26 +84,13 @@
   cursor: pointer;
   background: linear-gradient(135deg,#ff5da2,#9b5cff);
   color: #1b0f2e;
-  transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.email-scope .send-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.35);
-}
-
-/* ================= STATUS MESSAGE ================= */
+/* status message */
 .email-scope .status-msg {
   margin-top: 18px;
   padding: 12px;
   text-align: center;
   font-weight: 600;
-}
-
-/* ================= MOBILE SAFETY ================= */
-@media (max-width: 640px) {
-  .email-scope .email-container {
-    padding: 20px;
-    margin: 20px auto;
-  }
+  color: #fff;
 }
