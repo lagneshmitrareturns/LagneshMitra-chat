@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact LagneshMitra</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- ONLY ONE CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="brand">
+    LagneshMitra
+    <span>Case Submission</span>
+  </div>
+</div>
+
+<!-- EMAIL PAGE WRAPPER (ISOLATION) -->
+<div class="email-page">
+
+  <div class="email-container">
+
+    <h2>Submit Your Case</h2>
+    <p class="subtitle">
+      Serious, paid case-based analysis only.
+    </p>
+
+    <form id="caseForm">
+
+      <label>Full Name *</label>
+      <input type="text" id="name" required>
+
+      <label>WhatsApp Number *</label>
+      <input type="tel" id="whatsapp" placeholder="+91XXXXXXXXXX" required>
+
+      <label>Query Type *</label>
+      <select id="queryType" required>
+        <option value="">Select</option>
+        <option>Marriage / Relationship</option>
+        <option>Career / Finance</option>
+        <option>Health / Stress</option>
+        <option>Karmic / Spiritual</option>
+        <option>General Guidance</option>
+      </select>
+
+      <label>Your Message *</label>
+      <textarea id="message" rows="8" required></textarea>
+
+      <div class="birth-box">
+        <h4>Birth Details (Required)</h4>
+        <input type="text" id="dob" placeholder="Date of Birth (DD-MM-YYYY)" required>
+        <input type="text" id="tob" placeholder="Time of Birth (HH:MM)" required>
+        <input type="text" id="pob" placeholder="Place of Birth" required>
+      </div>
+
+      <label>Attach Chart (optional)</label>
+      <input type="file" id="attachment" accept=".jpg,.jpeg,.png,.pdf">
+
+      <button type="submit" class="send-btn">
+        Send to LagneshMitra
+      </button>
+
+    </form>
+
+    <div id="statusMsg" class="status-msg"></div>
+
+  </div>
+
+</div>
+
+<script src="email-chat.js" type="module"></script>
+</body>
+</html>
