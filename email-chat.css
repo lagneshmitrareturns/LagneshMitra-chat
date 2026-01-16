@@ -1,25 +1,37 @@
-.email-container {
+/* ================= EMAIL / CHAT SCOPE ================= */
+.email-scope {
+  color: #fff;
+  font-family: inherit;
+}
+
+/* ================= CONTAINER ================= */
+.email-scope .email-container {
   max-width: 760px;
   margin: 40px auto;
   padding: 28px;
 }
 
-.email-container h2 {
+/* ================= HEADINGS ================= */
+.email-scope .email-container h2 {
   margin-bottom: 6px;
 }
 
-.subtitle {
+.email-scope .subtitle {
   opacity: 0.75;
   margin-bottom: 24px;
 }
 
-label {
+/* ================= LABELS ================= */
+.email-scope label {
   display: block;
   margin-top: 16px;
   font-weight: 600;
 }
 
-input, select, textarea {
+/* ================= INPUTS ================= */
+.email-scope input,
+.email-scope select,
+.email-scope textarea {
   width: 100%;
   padding: 12px;
   margin-top: 6px;
@@ -28,24 +40,32 @@ input, select, textarea {
   background: rgba(255,255,255,0.08);
   color: #fff;
   font-size: 15px;
+  outline: none;
 }
 
-textarea {
+.email-scope input::placeholder,
+.email-scope textarea::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+.email-scope textarea {
   resize: vertical;
 }
 
-.birth-box {
+/* ================= BIRTH DETAILS BOX ================= */
+.email-scope .birth-box {
   margin-top: 20px;
   padding: 16px;
   border-radius: 12px;
   background: rgba(0,0,0,0.35);
 }
 
-.birth-box h4 {
+.email-scope .birth-box h4 {
   margin-bottom: 10px;
 }
 
-.send-btn {
+/* ================= SEND BUTTON ================= */
+.email-scope .send-btn {
   margin-top: 28px;
   width: 100%;
   padding: 14px;
@@ -56,11 +76,26 @@ textarea {
   cursor: pointer;
   background: linear-gradient(135deg,#ff5da2,#9b5cff);
   color: #1b0f2e;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.status-msg {
+.email-scope .send-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+}
+
+/* ================= STATUS MESSAGE ================= */
+.email-scope .status-msg {
   margin-top: 18px;
   padding: 12px;
   text-align: center;
   font-weight: 600;
+}
+
+/* ================= MOBILE SAFETY ================= */
+@media (max-width: 640px) {
+  .email-scope .email-container {
+    padding: 20px;
+    margin: 20px auto;
+  }
 }
