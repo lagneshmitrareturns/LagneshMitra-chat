@@ -1,0 +1,26 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "routes": [
+    {
+      "src": "^/$",
+      "dest": "/index.html"
+    },
+    {
+      "src": "^/email$",
+      "dest": "/email/index.html"
+    },
+    {
+      "src": "^/admin$",
+      "dest": "/admin/index.html"
+    },
+    {
+      "src": "^/admin-posts$",
+      "dest": "/admin-posts.html"
+    },
+    {
+      "src": "^/(.*)$",
+      "dest": "/$1"
+    }
+  ]
+}
