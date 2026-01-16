@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LagneshMitra – Admin Inbox</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="style.css">
+</head><body><!-- ================= TOP BAR ================= --><div class="topbar">
+  <div class="brand">
+    LagneshMitra
+    <span>Admin Inbox</span>
+  </div>  <div class="menu" onclick="location.href='index.html'">⟵</div>
+</div><!-- ================= MAIN GRID ================= --><div style="
+  max-width:1400px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:360px 1fr;
+  gap:18px;
+">  <!-- ================= LEFT : INBOX LIST ================= -->  <div style="
+    background:rgba(36,18,61,0.92);
+    border-radius:22px;
+    padding:18px;
+    height:calc(100vh - 180px);
+    overflow-y:auto;
+  "><h3 style="color:#ff5da2;margin-bottom:14px;">
+  Incoming Cases
+</h3>
+
+<!-- CASE ITEM -->
+<div class="case-item active">
+  <strong>Danish</strong><br>
+  <small>Health / Stress</small><br>
+  <span class="status submitted">Query Submitted</span>
+</div>
+
+<div class="case-item">
+  <strong>Sample Client</strong><br>
+  <small>Marriage</small><br>
+  <span class="status scrutiny">Under Scrutiny</span>
+</div>
+
+<div class="case-item">
+  <strong>Test User</strong><br>
+  <small>Career</small><br>
+  <span class="status decision">Decision Phase</span>
+</div>
+
+  </div>  <!-- ================= RIGHT : CASE VIEW ================= -->  <div style="
+    background:rgba(36,18,61,0.88);
+    border-radius:22px;
+    padding:26px;
+    height:calc(100vh - 180px);
+    overflow-y:auto;
+  "><h2 style="color:#ff5da2;margin-bottom:6px;">
+  Case Details
+</h2>
+
+<p style="opacity:.75;margin-bottom:20px;">
+  Full client submission and action controls
+</p>
+
+<!-- META -->
+<div class="block">
+  <p><strong>Name:</strong> Danish</p>
+  <p><strong>WhatsApp:</strong> +91XXXXXXXXXX</p>
+  <p><strong>Query Type:</strong> Health / Stress</p>
+  <p><strong>Status:</strong> Query Submitted</p>
+</div>
+
+<!-- MESSAGE -->
+<div class="block">
+  <strong>Client Message</strong>
+  <p>
+    I was told earlier that parenthood is difficult for me.
+    This has created fear and anxiety. I want a genuine,
+    chart-based understanding with clarity.
+  </p>
+</div>
+
+<!-- BIRTH DETAILS -->
+<div class="block">
+  <strong>Birth Details</strong>
+  <p>DOB: 12-10-1996</p>
+  <p>TOB: 2:44 PM</p>
+  <p>POB: Jalandhar, Punjab</p>
+</div>
+
+<!-- ACTION BUTTONS -->
+<div style="
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:26px;
+">
+
+  <button class="admin-btn">Mark Under Scrutiny</button>
+  <button class="admin-btn">Send to RPE</button>
+  <button class="admin-btn">Request More Info</button>
+  <button class="admin-btn">Check Payment</button>
+  <button class="admin-btn">Process Report</button>
+  <button class="admin-btn danger">Reject Case</button>
+
+</div>
+
+<!-- INTERNAL NOTES -->
+<div class="block" style="margin-top:30px;">
+  <strong>Internal Notes</strong>
+  <textarea rows="6" placeholder="Private admin notes..."></textarea>
+</div>
+
+  </div></div><!-- ================= BASIC STYLES ================= --><style>
+.case-item{
+  padding:14px;
+  border-radius:14px;
+  background:rgba(0,0,0,.35);
+  margin-bottom:12px;
+  cursor:pointer;
+}
+.case-item.active{
+  border:2px solid #ff5da2;
+}
+.status{
+  display:inline-block;
+  margin-top:6px;
+  padding:4px 8px;
+  border-radius:8px;
+  font-size:12px;
+}
+.status.submitted{background:#3b82f6;}
+.status.scrutiny{background:#f59e0b;}
+.status.decision{background:#22c55e;}
+
+.block{
+  background:rgba(0,0,0,.35);
+  padding:16px;
+  border-radius:14px;
+  margin-bottom:18px;
+}
+
+.admin-btn{
+  padding:12px 16px;
+  border-radius:14px;
+  border:none;
+  cursor:pointer;
+  background:linear-gradient(135deg,#ff5da2,#9b5cff);
+  color:#1b0f2e;
+  font-weight:700;
+}
+
+.admin-btn.danger{
+  background:linear-gradient(135deg,#ef4444,#b91c1c);
+  color:#fff;
+}
+
+textarea{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  background:rgba(255,255,255,.12);
+  color:#fff;
+}
+</style></body>
+</html>
