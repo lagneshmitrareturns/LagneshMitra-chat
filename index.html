@@ -16,7 +16,7 @@
     <span>Decision Intelligence</span>
   </div>
 
-  <!-- THREE DOTS -->
+  <!-- THREE DOTS (ADMIN REMOVED) -->
   <div class="menu" id="menuBtn"
        style="
          position:absolute;
@@ -33,12 +33,48 @@
     <p>Interpretation before prediction</p>
     <p>Decisions before remedies</p>
     <p>Structure before emotion</p>
-    <hr style="margin:12px 0;opacity:.3">
-    <a href="admin-posts.html" target="_blank"
-       style="color:#ff5da2;font-weight:600;text-decoration:none">
-      Admin Panel
-    </a>
   </div>
+</div>
+
+<!-- ================= COMMAND BUTTONS ================= -->
+<div style="
+  display:flex;
+  gap:18px;
+  justify-content:center;
+  margin:30px auto 10px;
+  flex-wrap:wrap;
+">
+  <button
+    onclick="location.href='admin-posts.html'"
+    style="
+      padding:16px 26px;
+      font-size:18px;
+      font-weight:700;
+      border-radius:14px;
+      border:none;
+      cursor:pointer;
+      background:linear-gradient(135deg,#ff5da2,#9b5cff);
+      color:#1b0f2e;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+    ">
+    ⚙️ Admin Command Center
+  </button>
+
+  <button
+    onclick="location.href='mail.html'"
+    style="
+      padding:16px 26px;
+      font-size:18px;
+      font-weight:700;
+      border-radius:14px;
+      border:2px solid #9b5cff;
+      cursor:pointer;
+      background:rgba(0,0,0,.35);
+      color:#fff;
+      box-shadow:0 8px 24px rgba(0,0,0,.2);
+    ">
+    📬 Email / Chat
+  </button>
 </div>
 
 <!-- ================= HERO ================= -->
@@ -50,7 +86,6 @@
     <div class="post-preview" id="postPreview"></div>
     <div class="post-full" id="postFull"></div>
 
-    <!-- ✅ RENAMED BUTTON ID -->
     <button id="toggleBtnExpand"
       style="
         margin-top:18px;
@@ -112,7 +147,7 @@ let currentPost = null;
 let isToggling = false;
 
 const postCard = document.getElementById("postCard");
-const toggleBtn = document.getElementById("toggleBtnExpand"); // ✅ UPDATED ID
+const toggleBtn = document.getElementById("toggleBtnExpand");
 
 async function loadLatestPost(){
   const snap = await getDocs(collection(db,"posts"));
@@ -144,7 +179,6 @@ async function loadLatestPost(){
 }
 loadLatestPost();
 
-/* ✅ SINGLE SOURCE TOGGLE (BUTTON ONLY) */
 toggleBtn.onclick = async (e) => {
   e.stopPropagation();
   if (!currentPost || isToggling) return;
@@ -213,7 +247,6 @@ window.closeZeno = () => {
 };
 </script>
 
-<!-- ================= ZENO HEARTBEAT ================= -->
 <script>
 (() => {
   const eye = document.getElementById("zeno-eye");
