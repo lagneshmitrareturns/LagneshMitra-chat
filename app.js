@@ -37,14 +37,14 @@ let viewCounted = false;
 let isToggling = false;
 
 /* =====================================================
-   🔵 UTILS
+   🔵 UTILS (EXPOSED)
    ===================================================== */
 
-function closeAllDropdowns() {
+window.closeAllDropdowns = function () {
   document.querySelectorAll(".dropdown").forEach(d => {
     d.style.display = "none";
   });
-}
+};
 
 function formatMinutesAgo(seconds) {
   const mins = Math.floor((Date.now() - seconds * 1000) / 60000);
@@ -56,7 +56,7 @@ function formatMinutesAgo(seconds) {
    🔵 LOAD LATEST HALL OF FAME POST (SAFE)
    ===================================================== */
 
-async function loadLatestPost() {
+window.loadLatestPost = async function () {
   const q = query(
     collection(db, "posts"),
     orderBy("updatedAt", "desc"),
@@ -75,7 +75,9 @@ async function loadLatestPost() {
     viewCounted = false;
 
     const card = document.getElementById("postCard");
-    const toggleBtn = document.getElementById("toggleBtn");
+    const toggleBtn =
+      document.getElementById("toggleBtn") ||
+      document.getElementById("toggleBtnExpand");
 
     if (card && toggleBtn) {
       card.classList.remove("expanded");
@@ -107,15 +109,17 @@ async function loadLatestPost() {
     : "just now";
 
   metaEl.innerText = `Updated ${timeText} • Views ${post.views || 0}`;
-}
+};
 
 /* =====================================================
-   🔵 TOGGLE EXPAND LOGIC
+   🔵 TOGGLE EXPAND LOGIC (BUTTON SAFE)
    ===================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
   const card = document.getElementById("postCard");
-  const toggleBtn = document.getElementById("toggleBtn");
+  const toggleBtn =
+    document.getElementById("toggleBtn") ||
+    document.getElementById("toggleBtnExpand");
 
   if (!card || !toggleBtn) return;
 
@@ -147,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 700);
   });
 
-  loadLatestPost();
+  window.loadLatestPost();
 });
 
 /* =====================================================
@@ -155,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
    ===================================================== */
 
 setInterval(() => {
-  loadLatestPost();
+  window.loadLatestPost();
 }, 60000);
 
 /* =====================================================
@@ -166,18 +170,14 @@ setInterval(() => {
   if (typeof window[fn] === "function") {
     const original = window[fn];
     window[fn] = function (...args) {
-      closeAllDropdowns();
+      window.closeAllDropdowns();
       return original.apply(this, args);
     };
   }
 });
 
 /* =====================================================
-   🟣 PHASE-2: CASE / EMAIL RECEIVING ENGINE (READY)
-   -----------------------------------------------------
-   ✔ customer email form → cases collection
-   ✔ admin inbox → real-time listener
-   ✔ NO UI BINDING YET (safe)
+   🟣 PHASE-2: CASE / EMAIL RECEIVING ENGINE
    ===================================================== */
 
 /* 🔹 SUBMIT CASE (customer side) */
@@ -195,7 +195,7 @@ window.submitCase = async function (payload) {
   }
 };
 
-/* 🔹 ADMIN LIVE INBOX LISTENER (future admin panel) */
+/* 🔹 ADMIN LIVE INBOX LISTENER */
 window.listenCasesInbox = function (callback) {
   const q = query(
     collection(db, "cases"),
@@ -204,8 +204,8 @@ window.listenCasesInbox = function (callback) {
 
   return onSnapshot(q, (snap) => {
     const cases = [];
-    snap.forEach(doc => {
-      cases.push({ id: doc.id, ...doc.data() });
+    snap.forEach(d => {
+      cases.push({ id: d.id, ...d.data() });
     });
     callback(cases);
   });
