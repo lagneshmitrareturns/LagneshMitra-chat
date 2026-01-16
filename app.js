@@ -29,7 +29,7 @@ let currentPostId = null;
 let expanded = false;
 let viewCounted = false;
 
-/* 🔒 HARD LOCK — kills ghost / double click */
+/* 🔒 HARD LOCK — prevents ghost / double click */
 let isToggling = false;
 
 /* ================= UTILS ================= */
@@ -145,6 +145,9 @@ document.addEventListener("DOMContentLoaded", () => {
       isToggling = false;
     }, 700);
   });
+
+  /* initial load AFTER DOM ready */
+  loadLatestPost();
 });
 
 /* ================= ADMIN MENU HOOKS =================
@@ -160,9 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 });
-
-/* ================= INIT ================= */
-loadLatestPost();
 
 /* ================= AUTO REFRESH =================
    🧠 SAFE:
