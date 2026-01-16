@@ -1,162 +1,287 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LagneshMitra – Admin Inbox</title>
-<meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="style.css">
-</head><body><!-- ================= TOP BAR ================= --><div class="topbar">
-  <div class="brand">
-    LagneshMitra
-    <span>Admin Inbox</span>
-  </div>  <div class="menu" onclick="location.href='index.html'">⟵</div>
-</div><!-- ================= MAIN GRID ================= --><div style="
-  max-width:1400px;
-  margin:0 auto;
-  display:grid;
-  grid-template-columns:360px 1fr;
-  gap:18px;
-">  <!-- ================= LEFT : INBOX LIST ================= -->  <div style="
-    background:rgba(36,18,61,0.92);
-    border-radius:22px;
-    padding:18px;
-    height:calc(100vh - 180px);
-    overflow-y:auto;
-  "><h3 style="color:#ff5da2;margin-bottom:14px;">
-  Incoming Cases
-</h3>
+<title>LagneshMitra – Admin Mailbox</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- CASE ITEM -->
-<div class="case-item active">
-  <strong>Danish</strong><br>
-  <small>Health / Stress</small><br>
-  <span class="status submitted">Query Submitted</span>
-</div>
+<style>
+/* ===== BASE ===== */
+body{
+  margin:0;
+  font-family:"Segoe UI",Roboto,Arial,sans-serif;
+  background:linear-gradient(135deg,#1b0f2e,#2b1055);
+  color:#fff;
+  height:100vh;
+  overflow:hidden;
+}
 
-<div class="case-item">
-  <strong>Sample Client</strong><br>
-  <small>Marriage</small><br>
-  <span class="status scrutiny">Under Scrutiny</span>
-</div>
-
-<div class="case-item">
-  <strong>Test User</strong><br>
-  <small>Career</small><br>
-  <span class="status decision">Decision Phase</span>
-</div>
-
-  </div>  <!-- ================= RIGHT : CASE VIEW ================= -->  <div style="
-    background:rgba(36,18,61,0.88);
-    border-radius:22px;
-    padding:26px;
-    height:calc(100vh - 180px);
-    overflow-y:auto;
-  "><h2 style="color:#ff5da2;margin-bottom:6px;">
-  Case Details
-</h2>
-
-<p style="opacity:.75;margin-bottom:20px;">
-  Full client submission and action controls
-</p>
-
-<!-- META -->
-<div class="block">
-  <p><strong>Name:</strong> Danish</p>
-  <p><strong>WhatsApp:</strong> +91XXXXXXXXXX</p>
-  <p><strong>Query Type:</strong> Health / Stress</p>
-  <p><strong>Status:</strong> Query Submitted</p>
-</div>
-
-<!-- MESSAGE -->
-<div class="block">
-  <strong>Client Message</strong>
-  <p>
-    I was told earlier that parenthood is difficult for me.
-    This has created fear and anxiety. I want a genuine,
-    chart-based understanding with clarity.
-  </p>
-</div>
-
-<!-- BIRTH DETAILS -->
-<div class="block">
-  <strong>Birth Details</strong>
-  <p>DOB: 12-10-1996</p>
-  <p>TOB: 2:44 PM</p>
-  <p>POB: Jalandhar, Punjab</p>
-</div>
-
-<!-- ACTION BUTTONS -->
-<div style="
+/* ===== TOP BAR ===== */
+.top-bar{
+  height:72px;
+  background:#1f1433;
+  border-bottom:1px solid #3b2463;
   display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  margin-top:26px;
-">
+  align-items:center;
+  padding:0 22px;
+  gap:20px;
+}
 
-  <button class="admin-btn">Mark Under Scrutiny</button>
-  <button class="admin-btn">Send to RPE</button>
-  <button class="admin-btn">Request More Info</button>
-  <button class="admin-btn">Check Payment</button>
-  <button class="admin-btn">Process Report</button>
-  <button class="admin-btn danger">Reject Case</button>
+.top-bar h2{
+  margin:0;
+  font-size:20px;
+  color:#ff5da2;
+}
 
-</div>
+.back-btn{
+  margin-left:auto;
+  background:#2a1650;
+  color:#fff;
+  border:none;
+  padding:12px 18px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:600;
+}
 
-<!-- INTERNAL NOTES -->
-<div class="block" style="margin-top:30px;">
-  <strong>Internal Notes</strong>
-  <textarea rows="6" placeholder="Private admin notes..."></textarea>
-</div>
+/* ===== LAYOUT ===== */
+.container{
+  display:flex;
+  height:calc(100vh - 72px);
+}
 
-  </div></div><!-- ================= BASIC STYLES ================= --><style>
-.case-item{
+/* ===== SIDEBAR ===== */
+.sidebar{
+  width:220px;
+  background:#1a0f2e;
+  border-right:1px solid #3b2463;
   padding:14px;
-  border-radius:14px;
-  background:rgba(0,0,0,.35);
-  margin-bottom:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.side-btn{
+  padding:12px 14px;
+  border-radius:12px;
+  border:none;
+  background:#2a1650;
+  color:#fff;
+  cursor:pointer;
+  text-align:left;
+  font-weight:600;
+}
+.side-btn.active{
+  background:linear-gradient(135deg,#ff5da2,#9b5cff);
+  color:#1b0f2e;
+}
+
+/* ===== INBOX LIST ===== */
+.inbox{
+  width:40%;
+  border-right:1px solid #3b2463;
+  overflow-y:auto;
+  background:#24123d;
+}
+
+.case-row{
+  padding:16px 18px;
+  border-bottom:1px solid #3b2463;
   cursor:pointer;
 }
-.case-item.active{
-  border:2px solid #ff5da2;
+.case-row:hover{
+  background:#2a1650;
 }
-.status{
-  display:inline-block;
-  margin-top:6px;
-  padding:4px 8px;
-  border-radius:8px;
-  font-size:12px;
-}
-.status.submitted{background:#3b82f6;}
-.status.scrutiny{background:#f59e0b;}
-.status.decision{background:#22c55e;}
 
-.block{
-  background:rgba(0,0,0,.35);
-  padding:16px;
-  border-radius:14px;
+.case-name{
+  font-weight:700;
+  color:#ffb4dc;
+}
+
+.case-meta{
+  font-size:13px;
+  color:#c4b5fd;
+  margin-top:4px;
+}
+
+.case-status{
+  margin-top:6px;
+  font-size:12px;
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:20px;
+  background:#3b2463;
+}
+
+/* ===== DETAIL PANEL ===== */
+.detail{
+  width:60%;
+  padding:22px;
+  overflow-y:auto;
+}
+
+.empty{
+  opacity:.7;
+  font-style:italic;
+  color:#c4b5fd;
+}
+
+/* ===== DETAIL ===== */
+.detail h3{
+  margin-top:0;
+  color:#ff5da2;
+}
+
+.section{
   margin-bottom:18px;
 }
 
-.admin-btn{
-  padding:12px 16px;
-  border-radius:14px;
-  border:none;
-  cursor:pointer;
-  background:linear-gradient(135deg,#ff5da2,#9b5cff);
-  color:#1b0f2e;
-  font-weight:700;
+.section label{
+  font-size:13px;
+  color:#c4b5fd;
 }
 
-.admin-btn.danger{
-  background:linear-gradient(135deg,#ef4444,#b91c1c);
-  color:#fff;
+.section div{
+  margin-top:4px;
+  font-size:15px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <h2>📮 Admin Mailbox</h2>
+  <button class="back-btn" onclick="location.href='admin-posts.html'">↩ Back</button>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <button class="side-btn active" onclick="loadBox('inbox')">📥 Inbox</button>
+    <button class="side-btn" onclick="loadBox('sent')">📤 Sent</button>
+    <button class="side-btn" onclick="loadBox('draft')">📝 Drafts</button>
+    <button class="side-btn" onclick="loadBox('archive')">🗄 Archive</button>
+  </div>
+
+  <!-- LIST -->
+  <div class="inbox" id="list"></div>
+
+  <!-- DETAIL -->
+  <div class="detail" id="detail">
+    <div class="empty">Select a message</div>
+  </div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  orderBy,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* FIREBASE */
+const app = initializeApp({
+  apiKey:"AIzaSyCX8yGRJc5AcxSEaaC6AzNLZzxtOCz83Sk",
+  authDomain:"lagneshmitra-e57b8.firebaseapp.com",
+  projectId:"lagneshmitra-e57b8"
+});
+const db = getFirestore(app);
+
+const list = document.getElementById("list");
+const detail = document.getElementById("detail");
+let currentBox = "inbox";
+
+/* LOAD BOX */
+window.loadBox = (box)=>{
+  currentBox = box;
+  document.querySelectorAll(".side-btn").forEach(b=>b.classList.remove("active"));
+  event.target.classList.add("active");
+  attachListener();
+};
+
+/* LISTENER */
+let unsubscribe = null;
+
+function attachListener(){
+  if(unsubscribe) unsubscribe();
+
+  list.innerHTML = "";
+
+  const q = query(
+    collection(db,"cases"),
+    orderBy("createdAt","desc")
+  );
+
+  unsubscribe = onSnapshot(q, snap=>{
+    list.innerHTML="";
+    snap.forEach(doc=>{
+      const c = doc.data();
+
+      if(
+        (currentBox==="inbox" && c.status==="Query Submitted") ||
+        (currentBox==="sent" && c.status==="Replied") ||
+        (currentBox==="draft" && c.status==="Draft") ||
+        (currentBox==="archive" && c.status==="Closed")
+      ){
+        const row = document.createElement("div");
+        row.className="case-row";
+        row.innerHTML=`
+          <div class="case-name">${c.name}</div>
+          <div class="case-meta">${c.queryType}</div>
+          <div class="case-status">${c.status}</div>
+        `;
+        row.onclick=()=>openCase(c);
+        list.appendChild(row);
+      }
+    });
+  });
 }
 
-textarea{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:none;
-  background:rgba(255,255,255,.12);
-  color:#fff;
+/* OPEN */
+function openCase(c){
+  detail.innerHTML=`
+    <h3>${c.name}</h3>
+
+    <div class="section">
+      <label>WhatsApp</label>
+      <div>${c.whatsapp}</div>
+    </div>
+
+    <div class="section">
+      <label>Query Type</label>
+      <div>${c.queryType}</div>
+    </div>
+
+    <div class="section">
+      <label>Message</label>
+      <div>${c.message}</div>
+    </div>
+
+    <div class="section">
+      <label>Birth Details</label>
+      <div>DOB: ${c.dob}</div>
+      <div>TOB: ${c.tob}</div>
+      <div>POB: ${c.pob}</div>
+    </div>
+
+    <div class="section">
+      <label>Status</label>
+      <div>${c.status}</div>
+    </div>
+  `;
 }
-</style></body>
+
+/* INIT */
+attachListener();
+</script>
+
+</body>
 </html>
