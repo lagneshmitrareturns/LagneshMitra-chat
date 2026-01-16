@@ -5,10 +5,13 @@ import {
   updateDoc,
   collection,
   getDocs,
+  addDoc,
   increment,
   query,
   orderBy,
-  limit
+  limit,
+  onSnapshot,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* 🔐 Firebase Config */
@@ -22,37 +25,37 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* ================= STATE (SINGLE SOURCE OF TRUTH) ================= */
+/* =====================================================
+   🔵 HALL OF FAME — STATE (SINGLE SOURCE OF TRUTH)
+   ===================================================== */
+
 let currentPostRef = null;
 let currentPostId = null;
 
 let expanded = false;
 let viewCounted = false;
-
-/* 🔒 HARD LOCK — prevents ghost / double click */
 let isToggling = false;
 
-/* ================= UTILS ================= */
+/* =====================================================
+   🔵 UTILS
+   ===================================================== */
 
-/* ⬇️ CLOSE ALL DROPDOWNS (ADMIN MENU SAFETY) */
 function closeAllDropdowns() {
   document.querySelectorAll(".dropdown").forEach(d => {
     d.style.display = "none";
   });
 }
 
-/* ================= TIME FORMAT ================= */
 function formatMinutesAgo(seconds) {
   const mins = Math.floor((Date.now() - seconds * 1000) / 60000);
   if (mins <= 0) return "just now";
   return `${mins} mins ago`;
 }
 
-/* ================= LOAD LATEST POST =================
-   🔥 SAFE:
-   - does NOT collapse expanded card
-   - resets view counter ONLY if post changes
-*/
+/* =====================================================
+   🔵 LOAD LATEST HALL OF FAME POST (SAFE)
+   ===================================================== */
+
 async function loadLatestPost() {
   const q = query(
     collection(db, "posts"),
@@ -67,10 +70,9 @@ async function loadLatestPost() {
   const post = snapDoc.data();
   const newPostId = snapDoc.id;
 
-  /* 🧠 If new post arrived → reset counters */
   if (currentPostId && currentPostId !== newPostId) {
-    viewCounted = false;
     expanded = false;
+    viewCounted = false;
 
     const card = document.getElementById("postCard");
     const toggleBtn = document.getElementById("toggleBtn");
@@ -95,7 +97,6 @@ async function loadLatestPost() {
 
   if (!previewEl || !fullEl || !metaEl) return;
 
-  /* 🛡 If expanded → don’t disturb content */
   if (!expanded) {
     previewEl.innerText = preview;
     fullEl.innerText = post.content;
@@ -108,7 +109,10 @@ async function loadLatestPost() {
   metaEl.innerText = `Updated ${timeText} • Views ${post.views || 0}`;
 }
 
-/* ================= TOGGLE LOGIC (BUTTON ONLY) ================= */
+/* =====================================================
+   🔵 TOGGLE EXPAND LOGIC
+   ===================================================== */
+
 document.addEventListener("DOMContentLoaded", () => {
   const card = document.getElementById("postCard");
   const toggleBtn = document.getElementById("toggleBtn");
@@ -119,16 +123,14 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!currentPostRef) return;
-    if (isToggling) return;
+    if (!currentPostRef || isToggling) return;
 
     isToggling = true;
-
     expanded = !expanded;
+
     card.classList.toggle("expanded", expanded);
     toggleBtn.innerText = expanded ? "Collapse" : "Expand";
 
-    /* 👁 Count view ONLY on first expand */
     if (expanded && !viewCounted) {
       try {
         await updateDoc(currentPostRef, {
@@ -140,20 +142,26 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /* 🔓 unlock AFTER CSS transition */
     setTimeout(() => {
       isToggling = false;
     }, 700);
   });
 
-  /* initial load AFTER DOM ready */
   loadLatestPost();
 });
 
-/* ================= ADMIN MENU HOOKS =================
-   🔥 Any admin action auto-closes dropdown
-   🔒 Zero behavioural change
-*/
+/* =====================================================
+   🔵 AUTO REFRESH (SAFE)
+   ===================================================== */
+
+setInterval(() => {
+  loadLatestPost();
+}, 60000);
+
+/* =====================================================
+   🔵 ADMIN MENU SAFETY HOOK
+   ===================================================== */
+
 ["loadAdd", "loadEditLatest", "loadManage"].forEach(fn => {
   if (typeof window[fn] === "function") {
     const original = window[fn];
@@ -164,11 +172,50 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-/* ================= AUTO REFRESH =================
-   🧠 SAFE:
-   - no expand reset
-   - no click rebinding
-*/
-setInterval(() => {
-  loadLatestPost();
-}, 60000);
+/* =====================================================
+   🟣 PHASE-2: CASE / EMAIL RECEIVING ENGINE (READY)
+   -----------------------------------------------------
+   ✔ customer email form → cases collection
+   ✔ admin inbox → real-time listener
+   ✔ NO UI BINDING YET (safe)
+   ===================================================== */
+
+/* 🔹 SUBMIT CASE (customer side) */
+window.submitCase = async function (payload) {
+  try {
+    await addDoc(collection(db, "cases"), {
+      ...payload,
+      status: "Query Submitted",
+      createdAt: serverTimestamp()
+    });
+    return { success: true };
+  } catch (err) {
+    console.error("Case submit failed:", err);
+    return { success: false };
+  }
+};
+
+/* 🔹 ADMIN LIVE INBOX LISTENER (future admin panel) */
+window.listenCasesInbox = function (callback) {
+  const q = query(
+    collection(db, "cases"),
+    orderBy("createdAt", "desc")
+  );
+
+  return onSnapshot(q, (snap) => {
+    const cases = [];
+    snap.forEach(doc => {
+      cases.push({ id: doc.id, ...doc.data() });
+    });
+    callback(cases);
+  });
+};
+
+/* 🔹 ADMIN STATUS UPDATE */
+window.updateCaseStatus = async function (caseId, status) {
+  try {
+    await updateDoc(doc(db, "cases", caseId), { status });
+  } catch (err) {
+    console.error("Status update failed:", err);
+  }
+};
