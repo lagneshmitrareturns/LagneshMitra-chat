@@ -12,9 +12,19 @@ const app = initializeApp({
 
 const db = getFirestore(app);
 
+/* ================= DOM BINDINGS (FIX) ================= */
 const form = document.getElementById("caseForm");
 const statusMsg = document.getElementById("statusMsg");
 
+const nameInput = document.getElementById("name");
+const whatsappInput = document.getElementById("whatsapp");
+const queryTypeInput = document.getElementById("queryType");
+const messageInput = document.getElementById("message");
+const dobInput = document.getElementById("dob");
+const tobInput = document.getElementById("tob");
+const pobInput = document.getElementById("pob");
+
+/* ================= SUBMIT HANDLER ================= */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -23,13 +33,13 @@ form.addEventListener("submit", async (e) => {
 
   try {
     await addDoc(collection(db, "cases"), {
-      name: name.value,
-      whatsapp: whatsapp.value,
-      queryType: queryType.value,
-      message: message.value,
-      dob: dob.value,
-      tob: tob.value,
-      pob: pob.value,
+      name: nameInput.value,
+      whatsapp: whatsappInput.value,
+      queryType: queryTypeInput.value,
+      message: messageInput.value,
+      dob: dobInput.value,
+      tob: tobInput.value,
+      pob: pobInput.value,
       status: "Query Submitted",
       createdAt: serverTimestamp()
     });
