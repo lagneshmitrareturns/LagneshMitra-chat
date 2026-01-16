@@ -157,7 +157,7 @@ body {
 }
 
 /* ==================================================
-   ZENO — EYE (ALIVE)
+   ZENO — EYE (FULLY ALIVE 🔥)
    ================================================== */
 
 #zeno-eye {
@@ -185,21 +185,27 @@ body {
   z-index: 5000;
 }
 
+/* 🔁 ROTATING + PULSING RING */
 #zeno-eye .ring {
   position: absolute;
   inset: 0;
   border-radius: 50%;
   border: 2px solid rgba(255,93,162,0.75);
-  animation: ring-rotate 10s linear infinite;
+  animation:
+    ring-rotate 10s linear infinite,
+    ring-pulse 4.5s ease-in-out infinite;
 }
 
+/* 👁 MOVING PUPIL */
 #zeno-eye .pupil {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   background: radial-gradient(circle, #ff5da2, #7c3aed);
+  animation: pupil-move 6s ease-in-out infinite;
 }
 
+/* 👁 BLINK */
 #zeno-eye .lid {
   position: absolute;
   inset: 0;
@@ -232,6 +238,20 @@ body {
   to { transform: rotate(360deg); }
 }
 
+@keyframes ring-pulse {
+  0%   { transform: scale(1); opacity: 0.9; }
+  50%  { transform: scale(1.35); opacity: 0.45; }
+  100% { transform: scale(1); opacity: 0.9; }
+}
+
+@keyframes pupil-move {
+  0%   { transform: translate(0,0); }
+  25%  { transform: translate(3px,-2px); }
+  50%  { transform: translate(-3px,2px); }
+  75%  { transform: translate(2px,3px); }
+  100% { transform: translate(0,0); }
+}
+
 @keyframes blink {
   0%,92%,100% { transform: translateY(-100%); }
   94%,96% { transform: translateY(0); }
@@ -258,7 +278,7 @@ body {
 }
 
 /* ==================================================
-   ✅ EMAIL / CASE SUBMISSION (FINAL FIX)
+   EMAIL / CASE SUBMISSION
    ================================================== */
 
 .email-page {
@@ -330,4 +350,4 @@ body {
   body { padding-top: 120px; }
   .brand { font-size: 28px; }
   #zeno-cloud { width: 92vw; right: 4vw; }
-   }
+}
