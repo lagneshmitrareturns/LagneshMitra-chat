@@ -71,7 +71,6 @@ body{
   overflow-y:auto;
   background:#24123d;
 }
-
 table{
   width:100%;
   border-collapse:collapse;
@@ -82,11 +81,10 @@ th,td{
   font-size:14px;
 }
 th{
-  text-align:left;
-  color:#c4b5fd;
   position:sticky;
   top:0;
   background:#24123d;
+  color:#c4b5fd;
 }
 tr:hover{ background:#2a1650; cursor:pointer; }
 
@@ -98,7 +96,7 @@ tr:hover{ background:#2a1650; cursor:pointer; }
   border-radius:10px;
 }
 
-/* MESSAGE MODAL */
+/* MODAL */
 .modal{
   position:fixed;
   inset:0;
@@ -106,7 +104,7 @@ tr:hover{ background:#2a1650; cursor:pointer; }
   display:none;
   align-items:center;
   justify-content:center;
-  z-index:999;
+  z-index:1000;
 }
 .modal-box{
   width:70%;
@@ -124,9 +122,46 @@ tr:hover{ background:#2a1650; cursor:pointer; }
   cursor:pointer;
   font-size:20px;
 }
-.section{ margin-bottom:16px; }
-.label{ font-size:13px;color:#c4b5fd; }
-.value{ margin-top:4px;font-size:15px; }
+.ctrls{
+  display:flex;
+  gap:12px;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+.ctrls button{
+  padding:10px 16px;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  font-weight:700;
+}
+.reply{ background:linear-gradient(135deg,#ff5da2,#9b5cff); color:#1b0f2e; }
+.draft{ background:#2a1650;color:#fff; }
+.archive{ background:#3b2463;color:#fff; }
+
+/* WORKSPACE */
+.workspace{
+  position:fixed;
+  inset:0;
+  background:#1f1433;
+  z-index:1200;
+  display:none;
+  padding:24px;
+}
+.workspace textarea{
+  width:100%;
+  height:50vh;
+  border-radius:16px;
+  padding:16px;
+  font-size:15px;
+  resize:none;
+  word-wrap:break-word;
+}
+.ws-actions{
+  margin-top:16px;
+  display:flex;
+  gap:12px;
+}
 </style>
 </head>
 
@@ -163,11 +198,27 @@ tr:hover{ background:#2a1650; cursor:pointer; }
 
 </div>
 
-<!-- MESSAGE MODAL -->
+<!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-box">
     <div class="close" onclick="closeModal()">✕</div>
     <div id="modalContent"></div>
+    <div class="ctrls">
+      <button class="reply" onclick="openWorkspace()">✉️ Reply</button>
+      <button class="draft" onclick="setStatus('Draft')">💾 Draft</button>
+      <button class="archive" onclick="setStatus('Closed')">🗄 Archive</button>
+    </div>
+  </div>
+</div>
+
+<!-- WORKSPACE -->
+<div class="workspace" id="workspace">
+  <h2 style="color:#ff5da2;">✉️ Reply Workspace</h2>
+  <textarea id="replyText" placeholder="Type reply here..."></textarea>
+  <input type="file" style="margin-top:12px;">
+  <div class="ws-actions">
+    <button class="reply" onclick="sendReply()">📤 Send</button>
+    <button class="draft" onclick="closeWorkspace()">✕ Cancel</button>
   </div>
 </div>
 
@@ -188,8 +239,10 @@ const db = getFirestore(app);
 const rows=document.getElementById("rows");
 const modal=document.getElementById("modal");
 const modalContent=document.getElementById("modalContent");
+const workspace=document.getElementById("workspace");
 
 let currentBox="inbox";
+let activeId=null;
 
 /* SIDEBAR */
 document.querySelectorAll(".side-btn").forEach(b=>{
@@ -197,15 +250,13 @@ document.querySelectorAll(".side-btn").forEach(b=>{
     document.querySelectorAll(".side-btn").forEach(x=>x.classList.remove("active"));
     b.classList.add("active");
     currentBox=b.dataset.box;
-    load();
   };
 });
 
 /* LOAD */
-function load(){
-  rows.innerHTML="";
-  const q=query(collection(db,"cases"),orderBy("createdAt","desc"));
-  onSnapshot(q,snap=>{
+onSnapshot(
+  query(collection(db,"cases"),orderBy("createdAt","desc")),
+  snap=>{
     rows.innerHTML="";
     snap.forEach(d=>{
       const c=d.data();
@@ -226,9 +277,8 @@ function load(){
               <option ${c.status==="Draft"?"selected":""}>Draft</option>
               <option ${c.status==="Closed"?"selected":""}>Closed</option>
             </select>
-          </td>
-        `;
-        tr.onclick=()=>openModal(c);
+          </td>`;
+        tr.onclick=()=>openModal(d.id,c);
         tr.querySelector("select").onclick=e=>e.stopPropagation();
         tr.querySelector("select").onchange=e=>{
           updateDoc(doc(db,"cases",d.id),{status:e.target.value});
@@ -236,26 +286,39 @@ function load(){
         rows.appendChild(tr);
       }
     });
-  });
-}
+  }
+);
 
 /* MODAL */
-function openModal(c){
+function openModal(id,c){
+  activeId=id;
   modal.style.display="flex";
   modalContent.innerHTML=`
     <h3>${c.name}</h3>
-    <div class="section"><div class="label">WhatsApp</div><div class="value">${c.whatsapp}</div></div>
-    <div class="section"><div class="label">Query</div><div class="value">${c.queryType}</div></div>
-    <div class="section"><div class="label">Message</div><div class="value">${c.message}</div></div>
-    <div class="section"><div class="label">Birth</div>
-      <div class="value">${c.dob} | ${c.tob} | ${c.pob}</div>
-    </div>
-  `;
+    <p><b>WhatsApp:</b> ${c.whatsapp}</p>
+    <p><b>Message:</b><br>${c.message}</p>
+    <p><b>Birth:</b> ${c.dob} | ${c.tob} | ${c.pob}</p>`;
 }
 window.closeModal=()=>modal.style.display="none";
 
-/* INIT */
-load();
+/* WORKSPACE */
+window.openWorkspace=()=>{
+  modal.style.display="none";
+  workspace.style.display="block";
+};
+window.closeWorkspace=()=>workspace.style.display="none";
+
+window.sendReply=async()=>{
+  const text=document.getElementById("replyText").value.trim();
+  if(!text)return;
+  await updateDoc(doc(db,"cases",activeId),{status:"Replied",reply:text});
+  workspace.style.display="none";
+};
+
+window.setStatus=async s=>{
+  await updateDoc(doc(db,"cases",activeId),{status:s});
+  closeModal();
+};
 </script>
 
 </body>
