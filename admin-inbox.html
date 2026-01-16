@@ -24,20 +24,15 @@ body{
   align-items:center;
   padding:0 22px;
 }
-.top-bar h2{
-  margin:0;
-  font-size:20px;
-  color:#ff5da2;
-}
+.top-bar h2{ margin:0;color:#ff5da2;font-size:20px; }
 .back-btn{
   margin-left:auto;
   background:#2a1650;
   color:#fff;
   border:none;
-  padding:12px 18px;
+  padding:10px 16px;
   border-radius:12px;
   cursor:pointer;
-  font-weight:600;
 }
 
 /* LAYOUT */
@@ -52,19 +47,18 @@ body{
   background:#1a0f2e;
   border-right:1px solid #3b2463;
   padding:14px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
 }
 .side-btn{
-  padding:12px 14px;
+  width:100%;
+  margin-bottom:8px;
+  padding:12px;
   border-radius:12px;
   border:none;
   background:#2a1650;
   color:#fff;
   cursor:pointer;
-  text-align:left;
   font-weight:600;
+  text-align:left;
 }
 .side-btn.active{
   background:linear-gradient(135deg,#ff5da2,#9b5cff);
@@ -73,78 +67,66 @@ body{
 
 /* INBOX TABLE */
 .inbox{
-  width:45%;
-  background:#24123d;
-  border-right:1px solid #3b2463;
+  flex:1;
   overflow-y:auto;
+  background:#24123d;
 }
-.table-head,
-.table-row{
-  display:grid;
-  grid-template-columns: 1.4fr 1.6fr 1fr;
-  padding:14px 16px;
-  align-items:center;
+
+table{
+  width:100%;
+  border-collapse:collapse;
 }
-.table-head{
+th,td{
+  padding:14px;
+  border-bottom:1px solid #3b2463;
+  font-size:14px;
+}
+th{
+  text-align:left;
+  color:#c4b5fd;
   position:sticky;
   top:0;
-  background:#1f1433;
-  font-size:13px;
-  color:#c4b5fd;
-  border-bottom:1px solid #3b2463;
-  z-index:2;
+  background:#24123d;
 }
-.table-row{
-  border-bottom:1px solid #3b2463;
-  cursor:pointer;
-}
-.table-row:hover{
-  background:#2a1650;
-}
-.name{
-  font-weight:700;
-  color:#ffb4dc;
-}
-.report{
-  font-size:14px;
-  color:#e9d5ff;
-}
-.status select{
+tr:hover{ background:#2a1650; cursor:pointer; }
+
+.status-select{
   background:#3b2463;
   color:#fff;
   border:none;
   padding:6px 10px;
-  border-radius:14px;
-  font-size:12px;
-  cursor:pointer;
+  border-radius:10px;
 }
 
-/* DETAIL PANEL */
-.detail{
-  width:55%;
-  padding:22px;
+/* MESSAGE MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+.modal-box{
+  width:70%;
+  max-height:85vh;
+  background:#1f1433;
+  border-radius:18px;
+  padding:24px;
   overflow-y:auto;
+  position:relative;
 }
-.empty{
-  opacity:.7;
-  font-style:italic;
-  color:#c4b5fd;
+.close{
+  position:absolute;
+  top:14px;
+  right:18px;
+  cursor:pointer;
+  font-size:20px;
 }
-.detail h3{
-  margin-top:0;
-  color:#ff5da2;
-}
-.section{
-  margin-bottom:18px;
-}
-.section label{
-  font-size:13px;
-  color:#c4b5fd;
-}
-.section div{
-  margin-top:4px;
-  font-size:15px;
-}
+.section{ margin-bottom:16px; }
+.label{ font-size:13px;color:#c4b5fd; }
+.value{ margin-top:4px;font-size:15px; }
 </style>
 </head>
 
@@ -167,31 +149,33 @@ body{
 
   <!-- INBOX -->
   <div class="inbox">
-    <div class="table-head">
-      <div>Name</div>
-      <div>Report Wanted</div>
-      <div>Status</div>
-    </div>
-    <div id="list"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Report Wanted</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
   </div>
 
-  <!-- DETAIL -->
-  <div class="detail" id="detail">
-    <div class="empty">Select a message</div>
-  </div>
+</div>
 
+<!-- MESSAGE MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="close" onclick="closeModal()">✕</div>
+    <div id="modalContent"></div>
+  </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
-  getFirestore,
-  collection,
-  query,
-  orderBy,
-  onSnapshot,
-  doc,
-  updateDoc
+  getFirestore, collection, query, orderBy,
+  onSnapshot, doc, updateDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const app = initializeApp({
@@ -201,92 +185,77 @@ const app = initializeApp({
 });
 const db = getFirestore(app);
 
-const list = document.getElementById("list");
-const detail = document.getElementById("detail");
-let currentBox = "inbox";
-let unsubscribe = null;
+const rows=document.getElementById("rows");
+const modal=document.getElementById("modal");
+const modalContent=document.getElementById("modalContent");
+
+let currentBox="inbox";
 
 /* SIDEBAR */
-document.querySelectorAll(".side-btn").forEach(btn=>{
-  btn.onclick = ()=>{
-    document.querySelectorAll(".side-btn").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    currentBox = btn.dataset.box;
-    attachListener();
+document.querySelectorAll(".side-btn").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll(".side-btn").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    currentBox=b.dataset.box;
+    load();
   };
 });
 
-/* LISTENER */
-function attachListener(){
-  if(unsubscribe) unsubscribe();
-  list.innerHTML = "";
-
-  const q = query(collection(db,"cases"), orderBy("createdAt","desc"));
-
-  unsubscribe = onSnapshot(q, snap=>{
-    list.innerHTML = "";
+/* LOAD */
+function load(){
+  rows.innerHTML="";
+  const q=query(collection(db,"cases"),orderBy("createdAt","desc"));
+  onSnapshot(q,snap=>{
+    rows.innerHTML="";
     snap.forEach(d=>{
-      const c = d.data();
-      const id = d.id;
-
+      const c=d.data();
       if(
-        (currentBox==="inbox" && c.status==="Query Submitted") ||
-        (currentBox==="sent" && c.status==="Replied") ||
-        (currentBox==="draft" && c.status==="Draft") ||
+        (currentBox==="inbox" && c.status==="Query Submitted")||
+        (currentBox==="sent" && c.status==="Replied")||
+        (currentBox==="draft" && c.status==="Draft")||
         (currentBox==="archive" && c.status==="Closed")
       ){
-        const row = document.createElement("div");
-        row.className="table-row";
-        row.innerHTML = `
-          <div class="name">${c.name || "Unknown"}</div>
-          <div class="report">${c.queryType || ""}</div>
-          <div class="status">
-            <select>
+        const tr=document.createElement("tr");
+        tr.innerHTML=`
+          <td>${c.name||""}</td>
+          <td>${c.queryType||""}</td>
+          <td>
+            <select class="status-select">
               <option ${c.status==="Query Submitted"?"selected":""}>Query Submitted</option>
-              <option ${c.status==="Under Scrutiny"?"selected":""}>Under Scrutiny</option>
               <option ${c.status==="Replied"?"selected":""}>Replied</option>
               <option ${c.status==="Draft"?"selected":""}>Draft</option>
               <option ${c.status==="Closed"?"selected":""}>Closed</option>
             </select>
-          </div>
+          </td>
         `;
-
-        row.querySelector("select").onchange = e=>{
-          updateDoc(doc(db,"cases",id),{ status:e.target.value });
+        tr.onclick=()=>openModal(c);
+        tr.querySelector("select").onclick=e=>e.stopPropagation();
+        tr.querySelector("select").onchange=e=>{
+          updateDoc(doc(db,"cases",d.id),{status:e.target.value});
         };
-
-        row.onclick = ()=>openCase(c);
-        list.appendChild(row);
+        rows.appendChild(tr);
       }
     });
-
-    if(!list.innerHTML){
-      list.innerHTML = `<div class="empty" style="padding:18px;">No messages</div>`;
-    }
   });
 }
 
-/* OPEN DETAIL */
-function openCase(c){
-  detail.innerHTML = `
-    <h3>${c.name || ""}</h3>
-
-    <div class="section"><label>WhatsApp</label><div>${c.whatsapp || ""}</div></div>
-    <div class="section"><label>Query Type</label><div>${c.queryType || ""}</div></div>
-    <div class="section"><label>Message</label><div>${c.message || ""}</div></div>
-
-    <div class="section">
-      <label>Birth Details</label>
-      <div>DOB: ${c.dob || ""}</div>
-      <div>TOB: ${c.tob || ""}</div>
-      <div>POB: ${c.pob || ""}</div>
+/* MODAL */
+function openModal(c){
+  modal.style.display="flex";
+  modalContent.innerHTML=`
+    <h3>${c.name}</h3>
+    <div class="section"><div class="label">WhatsApp</div><div class="value">${c.whatsapp}</div></div>
+    <div class="section"><div class="label">Query</div><div class="value">${c.queryType}</div></div>
+    <div class="section"><div class="label">Message</div><div class="value">${c.message}</div></div>
+    <div class="section"><div class="label">Birth</div>
+      <div class="value">${c.dob} | ${c.tob} | ${c.pob}</div>
     </div>
-
-    <div class="section"><label>Status</label><div>${c.status}</div></div>
   `;
 }
+window.closeModal=()=>modal.style.display="none";
 
-attachListener();
+/* INIT */
+load();
 </script>
 
 </body>
