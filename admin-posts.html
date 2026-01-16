@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>LagneshMitra – Admin Panel</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<style>
+<meta name="viewport" content="width=device-width, initial-scale=1"><style>
 /* ===== BASE ===== */
 body{
   margin:0;
@@ -182,7 +179,6 @@ textarea{
   font-size:13px;
 }
 
-/* 🔥 PRIMARY ACTION */
 .ops-panel .publish-btn{
   background:linear-gradient(135deg,#ff5da2,#d946ef);
   color:#1b0f2e;
@@ -201,40 +197,32 @@ th,td{
 }
 th{ color:#c4b5fd; text-align:left; }
 tr:hover{ background:#2a1650; cursor:pointer; }
-</style>
-</head>
-
-<body>
-
-<div class="system-label">
+</style></head><body><div class="system-label">
   <strong>LagneshMitra Intelligence System</strong>
   Version 1.0
-</div>
-
-<div class="top-bar">
-  <div class="menu-group">
+</div><div class="top-bar">  <!-- HOF -->  <div class="menu-group">
     <button class="menu-main" onclick="toggleDD(event,'hof-dd')">Hall of Fame ▾</button>
     <div class="dropdown" id="hof-dd">
       <button onclick="menuAction(loadAdd)">➕ Add Post</button>
       <button onclick="menuAction(loadEditLatest)">✏ Edit Latest</button>
       <button onclick="menuAction(loadManage)">📋 Manage Posts</button>
     </div>
-  </div>
+  </div>  <!-- ZENO (LOCKED) --><button class="menu-main" disabled>ZENO ▾</button>
 
-  <button class="menu-main" disabled>ZENO ▾</button>
-  <button class="menu-main" disabled>Mail ▾</button>
-  <button class="menu-main" disabled>Payments ▾</button>
+  <!-- 📬 MAIL / CHAT -->  <div class="menu-group">
+    <button class="menu-main" onclick="toggleDD(event,'mail-dd')">Mail ▾</button>
+    <div class="dropdown" id="mail-dd">
+      <button onclick="openInbox()">📥 Admin Inbox</button>
+    </div>
+  </div>  <!-- PAYMENTS (LOCKED) --><button class="menu-main" disabled>Payments ▾</button>
 
-  <button class="menu-main back-btn" onclick="goHome()">↩ Back to Site</button>
-</div>
+<button class="menu-main back-btn" onclick="goHome()">↩ Back to Site</button>
 
-<div class="workspace">
+</div><div class="workspace">
   <div class="workspace-inner" id="workspace">
     <div class="empty">Select a module from the top menu</div>
   </div>
-</div>
-
-<script type="module">
+</div><script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
   getFirestore, collection, addDoc, getDocs,
@@ -253,6 +241,11 @@ let selectedPostId=null;
 
 /* NAV */
 window.goHome=()=>window.open("/", "_blank");
+
+/* MAIL */
+window.openInbox=()=>{
+  window.location.href="admin-inbox.html";
+};
 
 /* DROPDOWN */
 window.toggleDD=(e,id)=>{
@@ -284,7 +277,6 @@ window.loadAdd=()=>{
     <div class="form-shell">
       <div class="close-x" onclick="clearWS()">✕</div>
       <button class="ops-toggle" onclick="toggleOps()">⚙ Controls</button>
-
       <div class="ops-panel" id="opsPanel">
         <button>Bold</button>
         <button>Italic</button>
@@ -294,107 +286,55 @@ window.loadAdd=()=>{
         <button>Print</button>
         <button class="publish-btn" onclick="savePost()">Publish</button>
       </div>
-
       <h3>Add Hall of Fame Post</h3>
-      <textarea id="postContent"></textarea>
-    </div>
-  `;
+      <textarea id="postContent"></textarea></div>`;
+
 };
 
 /* EDIT LATEST */
 window.loadEditLatest=async()=>{
-  const q=query(collection(db,"posts"),orderBy("updatedAt","desc"),limit(1));
-  const snap=await getDocs(q);
-  if(snap.empty)return;
-  const d=snap.docs[0];
-  selectedPostId=d.id;
-  ws.innerHTML=`
-    <div class="form-shell">
-      <div class="close-x" onclick="clearWS()">✕</div>
-      <button class="ops-toggle" onclick="toggleOps()">⚙ Controls</button>
-
-      <div class="ops-panel" id="opsPanel">
-        <button>Bold</button>
-        <button>Italic</button>
-        <button>Insert Image</button>
-        <button>Insert Table</button>
-        <button>Export PDF</button>
-        <button>Print</button>
-        <button class="publish-btn" onclick="savePost()">Republish</button>
-      </div>
-
-      <h3>Edit Latest Post</h3>
-      <textarea id="postContent">${d.data().content}</textarea>
-    </div>
-  `;
+const q=query(collection(db,"posts"),orderBy("updatedAt","desc"),limit(1));
+const snap=await getDocs(q);
+if(snap.empty)return;
+const d=snap.docs[0];
+selectedPostId=d.id;
+ws.innerHTML=" <div class="form-shell"> <div class="close-x" onclick="clearWS()">✕</div> <button class="ops-toggle" onclick="toggleOps()">⚙ Controls</button> <div class="ops-panel" id="opsPanel"> <button>Bold</button> <button>Italic</button> <button>Insert Image</button> <button>Insert Table</button> <button>Export PDF</button> <button>Print</button> <button class="publish-btn" onclick="savePost()">Republish</button> </div> <h3>Edit Latest Post</h3> <textarea id="postContent">${d.data().content}</textarea> </div>";
 };
 
 /* MANAGE */
 window.loadManage=async()=>{
-  ws.innerHTML=`
-    <div class="form-shell">
-      <div class="close-x" onclick="clearWS()">✕</div>
-      <h3>Manage Posts</h3>
-      <table>
-        <thead><tr><th>Date</th><th>Preview</th><th>Views</th></tr></thead>
-        <tbody id="rows"></tbody>
-      </table>
-    </div>
-  `;
-  const q=query(collection(db,"posts"),orderBy("updatedAt","desc"));
-  const snap=await getDocs(q);
-  snap.forEach(d=>{
-    rows.innerHTML+=`
-      <tr onclick="editFromTable('${d.id}')">
-        <td>${new Date(d.data().updatedAt.seconds*1000).toLocaleString()}</td>
-        <td>${d.data().content.slice(0,40)}...</td>
-        <td>${d.data().views||0}</td>
-      </tr>`;
-  });
+ws.innerHTML=" <div class="form-shell"> <div class="close-x" onclick="clearWS()">✕</div> <h3>Manage Posts</h3> <table> <thead><tr><th>Date</th><th>Preview</th><th>Views</th></tr></thead> <tbody id="rows"></tbody> </table> </div>";
+const q=query(collection(db,"posts"),orderBy("updatedAt","desc"));
+const snap=await getDocs(q);
+snap.forEach(d=>{
+rows.innerHTML+=" <tr onclick="editFromTable('${d.id}')"> <td>${new Date(d.data().updatedAt.seconds*1000).toLocaleString()}</td> <td>${d.data().content.slice(0,40)}...</td> <td>${d.data().views||0}</td> </tr>";
+});
 };
 
 window.editFromTable=async(id)=>{
-  const snap=await getDoc(doc(db,"posts",id));
-  selectedPostId=id;
-  ws.innerHTML=`
-    <div class="form-shell">
-      <div class="close-x" onclick="clearWS()">✕</div>
-      <button class="ops-toggle" onclick="toggleOps()">⚙ Controls</button>
-
-      <div class="ops-panel" id="opsPanel">
-        <button>Bold</button>
-        <button>Italic</button>
-        <button>Insert Image</button>
-        <button>Insert Table</button>
-        <button>Export PDF</button>
-        <button>Print</button>
-        <button class="publish-btn" onclick="savePost()">Republish</button>
-      </div>
-
-      <h3>Edit Post</h3>
-      <textarea id="postContent">${snap.data().content}</textarea>
-    </div>
-  `;
+const snap=await getDoc(doc(db,"posts",id));
+selectedPostId=id;
+ws.innerHTML=" <div class="form-shell"> <div class="close-x" onclick="clearWS()">✕</div> <button class="ops-toggle" onclick="toggleOps()">⚙ Controls</button> <div class="ops-panel" id="opsPanel"> <button>Bold</button> <button>Italic</button> <button>Insert Image</button> <button>Insert Table</button> <button>Export PDF</button> <button>Print</button> <button class="publish-btn" onclick="savePost()">Republish</button> </div> <h3>Edit Post</h3> <textarea id="postContent">${snap.data().content}</textarea> </div>";
 };
 
 /* SAVE */
 window.savePost=async()=>{
-  const text=postContent.value.trim();
-  if(!text)return;
-  if(selectedPostId){
-    await updateDoc(doc(db,"posts",selectedPostId),{
-      content:text,
-      updatedAt:serverTimestamp()
-    });
-  }else{
-    await addDoc(collection(db,"posts"),{
-      content:text,
-      views:0,
-      createdAt:serverTimestamp(),
-      updatedAt:serverTimestamp()
-    });
-  }
-  clearWS();
+const text=postContent.value.trim();
+if(!text)return;
+if(selectedPostId){
+await updateDoc(doc(db,"posts",selectedPostId),{
+content:text,
+updatedAt:serverTimestamp()
+});
+}else{
+await addDoc(collection(db,"posts"),{
+content:text,
+views:0,
+createdAt:serverTimestamp(),
+updatedAt:serverTimestamp()
+});
+}
+clearWS();
 };
 </script>
 
