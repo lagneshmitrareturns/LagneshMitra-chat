@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LagneshMitra – Admin Mailbox</title>
+<title>LagneshMitra – Admin Inbox</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-/* ===== BASE ===== */
 body{
   margin:0;
   font-family:"Segoe UI",Roboto,Arial,sans-serif;
@@ -16,7 +15,7 @@ body{
   overflow:hidden;
 }
 
-/* ===== TOP BAR ===== */
+/* TOP BAR */
 .top-bar{
   height:72px;
   background:#1f1433;
@@ -26,13 +25,11 @@ body{
   padding:0 22px;
   gap:20px;
 }
-
 .top-bar h2{
   margin:0;
   font-size:20px;
   color:#ff5da2;
 }
-
 .back-btn{
   margin-left:auto;
   background:#2a1650;
@@ -44,13 +41,13 @@ body{
   font-weight:600;
 }
 
-/* ===== LAYOUT ===== */
+/* LAYOUT */
 .container{
   display:flex;
   height:calc(100vh - 72px);
 }
 
-/* ===== SIDEBAR ===== */
+/* SIDEBAR */
 .sidebar{
   width:220px;
   background:#1a0f2e;
@@ -60,7 +57,6 @@ body{
   flex-direction:column;
   gap:8px;
 }
-
 .side-btn{
   padding:12px 14px;
   border-radius:12px;
@@ -76,34 +72,28 @@ body{
   color:#1b0f2e;
 }
 
-/* ===== INBOX LIST ===== */
+/* INBOX LIST */
 .inbox{
   width:40%;
   border-right:1px solid #3b2463;
   overflow-y:auto;
   background:#24123d;
 }
-
 .case-row{
   padding:16px 18px;
   border-bottom:1px solid #3b2463;
   cursor:pointer;
 }
-.case-row:hover{
-  background:#2a1650;
-}
-
+.case-row:hover{ background:#2a1650; }
 .case-name{
   font-weight:700;
   color:#ffb4dc;
 }
-
 .case-meta{
   font-size:13px;
   color:#c4b5fd;
   margin-top:4px;
 }
-
 .case-status{
   margin-top:6px;
   font-size:12px;
@@ -113,34 +103,28 @@ body{
   background:#3b2463;
 }
 
-/* ===== DETAIL PANEL ===== */
+/* DETAIL */
 .detail{
   width:60%;
   padding:22px;
   overflow-y:auto;
 }
-
 .empty{
   opacity:.7;
   font-style:italic;
   color:#c4b5fd;
 }
-
-/* ===== DETAIL ===== */
 .detail h3{
   margin-top:0;
   color:#ff5da2;
 }
-
 .section{
   margin-bottom:18px;
 }
-
 .section label{
   font-size:13px;
   color:#c4b5fd;
 }
-
 .section div{
   margin-top:4px;
   font-size:15px;
@@ -150,21 +134,19 @@ body{
 
 <body>
 
-<!-- TOP BAR -->
 <div class="top-bar">
-  <h2>📮 Admin Mailbox</h2>
+  <h2>📮 Admin Inbox</h2>
   <button class="back-btn" onclick="location.href='admin-posts.html'">↩ Back</button>
 </div>
 
-<!-- MAIN -->
 <div class="container">
 
   <!-- SIDEBAR -->
   <div class="sidebar">
-    <button class="side-btn active" onclick="loadBox('inbox')">📥 Inbox</button>
-    <button class="side-btn" onclick="loadBox('sent')">📤 Sent</button>
-    <button class="side-btn" onclick="loadBox('draft')">📝 Drafts</button>
-    <button class="side-btn" onclick="loadBox('archive')">🗄 Archive</button>
+    <button class="side-btn active" data-box="inbox">📥 Inbox</button>
+    <button class="side-btn" data-box="sent">📤 Sent</button>
+    <button class="side-btn" data-box="draft">📝 Drafts</button>
+    <button class="side-btn" data-box="archive">🗄 Archive</button>
   </div>
 
   <!-- LIST -->
@@ -198,32 +180,29 @@ const db = getFirestore(app);
 const list = document.getElementById("list");
 const detail = document.getElementById("detail");
 let currentBox = "inbox";
-
-/* LOAD BOX */
-window.loadBox = (box)=>{
-  currentBox = box;
-  document.querySelectorAll(".side-btn").forEach(b=>b.classList.remove("active"));
-  event.target.classList.add("active");
-  attachListener();
-};
-
-/* LISTENER */
 let unsubscribe = null;
 
+/* SIDEBAR HANDLER */
+document.querySelectorAll(".side-btn").forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll(".side-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    currentBox = btn.dataset.box;
+    attachListener();
+  };
+});
+
+/* FIRESTORE LISTENER */
 function attachListener(){
   if(unsubscribe) unsubscribe();
-
   list.innerHTML = "";
 
-  const q = query(
-    collection(db,"cases"),
-    orderBy("createdAt","desc")
-  );
+  const q = query(collection(db,"cases"), orderBy("createdAt","desc"));
 
   unsubscribe = onSnapshot(q, snap=>{
-    list.innerHTML="";
-    snap.forEach(doc=>{
-      const c = doc.data();
+    list.innerHTML = "";
+    snap.forEach(d=>{
+      const c = d.data();
 
       if(
         (currentBox==="inbox" && c.status==="Query Submitted") ||
@@ -233,43 +212,47 @@ function attachListener(){
       ){
         const row = document.createElement("div");
         row.className="case-row";
-        row.innerHTML=`
-          <div class="case-name">${c.name}</div>
-          <div class="case-meta">${c.queryType}</div>
+        row.innerHTML = `
+          <div class="case-name">${c.name || "Unknown"}</div>
+          <div class="case-meta">${c.queryType || ""}</div>
           <div class="case-status">${c.status}</div>
         `;
-        row.onclick=()=>openCase(c);
+        row.onclick = ()=>openCase(c);
         list.appendChild(row);
       }
     });
+
+    if(!list.innerHTML){
+      list.innerHTML = `<div class="empty" style="padding:18px;">No messages</div>`;
+    }
   });
 }
 
-/* OPEN */
+/* OPEN CASE */
 function openCase(c){
-  detail.innerHTML=`
-    <h3>${c.name}</h3>
+  detail.innerHTML = `
+    <h3>${c.name || ""}</h3>
 
     <div class="section">
       <label>WhatsApp</label>
-      <div>${c.whatsapp}</div>
+      <div>${c.whatsapp || ""}</div>
     </div>
 
     <div class="section">
       <label>Query Type</label>
-      <div>${c.queryType}</div>
+      <div>${c.queryType || ""}</div>
     </div>
 
     <div class="section">
       <label>Message</label>
-      <div>${c.message}</div>
+      <div>${c.message || ""}</div>
     </div>
 
     <div class="section">
       <label>Birth Details</label>
-      <div>DOB: ${c.dob}</div>
-      <div>TOB: ${c.tob}</div>
-      <div>POB: ${c.pob}</div>
+      <div>DOB: ${c.dob || ""}</div>
+      <div>TOB: ${c.tob || ""}</div>
+      <div>POB: ${c.pob || ""}</div>
     </div>
 
     <div class="section">
