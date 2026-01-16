@@ -5,7 +5,7 @@
   <title>Contact LagneshMitra</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- ONLY ONE CSS -->
+  <!-- CORE STYLE -->
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -19,7 +19,7 @@
   </div>
 </div>
 
-<!-- ================= NAV BUTTONS (BIG & CLEAR) ================= -->
+<!-- ================= NAV BUTTONS ================= -->
 <div style="
   display:flex;
   gap:20px;
@@ -28,7 +28,6 @@
   flex-wrap:wrap;
 ">
 
-  <!-- BACK TO INDEX -->
   <button
     onclick="location.href='index.html'"
     style="
@@ -45,7 +44,6 @@
     ⬅️ Back to Home
   </button>
 
-  <!-- ADMIN -->
   <button
     onclick="location.href='admin-posts.html'"
     style="
@@ -64,7 +62,7 @@
 
 </div>
 
-<!-- ================= EMAIL PAGE WRAPPER ================= -->
+<!-- ================= EMAIL PAGE ================= -->
 <div class="email-page">
 
   <div class="email-container">
@@ -74,7 +72,7 @@
       Serious, paid case-based analysis only.
     </p>
 
-    <form id="caseForm">
+    <form id="caseForm" autocomplete="off">
 
       <label>Full Name *</label>
       <input type="text" id="name" required>
@@ -111,12 +109,19 @@
 
     </form>
 
-    <div id="statusMsg" class="status-msg"></div>
+    <!-- ✅ STATUS MESSAGE -->
+    <div
+      id="statusMsg"
+      class="status-msg"
+      style="display:none;margin-top:18px;text-align:center;font-weight:700;">
+    </div>
 
   </div>
 
 </div>
 
+<!-- ================= JS ================= -->
 <script src="email-chat.js" type="module"></script>
+
 </body>
 </html>
