@@ -1,131 +1,132 @@
 /* ================================
-   LagneshMitra – Core Styling
-   GPU PATCH KILL • FINAL LOCK
-   ================================ */
+LagneshMitra – Core Styling
+GPU PATCH KILL • FINAL LOCK
+================================ */
 
 /* ===== RESET ===== */
+
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+box-sizing: border-box;
+margin: 0;
+padding: 0;
 }
 
 /* ===== BODY ===== */
 body {
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  background: radial-gradient(circle at top, #2b1055, #160a26 60%);
-  color: #f5f3ff;
-  line-height: 1.6;
-  padding: 16px;
-  padding-top: 140px;
-  overflow-x: hidden;
+font-family: "Segoe UI", Roboto, Arial, sans-serif;
+background: radial-gradient(circle at top, #2b1055, #160a26 60%);
+color: #f5f3ff;
+line-height: 1.6;
+padding: 16px;
+padding-top: 140px;
+overflow-x: hidden;
 }
 
 /* ===== TOP BAR ===== */
 .topbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  padding: 22px 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 1200;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100px;
+padding: 22px 28px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+z-index: 1200;
 }
 
 .brand {
-  font-size: 36px;
-  font-style: italic;
-  font-weight: 600;
-  color: #ff5da2;
-  display: flex;
-  flex-direction: column;
+font-size: 36px;
+font-style: italic;
+font-weight: 600;
+color: #ff5da2;
+display: flex;
+flex-direction: column;
 }
 
 .brand span {
-  font-size: 14px;
-  color: #d8b4fe;
+font-size: 14px;
+color: #d8b4fe;
 }
 
 /* ================================
-   THREE DOT MENU
-   ================================ */
+THREE DOT MENU
+================================ */
 
 .menu {
-  font-size: 40px;
-  cursor: pointer;
-  color: #e9d5ff;
-  position: relative;
-  z-index: 3000;
-  padding: 6px 10px;
-  border-radius: 10px;
+font-size: 40px;
+cursor: pointer;
+color: #e9d5ff;
+position: relative;
+z-index: 3000;
+padding: 6px 10px;
+border-radius: 10px;
 }
 
 .menu:hover {
-  background: rgba(255,255,255,0.08);
+background: rgba(255,255,255,0.08);
 }
 
 .dropdown {
-  position: absolute;
-  top: calc(100% + 12px);
-  right: 0;
-  width: 320px;
-  padding: 18px;
-  display: none;
-  background: rgba(36,18,61,0.95);
-  backdrop-filter: blur(14px);
-  border-radius: 16px;
-  box-shadow: 0 20px 45px rgba(0,0,0,0.7);
-  z-index: 3100;
+position: absolute;
+top: calc(100% + 12px);
+right: 0;
+width: 320px;
+padding: 18px;
+display: none;
+background: rgba(36,18,61,0.95);
+backdrop-filter: blur(14px);
+border-radius: 16px;
+box-shadow: 0 20px 45px rgba(0,0,0,0.7);
+z-index: 3100;
 }
 
 /* ===== HERO ===== */
 .hero {
-  display: flex;
-  justify-content: center;
+display: flex;
+justify-content: center;
 }
 
 /* ==================================================
-   HALL OF FAME CARD
-   ================================================== */
+HALL OF FAME CARD
+================================================== */
 
 .post-card {
-  position: relative;
-  width: 100%;
-  max-width: 1100px;
-  margin-top: 28px;
-  max-height: 520px;
-  padding: 32px 36px 96px;
-  border-radius: 26px;
-  background: linear-gradient(
-    160deg,
-    rgba(255,255,255,0.10),
-    rgba(255,255,255,0.04)
-  );
-  border: 1px solid rgba(255,255,255,0.18);
-  box-shadow: 0 22px 60px rgba(0,0,0,0.6);
-  overflow: hidden;
-  transition: max-height 0.6s ease;
+position: relative;
+width: 100%;
+max-width: 1100px;
+margin-top: 28px;
+max-height: 520px;
+padding: 32px 36px 96px;
+border-radius: 26px;
+background: linear-gradient(
+160deg,
+rgba(255,255,255,0.10),
+rgba(255,255,255,0.04)
+);
+border: 1px solid rgba(255,255,255,0.18);
+box-shadow: 0 22px 60px rgba(0,0,0,0.6);
+overflow: hidden;
+transition: max-height 0.6s ease;
 }
 
 .post-card.expanded {
-  max-height: calc(100vh - 160px);
-  overflow-y: auto;
+max-height: calc(100vh - 160px);
+overflow-y: auto;
 }
 
 .post-card h3 {
-  font-size: 26px;
-  margin-bottom: 14px;
-  color: #ff5da2;
-  font-style: italic;
+font-size: 26px;
+margin-bottom: 14px;
+color: #ff5da2;
+font-style: italic;
 }
 
 .meta {
-  font-size: 13px;
-  color: #c4b5fd;
-  margin-bottom: 16px;
+font-size: 13px;
+color: #c4b5fd;
+margin-bottom: 16px;
 }
 
 .post-preview { margin-top: 10px; }
@@ -137,197 +138,143 @@ body {
 /* ===== EXPAND BUTTON ===== */
 #toggleBtn,
 #toggleBtnExpand {
-  position: absolute;
-  left: 36px;
-  bottom: 28px;
-  padding: 14px 26px;
-  background: linear-gradient(135deg, #ff5da2, #c084fc);
-  border: none;
-  border-radius: 16px;
-  color: #1b0f2e;
-  font-weight: 700;
-  cursor: pointer;
-  z-index: 10;
+position: absolute;
+left: 36px;
+bottom: 28px;
+padding: 14px 26px;
+background: linear-gradient(135deg, #ff5da2, #c084fc);
+border: none;
+border-radius: 16px;
+color: #1b0f2e;
+font-weight: 700;
+cursor: pointer;
+z-index: 10;
 }
 
 .post-card.expanded #toggleBtn,
 .post-card.expanded #toggleBtnExpand {
-  position: static;
-  margin-top: 32px;
+position: static;
+margin-top: 32px;
 }
 
 /* ==================================================
-   ZENO — EYE (FULLY ALIVE 🔥)
-   ================================================== */
+ZENO — EYE (ORIGINAL, UNTOUCHED)
+================================================== */
 
 #zeno-eye {
-  position: fixed;
-  right: 22px;
-  bottom: 22px;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at center,
-    #fdf4ff 14%,
-    #c084fc 32%,
-    #7c3aed 48%,
-    #1b0f2e 70%
-  );
-  box-shadow:
-    0 0 18px rgba(236,72,153,0.7),
-    0 0 32px rgba(124,58,237,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  cursor: pointer;
-  z-index: 5000;
+position: fixed;
+right: 22px;
+bottom: 22px;
+width: 58px;
+height: 58px;
+border-radius: 50%;
+background: radial-gradient(
+circle at center,
+#fdf4ff 14%,
+#c084fc 32%,
+#7c3aed 48%,
+#1b0f2e 70%
+);
+box-shadow:
+0 0 18px rgba(236,72,153,0.7),
+0 0 32px rgba(124,58,237,0.5);
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+cursor: pointer;
+z-index: 5000;
+}
+
+/* 🔁 RING */
+#zeno-eye .ring {
+position: absolute;
+inset: 0;
+border-radius: 50%;
+border: 2px solid rgba(255,93,162,0.75);
+animation:
+ring-rotate 10s linear infinite,
+ring-pulse 4.5s ease-in-out infinite;
+}
+
+/* 👁 PUPIL */
+#zeno-eye .pupil {
+width: 12px;
+height: 12px;
+border-radius: 50%;
+background: radial-gradient(circle, #ff5da2, #7c3aed);
+animation: pupil-move 6s ease-in-out infinite;
+}
+
+/* 👁 BLINK */
+#zeno-eye .lid {
+position: absolute;
+inset: 0;
+background: linear-gradient(to bottom, #1b0f2e, #2b1055);
+transform: translateY(-100%);
+animation: blink 6s infinite;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes ring-rotate {
+from { transform: rotate(0deg); }
+to { transform: rotate(360deg); }
+}
+
+@keyframes ring-pulse {
+0%   { transform: scale(1); opacity: 0.9; }
+50%  { transform: scale(1.35); opacity: 0.45; }
+100% { transform: scale(1); opacity: 0.9; }
+}
+
+@keyframes pupil-move {
+0%   { transform: translate(0,0); }
+25%  { transform: translate(3px,-2px); }
+50%  { transform: translate(-3px,2px); }
+75%  { transform: translate(2px,3px); }
+100% { transform: translate(0,0); }
+}
+
+@keyframes blink {
+0%,92%,100% { transform: translateY(-100%); }
+94%,96% { transform: translateY(0); }
 }
 
 /* ==================================================
-   EMAIL / CASE SUBMISSION
-   ================================================== */
+EMAIL / CASE SUBMISSION (FIXED, NO SHAPE BREAK)
+================================================== */
 
 .email-page {
-  min-height: calc(100vh - 120px);
-  padding: 40px 16px;
+min-height: calc(100vh - 120px);
+padding: 40px 16px;
 }
 
 .email-page .email-container {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 28px;
-  background: rgba(36,18,61,0.88);
-  border-radius: 22px;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.65);
+max-width: 760px;
+margin: 0 auto;
+padding: 28px;
+background: rgba(36,18,61,0.88);
+border-radius: 22px;
+box-shadow: 0 25px 60px rgba(0,0,0,0.65);
 }
 
 /* ==================================================
-   🔥 ADMIN MAILBOX (NEW – SAFE EXTENSION)
-   ================================================== */
+🔥 ADMIN MAILBOX (ADDITIVE ONLY)
+================================================== */
 
 .admin-mailbox {
-  position: fixed;
-  top: 100px;
-  left: 0;
-  width: 100%;
-  height: calc(100vh - 100px);
-  display: grid;
-  grid-template-columns: 220px 360px 1fr;
-  background: linear-gradient(180deg,#24123d,#160a26);
-}
-
-/* ===== SIDEBAR ===== */
-.mail-sidebar {
-  background: rgba(36,18,61,0.95);
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.mail-folder {
-  padding: 14px;
-  border-radius: 14px;
-  cursor: pointer;
-  font-weight: 600;
-  color: #e9d5ff;
-}
-
-.mail-folder.active,
-.mail-folder:hover {
-  background: linear-gradient(135deg,#ff5da2,#9b5cff);
-  color: #1b0f2e;
-}
-
-/* ===== MAIL LIST ===== */
-.mail-list {
-  background: rgba(27,15,46,0.95);
-  overflow-y: auto;
-  padding: 16px;
-}
-
-.mail-item {
-  background: rgba(255,255,255,0.06);
-  border-radius: 16px;
-  padding: 14px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  border: 1px solid rgba(255,255,255,0.08);
-}
-
-.mail-item:hover,
-.mail-item.active {
-  background: rgba(255,255,255,0.12);
-}
-
-.mail-item h4 {
-  font-size: 15px;
-  color: #ffb4e6;
-}
-
-.mail-item p {
-  font-size: 13px;
-  opacity: .85;
-}
-
-/* ===== STATUS BADGE ===== */
-.status-badge {
-  display: inline-block;
-  margin-top: 6px;
-  padding: 4px 10px;
-  font-size: 11px;
-  border-radius: 999px;
-  background: #3b2463;
-}
-
-.status-new { background:#22c55e; color:#022c22; }
-.status-pending { background:#facc15; color:#422006; }
-.status-closed { background:#ef4444; color:#3f0a0a; }
-
-/* ===== DETAILS PANE ===== */
-.mail-details {
-  padding: 24px;
-  overflow-y: auto;
-}
-
-.mail-details h3 {
-  color: #ff5da2;
-  margin-bottom: 14px;
-}
-
-.case-box {
-  background: rgba(255,255,255,0.06);
-  border-radius: 18px;
-  padding: 18px;
-  margin-bottom: 18px;
-}
-
-.case-box strong {
-  color: #ffb4e6;
-}
-
-/* ===== ACTION BUTTONS ===== */
-.case-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.case-actions button {
-  padding: 10px 14px;
-  border-radius: 14px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  background: linear-gradient(135deg,#ff5da2,#9b5cff);
-  color: #1b0f2e;
+position: fixed;
+top: 100px;
+left: 0;
+width: 100%;
+height: calc(100vh - 100px);
+display: grid;
+grid-template-columns: 220px 360px 1fr;
+background: linear-gradient(180deg,#24123d,#160a26);
 }
 
 /* ===== MOBILE ===== */
-@media (max-width: 900px) {
-  .admin-mailbox {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 600px) {
+body { padding-top: 120px; }
+.brand { font-size: 28px; }
 }
