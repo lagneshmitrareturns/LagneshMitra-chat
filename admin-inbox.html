@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
+/* ⚠️ CSS UNTOUCHED */
 body{
   margin:0;
   font-family:"Segoe UI",Roboto,Arial,sans-serif;
@@ -14,8 +15,6 @@ body{
   height:100vh;
   overflow:hidden;
 }
-
-/* TOP BAR */
 .top-bar{
   height:72px;
   background:#1f1433;
@@ -34,14 +33,10 @@ body{
   border-radius:12px;
   cursor:pointer;
 }
-
-/* LAYOUT */
 .container{
   display:flex;
   height:calc(100vh - 72px);
 }
-
-/* SIDEBAR */
 .sidebar{
   width:220px;
   background:#1a0f2e;
@@ -64,8 +59,6 @@ body{
   background:linear-gradient(135deg,#ff5da2,#9b5cff);
   color:#1b0f2e;
 }
-
-/* INBOX TABLE */
 .inbox{
   flex:1;
   overflow-y:auto;
@@ -87,7 +80,6 @@ th{
   color:#c4b5fd;
 }
 tr:hover{ background:#2a1650; cursor:pointer; }
-
 .status-select{
   background:#3b2463;
   color:#fff;
@@ -95,8 +87,6 @@ tr:hover{ background:#2a1650; cursor:pointer; }
   padding:6px 10px;
   border-radius:10px;
 }
-
-/* MODAL */
 .modal{
   position:fixed;
   inset:0;
@@ -138,8 +128,6 @@ tr:hover{ background:#2a1650; cursor:pointer; }
 .reply{ background:linear-gradient(135deg,#ff5da2,#9b5cff); color:#1b0f2e; }
 .draft{ background:#2a1650;color:#fff; }
 .archive{ background:#3b2463;color:#fff; }
-
-/* WORKSPACE */
 .workspace{
   position:fixed;
   inset:0;
@@ -174,7 +162,6 @@ tr:hover{ background:#2a1650; cursor:pointer; }
 
 <div class="container">
 
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <button class="side-btn active" data-box="inbox">📥 Inbox</button>
     <button class="side-btn" data-box="sent">📤 Sent</button>
@@ -182,7 +169,6 @@ tr:hover{ background:#2a1650; cursor:pointer; }
     <button class="side-btn" data-box="archive">🗄 Archive</button>
   </div>
 
-  <!-- INBOX -->
   <div class="inbox">
     <table>
       <thead>
@@ -198,7 +184,6 @@ tr:hover{ background:#2a1650; cursor:pointer; }
 
 </div>
 
-<!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-box">
     <div class="close" onclick="closeModal()">✕</div>
@@ -211,11 +196,10 @@ tr:hover{ background:#2a1650; cursor:pointer; }
   </div>
 </div>
 
-<!-- WORKSPACE -->
 <div class="workspace" id="workspace">
   <h2 style="color:#ff5da2;">✉️ Reply Workspace</h2>
   <textarea id="replyText" placeholder="Type reply here..."></textarea>
-  <input type="file" style="margin-top:12px;">
+  <input type="file" accept="image/*,.pdf" style="margin-top:12px;">
   <div class="ws-actions">
     <button class="reply" onclick="sendReply()">📤 Send</button>
     <button class="draft" onclick="closeWorkspace()">✕ Cancel</button>
@@ -236,60 +220,64 @@ const app = initializeApp({
 });
 const db = getFirestore(app);
 
-const rows=document.getElementById("rows");
-const modal=document.getElementById("modal");
-const modalContent=document.getElementById("modalContent");
-const workspace=document.getElementById("workspace");
+const rows = document.getElementById("rows");
+const modal = document.getElementById("modal");
+const modalContent = document.getElementById("modalContent");
+const workspace = document.getElementById("workspace");
 
-let currentBox="inbox";
-let activeId=null;
+let currentBox = "inbox";
+let activeId = null;
+let cache = [];
 
-/* SIDEBAR */
 document.querySelectorAll(".side-btn").forEach(b=>{
   b.onclick=()=>{
     document.querySelectorAll(".side-btn").forEach(x=>x.classList.remove("active"));
     b.classList.add("active");
     currentBox=b.dataset.box;
+    renderRows();
   };
 });
 
-/* LOAD */
+function renderRows(){
+  rows.innerHTML="";
+  cache.forEach(({id,c})=>{
+    if(
+      (currentBox==="inbox" && c.status==="Query Submitted")||
+      (currentBox==="sent" && c.status==="Replied")||
+      (currentBox==="draft" && c.status==="Draft")||
+      (currentBox==="archive" && c.status==="Closed")
+    ){
+      const tr=document.createElement("tr");
+      tr.innerHTML=`
+        <td>${c.name||""}</td>
+        <td>${c.queryType||""}</td>
+        <td>
+          <select class="status-select">
+            <option ${c.status==="Query Submitted"?"selected":""}>Query Submitted</option>
+            <option ${c.status==="Replied"?"selected":""}>Replied</option>
+            <option ${c.status==="Draft"?"selected":""}>Draft</option>
+            <option ${c.status==="Closed"?"selected":""}>Closed</option>
+          </select>
+        </td>`;
+      tr.onclick=()=>openModal(id,c);
+      tr.querySelector("select").onclick=e=>e.stopPropagation();
+      tr.querySelector("select").onchange=e=>{
+        updateDoc(doc(db,"cases",id),{status:e.target.value});
+      };
+      rows.appendChild(tr);
+    }
+  });
+}
+
 onSnapshot(
   query(collection(db,"cases"),orderBy("createdAt","desc")),
   snap=>{
-    rows.innerHTML="";
-    snap.forEach(d=>{
-      const c=d.data();
-      if(
-        (currentBox==="inbox" && c.status==="Query Submitted")||
-        (currentBox==="sent" && c.status==="Replied")||
-        (currentBox==="draft" && c.status==="Draft")||
-        (currentBox==="archive" && c.status==="Closed")
-      ){
-        const tr=document.createElement("tr");
-        tr.innerHTML=`
-          <td>${c.name||""}</td>
-          <td>${c.queryType||""}</td>
-          <td>
-            <select class="status-select">
-              <option ${c.status==="Query Submitted"?"selected":""}>Query Submitted</option>
-              <option ${c.status==="Replied"?"selected":""}>Replied</option>
-              <option ${c.status==="Draft"?"selected":""}>Draft</option>
-              <option ${c.status==="Closed"?"selected":""}>Closed</option>
-            </select>
-          </td>`;
-        tr.onclick=()=>openModal(d.id,c);
-        tr.querySelector("select").onclick=e=>e.stopPropagation();
-        tr.querySelector("select").onchange=e=>{
-          updateDoc(doc(db,"cases",d.id),{status:e.target.value});
-        };
-        rows.appendChild(tr);
-      }
-    });
+    cache=[];
+    snap.forEach(d=>cache.push({id:d.id,c:d.data()}));
+    renderRows();
   }
 );
 
-/* MODAL */
 function openModal(id,c){
   activeId=id;
   modal.style.display="flex";
@@ -301,7 +289,6 @@ function openModal(id,c){
 }
 window.closeModal=()=>modal.style.display="none";
 
-/* WORKSPACE */
 window.openWorkspace=()=>{
   modal.style.display="none";
   workspace.style.display="block";
@@ -311,7 +298,10 @@ window.closeWorkspace=()=>workspace.style.display="none";
 window.sendReply=async()=>{
   const text=document.getElementById("replyText").value.trim();
   if(!text)return;
-  await updateDoc(doc(db,"cases",activeId),{status:"Replied",reply:text});
+  await updateDoc(doc(db,"cases",activeId),{
+    status:"Replied",
+    reply:text
+  });
   workspace.style.display="none";
 };
 
