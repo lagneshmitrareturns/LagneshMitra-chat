@@ -7,21 +7,20 @@
   <title>LagneshMitra</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- MAIN STYLESHEET (LOCKED) -->
+  <!-- MAIN STYLESHEET -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- LM INTRO – FULL SCREEN SLAB -->
+  <!-- LM INTRO – FULL SCREEN SLAB (GPU SAFE) -->
   <style>
     #lm-intro{
       position:fixed;
       inset:0;
-      background:radial-gradient(circle at top,#2b1055,#160a26 80%);
-      backdrop-filter:blur(18px);
-      z-index:999999;
+      background:#160a26;
+      z-index:99999;
       display:flex;
       align-items:center;
       justify-content:center;
-      animation:lm-slide-up 5.8s ease forwards;
+      animation:lm-slide-up 5.5s ease forwards;
     }
 
     .lm-core{
@@ -31,14 +30,18 @@
       color:#ff5da2;
       letter-spacing:10px;
       text-shadow:
-        0 0 20px rgba(255,93,162,.9),
-        0 0 60px rgba(124,58,237,.8);
+        0 0 20px rgba(255,93,162,.8),
+        0 0 50px rgba(124,58,237,.6);
     }
 
     @keyframes lm-slide-up{
-      0%{transform:translateY(0);opacity:1}
-      70%{opacity:1}
-      100%{transform:translateY(-120%);opacity:0}
+      0%   { transform:translateY(0); }
+      85%  { transform:translateY(0); }
+      100% { transform:translateY(-110%); }
+    }
+
+    @media(max-width:600px){
+      .lm-core{ font-size:80px; }
     }
   </style>
 
@@ -97,42 +100,45 @@
 <script type="module" src="app.js"></script>
 
 <script>
-  /* HARD LOCK */
-  document.body.style.pointerEvents="none";
-  document.body.style.paddingTop="0px";
+  /* HARD LOCK DURING INTRO */
+  document.body.style.pointerEvents = "none";
+  document.body.style.paddingTop = "0px";
 
   (function(){
-    const intro=document.getElementById("lm-intro");
+    const intro = document.getElementById("lm-intro");
+
     if(sessionStorage.getItem("lm_intro_seen")){
       intro.remove();
-      document.body.style.pointerEvents="auto";
-      document.body.style.paddingTop="140px";
+      document.body.style.pointerEvents = "auto";
+      document.body.style.paddingTop = "140px";
       return;
     }
+
     sessionStorage.setItem("lm_intro_seen","1");
+
     setTimeout(()=>{
       intro.remove();
-      document.body.style.pointerEvents="auto";
-      document.body.style.paddingTop="140px";
+      document.body.style.pointerEvents = "auto";
+      document.body.style.paddingTop = "140px";
       window.dispatchEvent(new Event("resize"));
-    },5800);
+    },5500);
   })();
 
   function toggleMenu(){
-    const m=document.getElementById("mainMenu");
-    m.style.display=(m.style.display==="block")?"none":"block";
+    const m = document.getElementById("mainMenu");
+    m.style.display = (m.style.display === "block") ? "none" : "block";
   }
 
   document.addEventListener("click",e=>{
     if(!e.target.closest(".menu")){
-      const m=document.getElementById("mainMenu");
-      if(m)m.style.display="none";
+      const m = document.getElementById("mainMenu");
+      if(m) m.style.display="none";
     }
   });
 
   function toggleZeno(){
-    const z=document.getElementById("zeno-cloud");
-    z.style.display=(z.style.display==="block")?"none":"block";
+    const z = document.getElementById("zeno-cloud");
+    z.style.display = (z.style.display === "block") ? "none" : "block";
   }
 </script>
 
