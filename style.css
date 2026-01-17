@@ -1,6 +1,6 @@
 /* ================================
    LagneshMitra – Core Styling
-   GPU PATCH KILL • FINAL LOCK
+   STABLE BUILD • NO GPU ABUSE
 ================================ */
 
 /* ===== RESET ===== */
@@ -32,7 +32,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  z-index: 1200;
+  z-index: 5000;
 }
 
 .brand {
@@ -55,7 +55,7 @@ body {
   cursor: pointer;
   color: #e9d5ff;
   position: relative;
-  z-index: 3000;
+  z-index: 6000;
   padding: 6px 10px;
   border-radius: 10px;
 }
@@ -68,14 +68,23 @@ body {
   position: absolute;
   top: calc(100% + 12px);
   right: 0;
-  width: 320px;
-  padding: 18px;
+  width: 260px;
+  padding: 16px;
   display: none;
-  background: rgba(36,18,61,0.95);
-  backdrop-filter: blur(14px);
+  background: rgba(36,18,61,0.96);
   border-radius: 16px;
   box-shadow: 0 20px 45px rgba(0,0,0,0.7);
-  z-index: 3100;
+}
+
+.dropdown button {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  cursor: pointer;
 }
 
 /* ===== HERO ===== */
@@ -83,10 +92,11 @@ body {
   display: flex;
   justify-content: center;
   width: 100%;
+  margin-top: 12px;
 }
 
 /* ==================================================
-   HALL OF FAME CARD (STABLE)
+   HALL OF FAME CARD (LOCKED)
 ================================================== */
 .post-card {
   position: relative;
@@ -97,19 +107,12 @@ body {
   border-radius: 26px;
   background: linear-gradient(
     160deg,
-    rgba(255,255,255,0.10),
+    rgba(255,255,255,0.12),
     rgba(255,255,255,0.04)
   );
-  border: 1px solid rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.2);
   box-shadow: 0 22px 60px rgba(0,0,0,0.6);
-  overflow: hidden;
-  transition: max-height 0.6s ease;
-  z-index: 5;
-}
-
-.post-card.expanded {
-  max-height: calc(100vh - 160px);
-  overflow-y: auto;
+  z-index: 1;
 }
 
 .post-card h3 {
@@ -125,11 +128,22 @@ body {
   margin-bottom: 16px;
 }
 
-.post-preview { margin-top: 10px; }
-.post-full { margin-top: 18px; }
+.post-preview {
+  margin-top: 10px;
+}
 
-.post-card:not(.expanded) .post-full { display: none; }
-.post-card.expanded .post-preview { display: none; }
+.post-full {
+  margin-top: 18px;
+  display: none;
+}
+
+.post-card.expanded .post-preview {
+  display: none;
+}
+
+.post-card.expanded .post-full {
+  display: block;
+}
 
 /* ===== EXPAND BUTTON ===== */
 #toggleBtn {
@@ -146,7 +160,7 @@ body {
 }
 
 /* ==================================================
-   ZENO — EYE (HARD PINNED)
+   ZENO — EYE (PINNED)
 ================================================== */
 #zeno-eye {
   position: fixed;
@@ -157,10 +171,10 @@ body {
   border-radius: 50%;
   background: radial-gradient(
     circle at center,
-    #fdf4ff 14%,
+    #fdf4ff 12%,
     #c084fc 32%,
     #7c3aed 48%,
-    #1b0f2e 70%
+    #1b0f2e 72%
   );
   box-shadow:
     0 0 18px rgba(236,72,153,0.7),
@@ -169,7 +183,7 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 99999;
+  z-index: 9000;
 }
 
 /* RING */
@@ -201,20 +215,20 @@ body {
 }
 
 /* ==================================================
-   ZENO CLOUD
+   ZENO CLOUD (TEXT FIXED)
 ================================================== */
 #zeno-cloud {
   position: fixed;
   right: 22px;
   bottom: 94px;
-  width: 360px;
+  width: 340px;
   padding: 18px;
   font-size: 14px;
-  background: rgba(36,18,61,0.96);
-  backdrop-filter: blur(16px);
+  color: #fdf4ff;
+  background: rgba(20,10,40,0.96);
   border-radius: 16px;
   box-shadow: 0 25px 55px rgba(0,0,0,0.75);
-  z-index: 100000;
+  z-index: 9001;
 }
 
 /* ===== ANIMATIONS ===== */
@@ -222,11 +236,13 @@ body {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
 @keyframes ring-pulse {
   0% { transform: scale(1); opacity: .9; }
   50% { transform: scale(1.35); opacity: .45; }
   100% { transform: scale(1); opacity: .9; }
 }
+
 @keyframes pupil-move {
   0% { transform: translate(0,0); }
   25% { transform: translate(3px,-2px); }
@@ -234,6 +250,7 @@ body {
   75% { transform: translate(2px,3px); }
   100% { transform: translate(0,0); }
 }
+
 @keyframes blink {
   0%,92%,100% { transform: translateY(-100%); }
   94%,96% { transform: translateY(0); }
