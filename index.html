@@ -124,7 +124,7 @@
 </div>
 
 <!-- =====================================================
-     HERO SECTION – HALL OF FAME (GUARANTEED VISIBLE)
+     HERO SECTION – HALL OF FAME
 ====================================================== -->
 <div class="hero">
   <div class="post-card" id="postCard">
@@ -142,7 +142,7 @@
 </div>
 
 <!-- =====================================================
-     ZENO – OBSERVER (UNTOUCHED)
+     ZENO – OBSERVER
 ====================================================== -->
 <div id="zeno-eye" onclick="toggleZeno()">
   <div class="ring"></div>
@@ -160,8 +160,9 @@
 <script type="module" src="app.js"></script>
 
 <script>
-  /* LOCK SCREEN UNTIL INTRO FINISHES */
+  /* HARD LOCK DURING INTRO */
   document.body.style.pointerEvents = "none";
+  document.body.style.paddingTop = "0px";
 
   (function runIntroOnce(){
     const intro = document.getElementById("lm-intro");
@@ -169,6 +170,8 @@
     if (sessionStorage.getItem("lm_intro_seen")) {
       intro.remove();
       document.body.style.pointerEvents = "auto";
+      document.body.style.paddingTop = "140px";
+      window.dispatchEvent(new Event("resize"));
       return;
     }
 
@@ -177,6 +180,8 @@
     setTimeout(() => {
       intro.remove();
       document.body.style.pointerEvents = "auto";
+      document.body.style.paddingTop = "140px";
+      window.dispatchEvent(new Event("resize")); // 🔥 mobile repaint fix
     }, 5800);
   })();
 
