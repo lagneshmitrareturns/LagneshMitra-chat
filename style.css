@@ -1,6 +1,6 @@
 /* ================================
    LagneshMitra – Core Styling
-   STABLE BUILD • GPU SAFE • FINAL
+   STABLE BASELINE • SAFE BUILD
 ================================ */
 
 /* ===== RESET ===== */
@@ -10,16 +10,10 @@
   padding: 0;
 }
 
-/* ===== HTML GPU BASE ===== */
-html {
-  background: #160a26;
-}
-
 /* ===== BODY ===== */
 body {
-  position: relative;
-  isolation: isolate;              /* 🔥 GPU PATCH KILL */
   font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: radial-gradient(circle at top, #2b1055, #160a26 60%);
   color: #f5f3ff;
   line-height: 1.6;
   padding: 16px;
@@ -27,16 +21,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ===== FIXED BACKGROUND LAYER (NO SEAMS) ===== */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at top, #2b1055, #160a26 60%);
-  z-index: -1;
-}
-
-/* ================= TOP BAR ================= */
+/* ===== TOP BAR ===== */
 .topbar {
   position: fixed;
   top: 0;
@@ -47,6 +32,7 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: transparent;
   z-index: 5000;
 }
 
@@ -64,7 +50,7 @@ body::before {
   color: #d8b4fe;
 }
 
-/* ================= MENU ================= */
+/* ===== MENU ===== */
 .menu {
   font-size: 40px;
   cursor: pointer;
@@ -102,20 +88,21 @@ body::before {
   cursor: pointer;
 }
 
-/* ================= HERO ================= */
+/* ===== HERO ===== */
 .hero {
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-top: 12px;
+  margin-top: 20px;
 }
 
-/* ================= HALL OF FAME ================= */
+/* ==================================================
+   HALL OF FAME CARD
+================================================== */
 .post-card {
   position: relative;
   width: 100%;
   max-width: 1100px;
-  margin-top: 28px;
   padding: 32px 36px 96px;
   border-radius: 26px;
   background: linear-gradient(
@@ -125,10 +112,7 @@ body::before {
   );
   border: 1px solid rgba(255,255,255,0.2);
   box-shadow: 0 22px 60px rgba(0,0,0,0.6);
-
-  contain: paint;                  /* 🔥 GPU FIX */
-  backface-visibility: hidden;
-  transform: translateZ(0);
+  z-index: 1;
 }
 
 .post-card h3 {
@@ -175,7 +159,9 @@ body::before {
   cursor: pointer;
 }
 
-/* ================= ZENO EYE ================= */
+/* ==================================================
+   ZENO — EYE
+================================================== */
 #zeno-eye {
   position: fixed;
   right: 22px;
@@ -200,35 +186,28 @@ body::before {
   z-index: 9000;
 }
 
-/* RING (ROTATION ONLY – GPU SAFE) */
 #zeno-eye .ring {
   position: absolute;
   inset: 0;
   border-radius: 50%;
   border: 2px solid rgba(255,93,162,0.75);
   animation: ring-rotate 10s linear infinite;
-  will-change: transform;
 }
 
-/* PUPIL */
 #zeno-eye .pupil {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   background: radial-gradient(circle, #ff5da2, #7c3aed);
-  animation: pupil-move 6s ease-in-out infinite;
 }
 
-/* BLINK */
 #zeno-eye .lid {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, #1b0f2e, #2b1055);
-  transform: translateY(-100%);
-  animation: blink 6s infinite;
+  display: none;
 }
 
-/* ================= ZENO CLOUD ================= */
+/* ==================================================
+   ZENO CLOUD
+================================================== */
 #zeno-cloud {
   position: fixed;
   right: 22px;
@@ -243,26 +222,30 @@ body::before {
   z-index: 9001;
 }
 
-/* ================= ANIMATIONS ================= */
+/* ===== ANIMATIONS ===== */
 @keyframes ring-rotate {
   from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  to   { transform: rotate(360deg); }
 }
 
-@keyframes pupil-move {
-  0% { transform: translate(0,0); }
-  25% { transform: translate(3px,-2px); }
-  50% { transform: translate(-3px,2px); }
-  75% { transform: translate(2px,3px); }
-  100% { transform: translate(0,0); }
+/* ==================================================
+   EMAIL / CHAT PAGE SAFETY
+================================================== */
+.email-page {
+  min-height: calc(100vh - 120px);
+  padding: 40px 16px;
 }
 
-@keyframes blink {
-  0%,92%,100% { transform: translateY(-100%); }
-  94%,96% { transform: translateY(0); }
+.email-page .email-container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px;
+  background: rgba(36,18,61,0.88);
+  border-radius: 22px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.65);
 }
 
-/* ================= MOBILE ================= */
+/* ===== MOBILE ===== */
 @media (max-width: 600px) {
   body { padding-top: 120px; }
   .brand { font-size: 28px; }
