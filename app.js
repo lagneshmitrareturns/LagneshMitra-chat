@@ -26,7 +26,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 /* =====================================================
-   🔵 HALL OF FAME — (UNCHANGED)
+   🔵 HALL OF FAME — UNCHANGED
    ===================================================== */
 
 let currentPostRef = null;
@@ -83,10 +83,10 @@ window.loadLatestPost = async function () {
 };
 
 /* =====================================================
-   🟣 CASE / MAILBOX ENGINE (PRODUCTION READY)
+   🟣 CASE / MAILBOX ENGINE — FINAL
    ===================================================== */
 
-/* 🔹 SUBMIT CASE (EMAIL / CHAT PAGE) */
+/* 🔹 SUBMIT CASE (CUSTOMER SIDE) */
 window.submitCase = async function (payload) {
   try {
     await addDoc(collection(db, "cases"), {
@@ -95,6 +95,7 @@ window.submitCase = async function (payload) {
       email: payload.email || "",
       queryType: payload.queryType || "",
       message: payload.message || "",
+
       dob: payload.dob || "",
       tob: payload.tob || "",
       pob: payload.pob || "",
@@ -124,42 +125,47 @@ window.submitCase = async function (payload) {
 };
 
 /* =====================================================
-   📥 ADMIN INBOX — LIVE LISTENER
+   📥 ADMIN INBOX — STAGE AWARE LISTENER
    ===================================================== */
 
 window.listenCasesInbox = function (callback) {
   const q = query(collection(db, "cases"), orderBy("createdAt", "desc"));
 
   return onSnapshot(q, snap => {
-    const inbox = [];
-    const sent = [];
-    const drafts = [];
-    const archive = [];
+    const buckets = {
+      inbox: [],
+      sent: [],
+      drafts: [],
+      archive: []
+    };
 
     snap.forEach(d => {
       const data = { id: d.id, ...d.data() };
 
+      /* 🔧 BACKWARD COMPAT FIX */
+      if (!data.stage) data.stage = "Inbox";
+
       switch (data.stage) {
         case "Sent":
-          sent.push(data);
+          buckets.sent.push(data);
           break;
         case "Draft":
-          drafts.push(data);
+          buckets.drafts.push(data);
           break;
         case "Archive":
-          archive.push(data);
+          buckets.archive.push(data);
           break;
         default:
-          inbox.push(data);
+          buckets.inbox.push(data);
       }
     });
 
     callback({
-      inbox,
-      sent,
-      drafts,
-      archive,
-      unreadCount: inbox.filter(c => c.status === "Query Submitted").length
+      inbox: buckets.inbox,
+      sent: buckets.sent,
+      drafts: buckets.drafts,
+      archive: buckets.archive,
+      unreadCount: buckets.inbox.filter(c => !c.isRead).length
     });
   });
 };
@@ -180,10 +186,35 @@ window.openCase = async function (caseId) {
 };
 
 /* =====================================================
-   🔁 UPDATE STATUS / MOVE STAGE
+   🔁 STATUS + STAGE CONTROLLER (CRITICAL)
    ===================================================== */
 
-window.updateCaseStatus = async function (caseId, status, stage = "Inbox") {
+window.updateCaseStatus = async function (caseId, action) {
+  let status = "Query Submitted";
+  let stage = "Inbox";
+
+  switch (action) {
+    case "reply":
+      status = "Replied";
+      stage = "Sent";
+      break;
+
+    case "draft":
+      status = "Draft";
+      stage = "Draft";
+      break;
+
+    case "archive":
+      status = "Closed";
+      stage = "Archive";
+      break;
+
+    case "restore":
+      status = "Query Submitted";
+      stage = "Inbox";
+      break;
+  }
+
   try {
     await updateDoc(doc(db, "cases", caseId), {
       status,
@@ -209,7 +240,7 @@ window.onNewCaseNotify = function (handler) {
   return onSnapshot(q, snap => {
     snap.forEach(d => {
       const data = d.data();
-      if (data.status === "Query Submitted") {
+      if (data.stage === "Inbox" && !data.isRead) {
         handler(data);
       }
     });
