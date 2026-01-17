@@ -2,94 +2,43 @@
 <html lang="en">
 <head>
 
-  <!-- =====================================================
-       BASIC META
-  ====================================================== -->
+  <!-- BASIC META -->
   <meta charset="UTF-8">
   <title>LagneshMitra</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- =====================================================
-       MAIN STYLESHEET (LOCKED)
-  ====================================================== -->
+  <!-- MAIN STYLESHEET (LOCKED) -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- =====================================================
-       LM GLASS INTRO – ISOLATED / SAFE
-  ====================================================== -->
+  <!-- LM INTRO – FULL SCREEN SLAB -->
   <style>
-    /* FULLSCREEN INTRO WRAPPER */
-    #lm-intro {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at top, #2b1055, #160a26 75%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999999;
-      overflow: hidden;
+    #lm-intro{
+      position:fixed;
+      inset:0;
+      background:radial-gradient(circle at top,#2b1055,#160a26 80%);
+      backdrop-filter:blur(18px);
+      z-index:999999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      animation:lm-slide-up 5.8s ease forwards;
     }
 
-    /* BIG GLASS CIRCLE */
-    .lm-glass {
-      width: 320px;
-      height: 320px;
-      border-radius: 50%;
-      backdrop-filter: blur(26px);
-      background: radial-gradient(
-        circle at top left,
-        rgba(255,255,255,0.60),
-        rgba(255,255,255,0.22),
-        rgba(255,255,255,0.08)
-      );
-      border: 2px solid rgba(255,255,255,0.4);
-      box-shadow:
-        inset 0 0 60px rgba(255,255,255,0.45),
-        0 0 120px rgba(236,72,153,0.55),
-        0 0 180px rgba(124,58,237,0.45);
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      animation:
-        lmFadeIn 1.6s ease forwards,
-        lmFloatUp 4.6s ease-in-out forwards 2.2s;
-    }
-
-    /* LM TEXT */
-    .lm-glass span {
-      font-size: 104px;
-      font-weight: 900;
-      letter-spacing: 8px;
-      font-style: italic;
-      color: #ff5da2;
+    .lm-core{
+      font-size:120px;
+      font-weight:900;
+      font-style:italic;
+      color:#ff5da2;
+      letter-spacing:10px;
       text-shadow:
-        0 0 18px rgba(255,93,162,1),
-        0 0 40px rgba(124,58,237,0.9);
+        0 0 20px rgba(255,93,162,.9),
+        0 0 60px rgba(124,58,237,.8);
     }
 
-    /* ANIMATIONS */
-    @keyframes lmFadeIn {
-      from { opacity: 0; transform: scale(0.5); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes lmFloatUp {
-      0%   { transform: translateY(0) scale(1); opacity: 1; }
-      65%  { opacity: 1; }
-      100% { transform: translateY(-140vh) scale(1.15); opacity: 0; }
-    }
-
-    /* MOBILE TUNING */
-    @media (max-width: 600px) {
-      .lm-glass {
-        width: 240px;
-        height: 240px;
-      }
-      .lm-glass span {
-        font-size: 76px;
-      }
+    @keyframes lm-slide-up{
+      0%{transform:translateY(0);opacity:1}
+      70%{opacity:1}
+      100%{transform:translateY(-120%);opacity:0}
     }
   </style>
 
@@ -97,18 +46,12 @@
 
 <body>
 
-<!-- =====================================================
-     LM INTRO OVERLAY (BLOCKS EVERYTHING)
-====================================================== -->
+<!-- LM INTRO -->
 <div id="lm-intro">
-  <div class="lm-glass">
-    <span>LM</span>
-  </div>
+  <div class="lm-core">LM</div>
 </div>
 
-<!-- =====================================================
-     TOP BAR
-====================================================== -->
+<!-- TOP BAR -->
 <div class="topbar">
   <div class="brand">
     LagneshMitra
@@ -123,9 +66,7 @@
   </div>
 </div>
 
-<!-- =====================================================
-     HERO SECTION – HALL OF FAME
-====================================================== -->
+<!-- HALL OF FAME -->
 <div class="hero">
   <div class="post-card" id="postCard">
     <h3>Hall of Fame</h3>
@@ -141,9 +82,7 @@
   </div>
 </div>
 
-<!-- =====================================================
-     ZENO – OBSERVER
-====================================================== -->
+<!-- ZENO -->
 <div id="zeno-eye" onclick="toggleZeno()">
   <div class="ring"></div>
   <div class="pupil"></div>
@@ -154,54 +93,46 @@
   ZENO is observing resonance patterns…
 </div>
 
-<!-- =====================================================
-     CORE LOGIC
-====================================================== -->
+<!-- CORE LOGIC -->
 <script type="module" src="app.js"></script>
 
 <script>
-  /* HARD LOCK DURING INTRO */
-  document.body.style.pointerEvents = "none";
-  document.body.style.paddingTop = "0px";
+  /* HARD LOCK */
+  document.body.style.pointerEvents="none";
+  document.body.style.paddingTop="0px";
 
-  (function runIntroOnce(){
-    const intro = document.getElementById("lm-intro");
-
-    if (sessionStorage.getItem("lm_intro_seen")) {
+  (function(){
+    const intro=document.getElementById("lm-intro");
+    if(sessionStorage.getItem("lm_intro_seen")){
       intro.remove();
-      document.body.style.pointerEvents = "auto";
-      document.body.style.paddingTop = "140px";
-      window.dispatchEvent(new Event("resize"));
+      document.body.style.pointerEvents="auto";
+      document.body.style.paddingTop="140px";
       return;
     }
-
-    sessionStorage.setItem("lm_intro_seen", "1");
-
-    setTimeout(() => {
+    sessionStorage.setItem("lm_intro_seen","1");
+    setTimeout(()=>{
       intro.remove();
-      document.body.style.pointerEvents = "auto";
-      document.body.style.paddingTop = "140px";
-      window.dispatchEvent(new Event("resize")); // 🔥 mobile repaint fix
-    }, 5800);
+      document.body.style.pointerEvents="auto";
+      document.body.style.paddingTop="140px";
+      window.dispatchEvent(new Event("resize"));
+    },5800);
   })();
 
-  /* MENU TOGGLE */
-  function toggleMenu() {
-    const m = document.getElementById("mainMenu");
-    m.style.display = (m.style.display === "block") ? "none" : "block";
+  function toggleMenu(){
+    const m=document.getElementById("mainMenu");
+    m.style.display=(m.style.display==="block")?"none":"block";
   }
 
-  document.addEventListener("click", e => {
-    if (!e.target.closest(".menu")) {
-      const m = document.getElementById("mainMenu");
-      if (m) m.style.display = "none";
+  document.addEventListener("click",e=>{
+    if(!e.target.closest(".menu")){
+      const m=document.getElementById("mainMenu");
+      if(m)m.style.display="none";
     }
   });
 
-  /* ZENO CLOUD */
-  function toggleZeno() {
-    const z = document.getElementById("zeno-cloud");
-    z.style.display = (z.style.display === "block") ? "none" : "block";
+  function toggleZeno(){
+    const z=document.getElementById("zeno-cloud");
+    z.style.display=(z.style.display==="block")?"none":"block";
   }
 </script>
 
