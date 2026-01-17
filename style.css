@@ -21,7 +21,9 @@ body {
   overflow-x: hidden;
 }
 
-/* ===== TOP BAR ===== */
+/* ==================================================
+   TOP BAR
+================================================== */
 .topbar {
   position: fixed;
   top: 0;
@@ -33,7 +35,7 @@ body {
   align-items: center;
   justify-content: space-between;
   background: transparent;
-  z-index: 5000;
+  z-index: 10000;
   pointer-events: auto;
 }
 
@@ -51,13 +53,15 @@ body {
   color: #d8b4fe;
 }
 
-/* ===== MENU ===== */
+/* ==================================================
+   THREE DOT MENU (HARD FIX)
+================================================== */
 .menu {
   font-size: 40px;
   cursor: pointer;
   color: #e9d5ff;
   position: relative;
-  z-index: 7000;
+  z-index: 20000;
   padding: 6px 10px;
   border-radius: 10px;
   pointer-events: auto;
@@ -77,7 +81,8 @@ body {
   background: rgba(36,18,61,0.96);
   border-radius: 16px;
   box-shadow: 0 20px 45px rgba(0,0,0,0.7);
-  z-index: 8000;
+  z-index: 21000;
+  pointer-events: auto;
 }
 
 .dropdown button {
@@ -86,22 +91,25 @@ body {
   padding: 12px;
   border-radius: 12px;
   border: none;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.10);
   color: #fff;
+  font-size: 15px;
   cursor: pointer;
+  pointer-events: auto;
 }
 
-/* ===== HERO ===== */
+/* ==================================================
+   HERO / HALL OF FAME
+================================================== */
 .hero {
   display: flex;
   justify-content: center;
   width: 100%;
   margin-top: 20px;
+  position: relative;
+  z-index: 1;
 }
 
-/* ==================================================
-   HALL OF FAME CARD
-================================================== */
 .post-card {
   position: relative;
   width: 100%;
@@ -115,7 +123,7 @@ body {
   );
   border: 1px solid rgba(255,255,255,0.2);
   box-shadow: 0 22px 60px rgba(0,0,0,0.6);
-  z-index: 1;
+  z-index: 2;
 }
 
 .post-card h3 {
@@ -148,7 +156,7 @@ body {
   display: block;
 }
 
-/* ===== EXPAND BUTTON ===== */
+/* Expand Button */
 #toggleBtn {
   position: absolute;
   left: 36px;
@@ -163,7 +171,7 @@ body {
 }
 
 /* ==================================================
-   ZENO — EYE (SAFE ANIMATION)
+   ZENO — EYE (GPU SAFE)
 ================================================== */
 #zeno-eye {
   position: fixed;
@@ -186,10 +194,9 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 9000;
+  z-index: 30000;
 }
 
-/* RING */
 #zeno-eye .ring {
   position: absolute;
   inset: 0;
@@ -198,7 +205,6 @@ body {
   animation: ring-rotate 10s linear infinite;
 }
 
-/* PUPIL (GPU SAFE MOVE) */
 #zeno-eye .pupil {
   width: 12px;
   height: 12px;
@@ -207,13 +213,12 @@ body {
   animation: pupil-move 6s ease-in-out infinite;
 }
 
-/* DISABLED LID (NO GPU COST) */
 #zeno-eye .lid {
   display: none;
 }
 
 /* ==================================================
-   ZENO CLOUD
+   ZENO CLOUD (TEXT FIXED)
 ================================================== */
 #zeno-cloud {
   position: fixed;
@@ -226,10 +231,13 @@ body {
   background: rgba(20,10,40,0.96);
   border-radius: 16px;
   box-shadow: 0 25px 55px rgba(0,0,0,0.75);
-  z-index: 9001;
+  z-index: 31000;
+  pointer-events: auto;
 }
 
-/* ===== ANIMATIONS ===== */
+/* ==================================================
+   ANIMATIONS
+================================================== */
 @keyframes ring-rotate {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
@@ -260,7 +268,9 @@ body {
   box-shadow: 0 25px 60px rgba(0,0,0,0.65);
 }
 
-/* ===== MOBILE ===== */
+/* ==================================================
+   MOBILE
+================================================== */
 @media (max-width: 600px) {
   body { padding-top: 120px; }
   .brand { font-size: 28px; }
