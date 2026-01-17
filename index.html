@@ -1,20 +1,28 @@
-<!DOCTYPE html><html lang="en">
-<head>  <!-- =====================================================
-       BASIC META
-  ====================================================== -->  <meta charset="UTF-8">
-  <title>LagneshMitra</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">  <!-- =====================================================
-       MAIN STYLESHEET (LOCKED)
-       DO NOT MODIFY FROM HERE
-  ====================================================== -->  <link rel="stylesheet" href="style.css">  <!-- =====================================================
-       LM GLASS INTRO – ISOLATED / SAFE
-  ====================================================== -->  <style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+  <!-- =====================================================
+       BASIC META
+  ====================================================== -->
+  <meta charset="UTF-8">
+  <title>LagneshMitra</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- =====================================================
+       MAIN STYLESHEET (LOCKED)
+  ====================================================== -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- =====================================================
+       LM GLASS INTRO – ISOLATED / SAFE
+  ====================================================== -->
+  <style>
     /* FULLSCREEN INTRO WRAPPER */
     #lm-intro {
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at top, #2b1055, #160a26 70%);
+      background: radial-gradient(circle at top, #2b1055, #160a26 75%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -22,105 +30,136 @@
       overflow: hidden;
     }
 
-    /* GLASS CIRCLE */
+    /* BIG GLASS CIRCLE */
     .lm-glass {
-      width: 220px;
-      height: 220px;
+      width: 320px;
+      height: 320px;
       border-radius: 50%;
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(26px);
       background: radial-gradient(
         circle at top left,
-        rgba(255,255,255,0.55),
-        rgba(255,255,255,0.18),
-        rgba(255,255,255,0.06)
+        rgba(255,255,255,0.60),
+        rgba(255,255,255,0.22),
+        rgba(255,255,255,0.08)
       );
-      border: 2px solid rgba(255,255,255,0.35);
+      border: 2px solid rgba(255,255,255,0.4);
       box-shadow:
-        inset 0 0 45px rgba(255,255,255,0.35),
-        0 0 90px rgba(236,72,153,0.45),
-        0 0 140px rgba(124,58,237,0.35);
+        inset 0 0 60px rgba(255,255,255,0.45),
+        0 0 120px rgba(236,72,153,0.55),
+        0 0 180px rgba(124,58,237,0.45);
 
       display: flex;
       align-items: center;
       justify-content: center;
 
       animation:
-        lmFadeIn 1.8s ease forwards,
-        lmFloatUp 4.2s ease-in-out forwards 2.4s;
+        lmFadeIn 1.6s ease forwards,
+        lmFloatUp 4.6s ease-in-out forwards 2.2s;
     }
 
     /* LM TEXT */
     .lm-glass span {
-      font-size: 76px;
-      font-weight: 800;
-      letter-spacing: 6px;
+      font-size: 104px;
+      font-weight: 900;
+      letter-spacing: 8px;
       font-style: italic;
       color: #ff5da2;
       text-shadow:
-        0 0 14px rgba(255,93,162,0.9),
-        0 0 32px rgba(124,58,237,0.8);
+        0 0 18px rgba(255,93,162,1),
+        0 0 40px rgba(124,58,237,0.9);
     }
 
     /* ANIMATIONS */
     @keyframes lmFadeIn {
-      from { opacity: 0; transform: scale(0.55); }
+      from { opacity: 0; transform: scale(0.5); }
       to   { opacity: 1; transform: scale(1); }
     }
 
     @keyframes lmFloatUp {
       0%   { transform: translateY(0) scale(1); opacity: 1; }
-      70%  { opacity: 1; }
-      100% { transform: translateY(-130vh) scale(1.15); opacity: 0; }
+      65%  { opacity: 1; }
+      100% { transform: translateY(-140vh) scale(1.15); opacity: 0; }
     }
 
-  </style></head><body><!-- =====================================================
+    /* MOBILE TUNING */
+    @media (max-width: 600px) {
+      .lm-glass {
+        width: 240px;
+        height: 240px;
+      }
+      .lm-glass span {
+        font-size: 76px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+<!-- =====================================================
      LM INTRO OVERLAY (BLOCKS EVERYTHING)
-====================================================== --><div id="lm-intro">
+====================================================== -->
+<div id="lm-intro">
   <div class="lm-glass">
     <span>LM</span>
   </div>
-</div><!-- =====================================================
+</div>
+
+<!-- =====================================================
      TOP BAR
-====================================================== --><div class="topbar">  <div class="brand">
+====================================================== -->
+<div class="topbar">
+  <div class="brand">
     LagneshMitra
     <span>Astrology • Decision Intelligence</span>
-  </div>  <div class="menu" onclick="toggleMenu()">⋮
+  </div>
+
+  <div class="menu" onclick="toggleMenu()">⋮
     <div class="dropdown" id="mainMenu">
       <button onclick="location.href='email-chat.html'">📩 Contact</button>
       <button onclick="location.href='admin-posts.html'">⚙ Admin</button>
     </div>
-  </div></div><!-- =====================================================
-     HERO SECTION – HALL OF FAME
-====================================================== --><div class="hero">  <div class="post-card" id="postCard"><h3>Hall of Fame</h3>
-
-<div class="meta" id="postMeta">
-  Loading latest transmission…
+  </div>
 </div>
 
-<div class="post-preview" id="postPreview"></div>
-<div class="post-full" id="postFull"></div>
+<!-- =====================================================
+     HERO SECTION – HALL OF FAME (GUARANTEED VISIBLE)
+====================================================== -->
+<div class="hero">
+  <div class="post-card" id="postCard">
+    <h3>Hall of Fame</h3>
 
-<button id="toggleBtn">Expand</button>
+    <div class="meta" id="postMeta">
+      Loading latest transmission…
+    </div>
 
-  </div></div><!-- =====================================================
-     FUTURE SECTIONS PLACEHOLDER
-     (PHASE-2 / PHASE-3 READY)
-====================================================== --><!--
-<section id="daily-transits"></section>
-<section id="vedic-decision"></section>
-<section id="subscriptions"></section>
---><!-- =====================================================
+    <div class="post-preview" id="postPreview"></div>
+    <div class="post-full" id="postFull"></div>
+
+    <button id="toggleBtn">Expand</button>
+  </div>
+</div>
+
+<!-- =====================================================
      ZENO – OBSERVER (UNTOUCHED)
-====================================================== --><div id="zeno-eye" onclick="toggleZeno()">
+====================================================== -->
+<div id="zeno-eye" onclick="toggleZeno()">
   <div class="ring"></div>
   <div class="pupil"></div>
   <div class="lid"></div>
-</div><div id="zeno-cloud" style="display:none;">
-  ZENO is observing resonance patterns…
-</div><!-- =====================================================
-     CORE LOGIC
-====================================================== --><script type="module" src="app.js"></script><script>
+</div>
 
+<div id="zeno-cloud" style="display:none;">
+  ZENO is observing resonance patterns…
+</div>
+
+<!-- =====================================================
+     CORE LOGIC
+====================================================== -->
+<script type="module" src="app.js"></script>
+
+<script>
   /* LOCK SCREEN UNTIL INTRO FINISHES */
   document.body.style.pointerEvents = "none";
 
@@ -159,6 +198,7 @@
     const z = document.getElementById("zeno-cloud");
     z.style.display = (z.style.display === "block") ? "none" : "block";
   }
+</script>
 
-</script></body>
+</body>
 </html>
