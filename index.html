@@ -1,210 +1,164 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>LagneshMitra – Decision Intelligence</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="style.css">
-</head>
+<!DOCTYPE html><html lang="en">
+<head>  <!-- =====================================================
+       BASIC META
+  ====================================================== -->  <meta charset="UTF-8">
+  <title>LagneshMitra</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">  <!-- =====================================================
+       MAIN STYLESHEET (LOCKED)
+       DO NOT MODIFY FROM HERE
+  ====================================================== -->  <link rel="stylesheet" href="style.css">  <!-- =====================================================
+       LM GLASS INTRO – ISOLATED / SAFE
+  ====================================================== -->  <style>
 
-<body>
+    /* FULLSCREEN INTRO WRAPPER */
+    #lm-intro {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, #2b1055, #160a26 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999999;
+      overflow: hidden;
+    }
 
-<!-- ================= TOP BAR ================= -->
-<div class="topbar">
-  <div class="brand">
+    /* GLASS CIRCLE */
+    .lm-glass {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      backdrop-filter: blur(20px);
+      background: radial-gradient(
+        circle at top left,
+        rgba(255,255,255,0.55),
+        rgba(255,255,255,0.18),
+        rgba(255,255,255,0.06)
+      );
+      border: 2px solid rgba(255,255,255,0.35);
+      box-shadow:
+        inset 0 0 45px rgba(255,255,255,0.35),
+        0 0 90px rgba(236,72,153,0.45),
+        0 0 140px rgba(124,58,237,0.35);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      animation:
+        lmFadeIn 1.8s ease forwards,
+        lmFloatUp 4.2s ease-in-out forwards 2.4s;
+    }
+
+    /* LM TEXT */
+    .lm-glass span {
+      font-size: 76px;
+      font-weight: 800;
+      letter-spacing: 6px;
+      font-style: italic;
+      color: #ff5da2;
+      text-shadow:
+        0 0 14px rgba(255,93,162,0.9),
+        0 0 32px rgba(124,58,237,0.8);
+    }
+
+    /* ANIMATIONS */
+    @keyframes lmFadeIn {
+      from { opacity: 0; transform: scale(0.55); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes lmFloatUp {
+      0%   { transform: translateY(0) scale(1); opacity: 1; }
+      70%  { opacity: 1; }
+      100% { transform: translateY(-130vh) scale(1.15); opacity: 0; }
+    }
+
+  </style></head><body><!-- =====================================================
+     LM INTRO OVERLAY (BLOCKS EVERYTHING)
+====================================================== --><div id="lm-intro">
+  <div class="lm-glass">
+    <span>LM</span>
+  </div>
+</div><!-- =====================================================
+     TOP BAR
+====================================================== --><div class="topbar">  <div class="brand">
     LagneshMitra
-    <span>Decision Intelligence</span>
-  </div>
+    <span>Astrology • Decision Intelligence</span>
+  </div>  <div class="menu" onclick="toggleMenu()">⋮
+    <div class="dropdown" id="mainMenu">
+      <button onclick="location.href='email-chat.html'">📩 Contact</button>
+      <button onclick="location.href='admin-posts.html'">⚙ Admin</button>
+    </div>
+  </div></div><!-- =====================================================
+     HERO SECTION – HALL OF FAME
+====================================================== --><div class="hero">  <div class="post-card" id="postCard"><h3>Hall of Fame</h3>
 
-  <div class="menu" id="menuBtn"
-       style="position:absolute;right:18px;top:14px;font-size:38px;
-       padding:8px 12px;cursor:pointer;user-select:none;">
-    ⋮
-  </div>
-
-  <div class="dropdown" id="menuBox">
-    <p><strong>Core Thinking</strong></p>
-    <p>Interpretation before prediction</p>
-    <p>Decisions before remedies</p>
-    <p>Structure before emotion</p>
-  </div>
+<div class="meta" id="postMeta">
+  Loading latest transmission…
 </div>
 
-<!-- ================= COMMAND BUTTONS ================= -->
-<div style="display:flex;gap:18px;justify-content:center;margin:30px auto 10px;flex-wrap:wrap;">
-  <button onclick="location.href='admin-posts.html'"
-    style="padding:16px 26px;font-size:18px;font-weight:700;border-radius:14px;border:none;
-    cursor:pointer;background:linear-gradient(135deg,#ff5da2,#9b5cff);
-    color:#1b0f2e;box-shadow:0 10px 30px rgba(0,0,0,.25);">
-    ⚙️ Admin Command Center
-  </button>
+<div class="post-preview" id="postPreview"></div>
+<div class="post-full" id="postFull"></div>
 
-  <button onclick="location.href='email-chat.html'"
-    style="padding:16px 26px;font-size:18px;font-weight:700;border-radius:14px;
-    border:2px solid #9b5cff;cursor:pointer;background:rgba(0,0,0,.35);
-    color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.2);">
-    📬 Email / Chat
-  </button>
-</div>
+<button id="toggleBtn">Expand</button>
 
-<!-- ================= HERO ================= -->
-<div class="hero">
-  <div class="post-card" id="postCard">
-    <h3>Hall of Fame</h3>
-
-    <div class="meta" id="postMeta"></div>
-    <div class="post-preview" id="postPreview"></div>
-    <div class="post-full" id="postFull"></div>
-
-    <button id="toggleBtnExpand"
-      style="margin-top:18px;padding:10px 18px;background:#ff5da2;
-      border:none;border-radius:10px;color:#1b0f2e;
-      font-weight:600;cursor:pointer;">
-      Expand
-    </button>
-  </div>
-</div>
-
-<!-- ================= ZENO ================= -->
-<div id="zeno-eye">
+  </div></div><!-- =====================================================
+     FUTURE SECTIONS PLACEHOLDER
+     (PHASE-2 / PHASE-3 READY)
+====================================================== --><!--
+<section id="daily-transits"></section>
+<section id="vedic-decision"></section>
+<section id="subscriptions"></section>
+--><!-- =====================================================
+     ZENO – OBSERVER (UNTOUCHED)
+====================================================== --><div id="zeno-eye" onclick="toggleZeno()">
   <div class="ring"></div>
   <div class="pupil"></div>
   <div class="lid"></div>
-</div>
+</div><div id="zeno-cloud" style="display:none;">
+  ZENO is observing resonance patterns…
+</div><!-- =====================================================
+     CORE LOGIC
+====================================================== --><script type="module" src="app.js"></script><script>
 
-<div id="zeno-cloud" style="display:none"></div>
+  /* LOCK SCREEN UNTIL INTRO FINISHES */
+  document.body.style.pointerEvents = "none";
 
-<!-- ================= JS ================= -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getFirestore, doc, updateDoc,
-  collection, getDocs, increment
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  (function runIntroOnce(){
+    const intro = document.getElementById("lm-intro");
 
-/* FIREBASE */
-const app = initializeApp({
-  apiKey:"AIzaSyCX8yGRJc5AcxSEaaC6AzNLZzxtOCz83Sk",
-  authDomain:"lagneshmitra-e57b8.firebaseapp.com",
-  projectId:"lagneshmitra-e57b8"
-});
-const db = getFirestore(app);
+    if (sessionStorage.getItem("lm_intro_seen")) {
+      intro.remove();
+      document.body.style.pointerEvents = "auto";
+      return;
+    }
 
-/* MENU */
-const menuBtn = document.getElementById("menuBtn");
-const menuBox = document.getElementById("menuBox");
+    sessionStorage.setItem("lm_intro_seen", "1");
 
-menuBtn.onclick = e => {
-  e.stopPropagation();
-  menuBox.style.display =
-    menuBox.style.display === "block" ? "none" : "block";
-};
-document.body.onclick = () => menuBox.style.display = "none";
+    setTimeout(() => {
+      intro.remove();
+      document.body.style.pointerEvents = "auto";
+    }, 5800);
+  })();
 
-/* HALL OF FAME */
-let expanded = false;
-let viewCounted = false;
-let currentPost = null;
-let isToggling = false;
+  /* MENU TOGGLE */
+  function toggleMenu() {
+    const m = document.getElementById("mainMenu");
+    m.style.display = (m.style.display === "block") ? "none" : "block";
+  }
 
-const postCard = document.getElementById("postCard");
-const toggleBtn = document.getElementById("toggleBtnExpand");
-const postPreview = document.getElementById("postPreview");
-const postFull = document.getElementById("postFull");
-const postMeta = document.getElementById("postMeta");
-
-async function loadLatestPost(){
-  const snap = await getDocs(collection(db,"posts"));
-  let latest = null;
-
-  snap.forEach(d=>{
-    const data = d.data();
-    if(!latest || (data.updatedAt?.seconds||0) >
-       (latest.updatedAt?.seconds||0)){
-      latest = { id:d.id, ...data };
+  document.addEventListener("click", e => {
+    if (!e.target.closest(".menu")) {
+      const m = document.getElementById("mainMenu");
+      if (m) m.style.display = "none";
     }
   });
 
-  if(!latest) return;
-  currentPost = latest;
-
-  postPreview.innerText =
-    latest.content.slice(0,260) +
-    (latest.content.length > 260 ? "..." : "");
-
-  postFull.innerText = latest.content;
-
-  const hrs = Math.floor(
-    (Date.now()/1000 - latest.updatedAt.seconds)/3600
-  );
-  postMeta.innerText =
-    `Updated ${hrs} hrs ago • Views ${latest.views||0}`;
-}
-loadLatestPost();
-
-toggleBtn.onclick = async e => {
-  e.stopPropagation();
-  if (!currentPost || isToggling) return;
-
-  isToggling = true;
-  expanded = !expanded;
-  postCard.classList.toggle("expanded", expanded);
-  toggleBtn.innerText = expanded ? "Collapse" : "Expand";
-
-  if (expanded && !viewCounted){
-    await updateDoc(doc(db,"posts", currentPost.id), {
-      views: increment(1)
-    });
-    viewCounted = true;
+  /* ZENO CLOUD */
+  function toggleZeno() {
+    const z = document.getElementById("zeno-cloud");
+    z.style.display = (z.style.display === "block") ? "none" : "block";
   }
-  setTimeout(()=>isToggling=false,650);
-};
 
-/* ================= ZENO ================= */
-const eye = document.getElementById("zeno-eye");
-const cloud = document.getElementById("zeno-cloud");
-let zenoStage = 0;
-
-eye.onclick = () => {
-  if (zenoStage === 0) openZeno();
-  else closeZeno();
-};
-
-function openZeno(){
-  zenoStage = 1;
-  cloud.style.display = "block";
-  cloud.innerHTML = `
-    <p><strong>ZENO — Test Protocol v1.0</strong></p>
-    <p>
-      I am here to observe.<br>
-      System under construction.
-    </p>
-    <button onclick="zenoContinue()">Continue</button>
-    <button onclick="closeZeno()">Close</button>
-  `;
-}
-
-window.zenoContinue = () => {
-  zenoStage = 2;
-  cloud.innerHTML = `
-    <p><strong>System Status</strong></p>
-    <ul>
-      <li>Index Page: stable</li>
-      <li>Hall of Fame: stable</li>
-      <li>Firebase: stable</li>
-      <li>Admin Command Center: under development</li>
-      <li>Mail / Case Submission: stable</li>
-    </ul>
-    <button onclick="closeZeno()">Close</button>
-  `;
-};
-
-window.closeZeno = () => {
-  zenoStage = 0;
-  cloud.style.display = "none";
-  cloud.innerHTML = "";
-};
-</script>
-
-</body>
+</script></body>
 </html>
