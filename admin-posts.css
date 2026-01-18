@@ -1,39 +1,22 @@
-/* ==================================================
-   ADMIN POSTS PANEL – DECENTRALIZED CSS
-   LagneshMitra | Professional Service Station
-   SAFE • STABLE • NO UI COLLISION
-================================================== */
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LagneshMitra – Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-/* ---------- ROOT ---------- */
-:root{
-  --bg-main:#1b0f2e;
-  --bg-panel:#24123d;
-  --bg-header:#1f1433;
-
-  --accent-pink:#ff5da2;
-  --accent-purple:#7c3aed;
-
-  --text-main:#ffffff;
-  --text-soft:#c4b5fd;
-  --border-soft:#3b2463;
-}
-
-/* ---------- BASE RESET ---------- */
-*{
-  box-sizing:border-box;
-}
-
-html,body{
+<style>
+/* ================== BASE ================== */
+body{
   margin:0;
-  padding:0;
-  height:100%;
   font-family:"Segoe UI",Roboto,Arial,sans-serif;
   background:linear-gradient(135deg,#1b0f2e,#2b1055);
-  color:var(--text-main);
+  color:#fff;
+  height:100vh;
   overflow:hidden;
 }
 
-/* ---------- SYSTEM LABEL ---------- */
+/* ================== LABEL ================== */
 .system-label{
   position:fixed;
   top:14px;
@@ -41,69 +24,66 @@ html,body{
   z-index:300;
   font-size:13px;
   font-style:italic;
-  color:var(--text-soft);
+  color:#d8b4fe;
 }
 .system-label strong{
   display:block;
   font-size:15px;
-  color:var(--accent-pink);
+  color:#ff5da2;
 }
 
-/* ---------- TOP BAR ---------- */
+/* ================== TOP BAR ================== */
 .top-bar{
   position:fixed;
   top:54px;
   left:0;
   width:100%;
   height:76px;
-
   display:flex;
   align-items:center;
-  gap:22px;
-
+  gap:14px;
   padding:0 22px;
-  background:var(--bg-header);
-  border-bottom:1px solid var(--border-soft);
+  background:#1f1433;
+  border-bottom:1px solid #3b2463;
   z-index:200;
 }
 
-/* ---------- MENU GROUP ---------- */
-.menu-group{
-  position:relative;
-}
-
-/* MAIN MENU BUTTON */
+/* ================== BUTTONS ================== */
 .menu-main{
   padding:14px 22px;
   border-radius:16px;
   border:none;
-
   font-size:14px;
   font-weight:700;
   cursor:pointer;
-
-  background:linear-gradient(135deg,var(--accent-pink),#d946ef);
+  background:linear-gradient(135deg,#ff5da2,#d946ef);
   color:#1b0f2e;
 }
 
-/* BACK BUTTON */
-.back-btn{
+.menu-main.alt{
+  background:#2a1650;
+  color:#fff;
+}
+
+.menu-main.back-btn{
   margin-left:auto;
   background:#2a1650;
   color:#fff;
 }
 
-/* ---------- DROPDOWN ---------- */
+/* ================== DROPDOWN ================== */
+.menu-group{
+  position:relative;
+}
+
 .dropdown{
   position:absolute;
-  top:64px;
+  top:70px;
   left:0;
   min-width:220px;
-
   background:#2a1650;
   border-radius:16px;
   box-shadow:0 18px 40px rgba(0,0,0,.6);
-
   display:none;
   overflow:hidden;
   z-index:500;
@@ -113,7 +93,6 @@ html,body{
   width:100%;
   background:none;
   border:none;
-
   color:#fff;
   padding:14px 18px;
   text-align:left;
@@ -125,148 +104,302 @@ html,body{
   background:#3b2463;
 }
 
-/* ---------- WORKSPACE ---------- */
+/* ================== WORKSPACE ================== */
 .workspace{
   position:absolute;
   top:130px;
   left:0;
-
   width:100%;
   height:calc(100vh - 130px);
-
-  background:var(--bg-panel);
+  background:#24123d;
 }
-
 .workspace-inner{
   height:100%;
   overflow-y:auto;
   padding:24px;
-
-  max-width:920px;
+  max-width:900px;
   margin:auto;
 }
-
-/* ---------- EMPTY STATE ---------- */
 .empty{
-  color:var(--text-soft);
+  color:#c4b5fd;
   font-style:italic;
   opacity:.75;
 }
 
-/* ---------- FORM SHELL ---------- */
+/* ================== FORMS ================== */
 .form-shell{
   height:100%;
   display:flex;
   flex-direction:column;
-  gap:14px;
+  gap:12px;
   position:relative;
 }
-
-/* ---------- TEXTAREA ---------- */
 textarea{
   flex:1;
   padding:16px;
   border-radius:16px;
   border:none;
-
   font-size:15px;
   background:#fff;
   color:#111;
   resize:none;
 }
-
-/* ---------- CLOSE BUTTON ---------- */
 .close-x{
   position:absolute;
   top:6px;
   right:6px;
   cursor:pointer;
   opacity:.7;
-  font-size:18px;
 }
-.close-x:hover{
-  opacity:1;
-}
+.close-x:hover{opacity:1;}
 
-/* ---------- OPS TOGGLE ---------- */
 .ops-toggle{
   position:absolute;
   top:6px;
   right:44px;
-
   background:#2a1650;
   color:#fff;
   border:none;
-
   padding:10px 14px;
   border-radius:12px;
   cursor:pointer;
 }
 
-/* ---------- OPS PANEL ---------- */
 .ops-panel{
   display:none;
   background:#1f1433;
   border-radius:16px;
   padding:14px;
-
   gap:10px;
   flex-wrap:wrap;
 }
-
 .ops-panel button{
   background:#3b2463;
   color:#fff;
   border:none;
-
   padding:10px 14px;
   border-radius:10px;
   cursor:pointer;
-  font-size:13px;
 }
-
-/* PUBLISH BUTTON */
 .ops-panel .publish-btn{
-  background:linear-gradient(135deg,var(--accent-pink),#d946ef);
+  background:linear-gradient(135deg,#ff5da2,#d946ef);
+  color:#1b0f2e;
+  font-weight:700;
+}
+.ops-panel .feature-btn{
+  background:#ffd166;
   color:#1b0f2e;
   font-weight:700;
 }
 
-/* ---------- TABLE ---------- */
+/* ================== TABLE ================== */
 table{
   width:100%;
   border-collapse:collapse;
 }
-
 th,td{
   padding:10px;
-  border-bottom:1px solid var(--border-soft);
+  border-bottom:1px solid #3b2463;
   font-size:13px;
 }
+th{ color:#c4b5fd; text-align:left; }
+tr:hover{ background:#2a1650; cursor:pointer; }
+</style>
+</head>
 
-th{
-  color:var(--text-soft);
-  text-align:left;
-}
+<body>
 
-tr:hover{
-  background:#2a1650;
-  cursor:pointer;
-}
+<!-- LABEL -->
+<div class="system-label">
+  <strong>LagneshMitra Intelligence System</strong>
+  Version 1.0
+</div>
 
-/* ---------- MOBILE ---------- */
-@media(max-width:600px){
-  .top-bar{
-    gap:14px;
-    padding:0 14px;
+<!-- TOP BAR -->
+<div class="top-bar">
+
+  <!-- HALL OF FAME MENU -->
+  <div class="menu-group">
+    <button class="menu-main" onclick="toggleDD(event)">🏆 Hall of Fame ▾</button>
+    <div class="dropdown" id="hofDD">
+      <button onclick="menuAction(loadAdd)">➕ Add Post</button>
+      <button onclick="menuAction(loadEditLatest)">✏ Edit Latest</button>
+      <button onclick="menuAction(loadManage)">📋 Manage Posts</button>
+    </div>
+  </div>
+
+  <button class="menu-main alt" onclick="openInbox()">📩 Email / Chat</button>
+  <button class="menu-main back-btn" onclick="goHome()">↩ Back to Site</button>
+</div>
+
+<!-- WORKSPACE -->
+<div class="workspace">
+  <div class="workspace-inner" id="workspace">
+    <div class="empty">Select an admin function above</div>
+  </div>
+</div>
+
+<!-- ================== LOGIC ================== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, getDocs,
+  doc, updateDoc, getDoc,
+  serverTimestamp, query, orderBy, limit
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* FIREBASE */
+const app = initializeApp({
+  apiKey:"AIzaSyCX8yGRJc5AcxSEaaC6AzNLZzxtOCz83Sk",
+  authDomain:"lagneshmitra-e57b8.firebaseapp.com",
+  projectId:"lagneshmitra-e57b8"
+});
+const db = getFirestore(app);
+
+const ws=document.getElementById("workspace");
+let selectedPostId=null;
+
+/* NAV */
+window.goHome=()=>location.href="index.html";
+window.openInbox=()=>location.href="admin-inbox.html";
+
+/* DROPDOWN */
+window.toggleDD=(e)=>{
+  e.stopPropagation();
+  const dd=document.getElementById("hofDD");
+  dd.style.display = dd.style.display==="block" ? "none" : "block";
+};
+window.menuAction=(fn)=>{
+  document.getElementById("hofDD").style.display="none";
+  fn();
+};
+document.addEventListener("click",()=>{
+  document.getElementById("hofDD").style.display="none";
+});
+
+/* UTILS */
+window.clearWS=()=>ws.innerHTML=`<div class="empty">Select an admin function above</div>`;
+window.toggleOps=()=>{
+  const p=document.getElementById("opsPanel");
+  if(p)p.style.display=p.style.display==="flex"?"none":"flex";
+};
+
+/* ADD */
+window.loadAdd=()=>{
+  selectedPostId=null;
+  ws.innerHTML=`
+  <div class="form-shell">
+    <div class="close-x" onclick="clearWS()">✕</div>
+    <button class="ops-toggle" onclick="toggleOps()">⚙ Controls</button>
+    <div class="ops-panel" id="opsPanel">
+      <button class="publish-btn" onclick="savePost()">Publish</button>
+    </div>
+    <h3>Add Hall of Fame Post</h3>
+    <textarea id="postContent"></textarea>
+  </div>`;
+};
+
+/* EDIT LATEST */
+window.loadEditLatest=async()=>{
+  const q=query(collection(db,"posts"),orderBy("updatedAt","desc"),limit(1));
+  const snap=await getDocs(q);
+  if(snap.empty)return;
+
+  const d=snap.docs[0];
+  selectedPostId=d.id;
+
+  ws.innerHTML=`
+  <div class="form-shell">
+    <div class="close-x" onclick="clearWS()">✕</div>
+    <button class="ops-toggle" onclick="toggleOps()">⚙ Controls</button>
+    <div class="ops-panel" id="opsPanel">
+      <button class="publish-btn" onclick="savePost()">Republish</button>
+      <button class="feature-btn" onclick="setFeatured('${d.id}')">⭐ Set as Front Page</button>
+    </div>
+    <h3>Edit Latest Post</h3>
+    <textarea id="postContent">${d.data().content}</textarea>
+  </div>`;
+};
+
+/* MANAGE */
+window.loadManage=async()=>{
+  ws.innerHTML=`
+  <div class="form-shell">
+    <div class="close-x" onclick="clearWS()">✕</div>
+    <h3>Manage Posts</h3>
+    <table>
+      <thead><tr><th>Date</th><th>Preview</th><th>Views</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>`;
+
+  const rows=document.getElementById("rows");
+  const q=query(collection(db,"posts"),orderBy("updatedAt","desc"));
+  const snap=await getDocs(q);
+
+  snap.forEach(d=>{
+    rows.innerHTML+=`
+    <tr onclick="editFromTable('${d.id}')">
+      <td>${new Date(d.data().updatedAt.seconds*1000).toLocaleString()}</td>
+      <td>${d.data().content.slice(0,50)}...</td>
+      <td>${d.data().views||0}</td>
+    </tr>`;
+  });
+};
+
+/* EDIT FROM TABLE */
+window.editFromTable=async(id)=>{
+  const snap=await getDoc(doc(db,"posts",id));
+  selectedPostId=id;
+
+  ws.innerHTML=`
+  <div class="form-shell">
+    <div class="close-x" onclick="clearWS()">✕</div>
+    <button class="ops-toggle" onclick="toggleOps()">⚙ Controls</button>
+    <div class="ops-panel" id="opsPanel">
+      <button class="publish-btn" onclick="savePost()">Republish</button>
+      <button class="feature-btn" onclick="setFeatured('${id}')">⭐ Set as Front Page</button>
+    </div>
+    <h3>Edit Post</h3>
+    <textarea id="postContent">${snap.data().content}</textarea>
+  </div>`;
+};
+
+/* FEATURE */
+window.setFeatured=async(postId)=>{
+  const snap=await getDocs(collection(db,"posts"));
+  snap.forEach(async d=>{
+    await updateDoc(doc(db,"posts",d.id),{featured:false});
+  });
+  await updateDoc(doc(db,"posts",postId),{
+    featured:true,
+    updatedAt:serverTimestamp()
+  });
+  alert("Front page updated");
+};
+
+/* SAVE */
+window.savePost=async()=>{
+  const text=document.getElementById("postContent").value.trim();
+  if(!text)return;
+
+  if(selectedPostId){
+    await updateDoc(doc(db,"posts",selectedPostId),{
+      content:text,
+      updatedAt:serverTimestamp()
+    });
+  }else{
+    await addDoc(collection(db,"posts"),{
+      content:text,
+      views:0,
+      featured:false,
+      createdAt:serverTimestamp(),
+      updatedAt:serverTimestamp()
+    });
   }
+  clearWS();
+};
+</script>
 
-  .menu-main{
-    padding:12px 16px;
-    font-size:13px;
-  }
-
-  .workspace-inner{
-    padding:18px;
-  }
-}
+</body>
+</html>
