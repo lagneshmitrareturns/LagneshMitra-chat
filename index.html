@@ -19,12 +19,12 @@
       font-family: "Segoe UI", Roboto, Arial, sans-serif;
     }
 
-    /* HEADER FLOW FIX */
+    /* ================= HEADER ================= */
     .header-wrap{
       position:relative;
       z-index:40;
-      padding-top:26px;
-      padding-bottom:10px;
+      padding-top:28px;
+      padding-bottom:12px;
       text-align:center;
     }
 
@@ -35,6 +35,14 @@
       justify-content:center;
     }
 
+    .brand-title{
+      font-size:34px;
+      font-weight:700;
+      font-style:italic;
+      color:#ff5da2;
+      line-height:1;
+    }
+
     .brand span{
       margin-top:6px;
       font-size:14px;
@@ -43,7 +51,7 @@
 
     /* PUSH CONTENT BELOW HEADER */
     .content-start{
-      margin-top:18px;
+      margin-top:10px;
     }
   </style>
 
@@ -84,14 +92,12 @@
 <!-- HEADER -->
 <div class="header-wrap">
   <div class="brand">
-    <div style="font-size:34px;font-weight:700;font-style:italic;color:#ff5da2;">
-      LagneshMitra
-    </div>
+    <div class="brand-title">LagneshMitra</div>
     <span>Astrology • Decision Intelligence</span>
   </div>
 </div>
 
-<!-- MAIN CONTENT START -->
+<!-- MAIN CONTENT -->
 <div class="content-start">
 
   <!-- ACTION BUTTONS -->
@@ -103,16 +109,22 @@
   <!-- HALL OF FAME -->
   <main class="hero">
     <div class="post-card" id="postCard">
+
       <h3>Hall of Fame</h3>
 
       <div class="meta" id="postMeta">
         Loading latest transmission…
       </div>
 
+      <!-- PREVIEW -->
       <div class="post-preview" id="postPreview"></div>
+
+      <!-- FULL CONTENT -->
       <div class="post-full" id="postFull"></div>
 
+      <!-- TOGGLE -->
       <button id="toggleBtn">Expand</button>
+
     </div>
   </main>
 
@@ -123,19 +135,20 @@
 
 <script>
   // INTRO CLEANUP
-  setTimeout(()=>{
-    const intro=document.getElementById("lm-intro");
-    if(intro) intro.remove();
-  },4500);
+  setTimeout(() => {
+    const intro = document.getElementById("lm-intro");
+    if (intro) intro.remove();
+  }, 4500);
 
-  // EXPAND TOGGLE
-  const btn=document.getElementById("toggleBtn");
-  const card=document.getElementById("postCard");
-  btn.onclick=()=>{
-    card.classList.toggle("expanded");
-    btn.innerText = card.classList.contains("expanded") ? "Collapse" : "Expand";
-  };
+  // EXPAND / COLLAPSE
+  const btn = document.getElementById("toggleBtn");
+  const card = document.getElementById("postCard");
+
+  btn.addEventListener("click", () => {
+    const expanded = card.classList.toggle("expanded");
+    btn.innerText = expanded ? "Collapse" : "Expand";
+  });
 </script>
 
 </body>
-</html>
+  </html>
