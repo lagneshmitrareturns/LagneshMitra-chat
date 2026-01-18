@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+l<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -59,14 +59,49 @@ body{
   background:linear-gradient(135deg,#ff5da2,#d946ef);
   color:#1b0f2e;
 }
+
 .menu-main.alt{
   background:#2a1650;
   color:#fff;
 }
+
 .menu-main.back-btn{
   margin-left:auto;
   background:#2a1650;
   color:#fff;
+}
+
+/* ================== DROPDOWN ================== */
+.menu-group{
+  position:relative;
+}
+
+.dropdown{
+  position:absolute;
+  top:70px;
+  left:0;
+  min-width:220px;
+  background:#2a1650;
+  border-radius:16px;
+  box-shadow:0 18px 40px rgba(0,0,0,.6);
+  display:none;
+  overflow:hidden;
+  z-index:500;
+}
+
+.dropdown button{
+  width:100%;
+  background:none;
+  border:none;
+  color:#fff;
+  padding:14px 18px;
+  text-align:left;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.dropdown button:hover{
+  background:#3b2463;
 }
 
 /* ================== WORKSPACE ================== */
@@ -182,9 +217,17 @@ tr:hover{ background:#2a1650; cursor:pointer; }
 
 <!-- TOP BAR -->
 <div class="top-bar">
-  <button class="menu-main" onclick="loadAdd()">➕ Add Post</button>
-  <button class="menu-main" onclick="loadEditLatest()">✏ Edit Latest</button>
-  <button class="menu-main" onclick="loadManage()">📋 Manage Posts</button>
+
+  <!-- HALL OF FAME MENU -->
+  <div class="menu-group">
+    <button class="menu-main" onclick="toggleDD(event)">🏆 Hall of Fame ▾</button>
+    <div class="dropdown" id="hofDD">
+      <button onclick="menuAction(loadAdd)">➕ Add Post</button>
+      <button onclick="menuAction(loadEditLatest)">✏ Edit Latest</button>
+      <button onclick="menuAction(loadManage)">📋 Manage Posts</button>
+    </div>
+  </div>
+
   <button class="menu-main alt" onclick="openInbox()">📩 Email / Chat</button>
   <button class="menu-main back-btn" onclick="goHome()">↩ Back to Site</button>
 </div>
@@ -219,6 +262,20 @@ let selectedPostId=null;
 /* NAV */
 window.goHome=()=>location.href="index.html";
 window.openInbox=()=>location.href="admin-inbox.html";
+
+/* DROPDOWN */
+window.toggleDD=(e)=>{
+  e.stopPropagation();
+  const dd=document.getElementById("hofDD");
+  dd.style.display = dd.style.display==="block" ? "none" : "block";
+};
+window.menuAction=(fn)=>{
+  document.getElementById("hofDD").style.display="none";
+  fn();
+};
+document.addEventListener("click",()=>{
+  document.getElementById("hofDD").style.display="none";
+});
 
 /* UTILS */
 window.clearWS=()=>ws.innerHTML=`<div class="empty">Select an admin function above</div>`;
