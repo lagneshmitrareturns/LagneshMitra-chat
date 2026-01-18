@@ -1,46 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- BASIC META -->
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>LagneshMitra</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- MAIN STYLESHEET -->
-  <link rel="stylesheet" href="style.css">
+  <!-- MAIN CSS -->
+  <link rel="stylesheet" href="style.css" />
 
-  <!-- LM INTRO -->
+  <!-- INTRO (SAFE, NON-BLOCKING) -->
   <style>
     #lm-intro{
       position:fixed;
       inset:0;
       background:#160a26;
-      z-index:99999;
       display:flex;
       align-items:center;
       justify-content:center;
-      animation:lm-slide-up 5.5s ease forwards;
+      z-index:9999;
+      animation:slideUp 4.5s ease forwards;
     }
-
     .lm-core{
-      font-size:120px;
+      font-size:96px;
       font-weight:900;
       font-style:italic;
       color:#ff5da2;
-      letter-spacing:10px;
-      text-shadow:
-        0 0 20px rgba(255,93,162,.8),
-        0 0 50px rgba(124,58,237,.6);
+      letter-spacing:8px;
     }
-
-    @keyframes lm-slide-up{
-      0% { transform:translateY(0); }
-      85% { transform:translateY(0); }
-      100% { transform:translateY(-110%); }
-    }
-
-    @media(max-width:600px){
-      .lm-core{ font-size:80px; }
+    @keyframes slideUp{
+      0%,80%{transform:translateY(0);}
+      100%{transform:translateY(-120%);}
     }
   </style>
 </head>
@@ -53,29 +42,21 @@
 </div>
 
 <!-- TOP BAR -->
-<div class="topbar">
+<header class="topbar">
   <div class="brand">
     LagneshMitra
     <span>Astrology • Decision Intelligence</span>
   </div>
+</header>
 
-  <!-- DESKTOP ACTIONS -->
-  <div class="top-actions">
-    <button onclick="location.href='email-chat.html'">Contact</button>
-    <button onclick="location.href='admin-posts.html'">Admin</button>
-  </div>
-
-  <!-- MOBILE MENU -->
-  <div class="menu" onclick="toggleMenu()">⋮
-    <div class="dropdown" id="mainMenu">
-      <button onclick="location.href='email-chat.html'">📩 Contact</button>
-      <button onclick="location.href='admin-posts.html'">⚙ Admin</button>
-    </div>
-  </div>
-</div>
+<!-- ACTION BUTTONS (IMPORTANT) -->
+<section class="hero-actions">
+  <button onclick="location.href='email-chat.html'">📩 Contact / Consult</button>
+  <button onclick="location.href='admin-posts.html'">⚙ Admin Panel</button>
+</section>
 
 <!-- HALL OF FAME -->
-<div class="hero">
+<main class="hero">
   <div class="post-card" id="postCard">
     <h3>Hall of Fame</h3>
 
@@ -88,75 +69,25 @@
 
     <button id="toggleBtn">Expand</button>
   </div>
-</div>
+</main>
 
 <!-- CORE LOGIC -->
 <script type="module" src="app.js"></script>
 
 <script>
-/* ===== INTRO LOCK ===== */
-document.body.style.pointerEvents = "none";
-document.body.style.paddingTop = "0px";
-
-(function(){
-  const intro = document.getElementById("lm-intro");
-
-  if(sessionStorage.getItem("lm_intro_seen")){
-    intro.remove();
-    document.body.style.pointerEvents = "auto";
-    document.body.style.paddingTop = "140px";
-    return;
-  }
-
-  sessionStorage.setItem("lm_intro_seen","1");
-
+  /* INTRO CLEANUP */
   setTimeout(()=>{
-    intro.remove();
-    document.body.style.pointerEvents = "auto";
-    document.body.style.paddingTop = "140px";
-  },5500);
-})();
+    const intro=document.getElementById("lm-intro");
+    if(intro) intro.remove();
+  },4500);
 
-/* ===== MENU ===== */
-function toggleMenu(){
-  const m = document.getElementById("mainMenu");
-  m.style.display = (m.style.display === "block") ? "none" : "block";
-}
-
-document.addEventListener("click",e=>{
-  if(!e.target.closest(".menu")){
-    const m = document.getElementById("mainMenu");
-    if(m) m.style.display="none";
-  }
-});
-
-/* ===== HALL OF FAME FALLBACK + TOGGLE ===== */
-document.addEventListener("DOMContentLoaded", () => {
-  const meta = document.getElementById("postMeta");
-  const preview = document.getElementById("postPreview");
-  const full = document.getElementById("postFull");
-  const btn = document.getElementById("toggleBtn");
-  const card = document.getElementById("postCard");
-
-  // 🔒 SAFETY FALLBACK (if app.js fails)
-  if (!preview.innerHTML.trim()) {
-    meta.textContent = "Featured Insight";
-    preview.innerHTML = `
-      True predictions are not guesses.
-      They are outcomes of structure, timing, and karmic sequence.
-    `;
-    full.innerHTML = `
-      Astrology works when prediction is treated as decision intelligence,
-      not belief. Lagna strength, dasha timing, and transit triggers
-      together decide manifestation — not hope.
-    `;
-  }
-
-  btn.addEventListener("click", () => {
+  /* EXPAND TOGGLE */
+  const btn=document.getElementById("toggleBtn");
+  const card=document.getElementById("postCard");
+  btn.onclick=()=>{
     card.classList.toggle("expanded");
-    btn.textContent = card.classList.contains("expanded") ? "Collapse" : "Expand";
-  });
-});
+    btn.innerText = card.classList.contains("expanded") ? "Collapse" : "Expand";
+  };
 </script>
 
 </body>
