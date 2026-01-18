@@ -5,10 +5,10 @@
   <title>LagneshMitra</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- MAIN CSS -->
+  <!-- MAIN CSS (GLOBAL ONLY) -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- INTRO (SAFE, NON-BLOCKING) -->
+  <!-- INTRO ANIMATION (SAFE, NON-BLOCKING) -->
   <style>
     #lm-intro{
       position:fixed;
@@ -19,6 +19,7 @@
       justify-content:center;
       z-index:9999;
       animation:slideUp 4.5s ease forwards;
+      pointer-events:none;
     }
     .lm-core{
       font-size:96px;
@@ -31,6 +32,9 @@
       0%,80%{transform:translateY(0);}
       100%{transform:translateY(-120%);}
     }
+    @media(max-width:600px){
+      .lm-core{font-size:72px;}
+    }
   </style>
 </head>
 
@@ -41,7 +45,7 @@
   <div class="lm-core">LM</div>
 </div>
 
-<!-- TOP BAR -->
+<!-- HEADER / BRAND -->
 <header class="topbar">
   <div class="brand">
     LagneshMitra
@@ -49,15 +53,20 @@
   </div>
 </header>
 
-<!-- ACTION BUTTONS (IMPORTANT) -->
+<!-- PRIMARY ACTION BUTTONS -->
 <section class="hero-actions">
-  <button onclick="location.href='email-chat.html'">📩 Contact / Consult</button>
-  <button onclick="location.href='admin-posts.html'">⚙ Admin Panel</button>
+  <button onclick="location.href='email-chat.html'">
+    📩 Contact / Consult
+  </button>
+  <button onclick="location.href='admin-posts.html'">
+    ⚙ Admin Panel
+  </button>
 </section>
 
 <!-- HALL OF FAME -->
 <main class="hero">
   <div class="post-card" id="postCard">
+
     <h3>Hall of Fame</h3>
 
     <div class="meta" id="postMeta">
@@ -68,6 +77,7 @@
     <div class="post-full" id="postFull"></div>
 
     <button id="toggleBtn">Expand</button>
+
   </div>
 </main>
 
@@ -75,19 +85,22 @@
 <script type="module" src="app.js"></script>
 
 <script>
-  /* INTRO CLEANUP */
+  /* INTRO CLEANUP (SAFETY) */
   setTimeout(()=>{
-    const intro=document.getElementById("lm-intro");
+    const intro = document.getElementById("lm-intro");
     if(intro) intro.remove();
-  },4500);
+  }, 4600);
 
-  /* EXPAND TOGGLE */
-  const btn=document.getElementById("toggleBtn");
-  const card=document.getElementById("postCard");
-  btn.onclick=()=>{
+  /* EXPAND / COLLAPSE */
+  const btn = document.getElementById("toggleBtn");
+  const card = document.getElementById("postCard");
+
+  btn.addEventListener("click", ()=>{
     card.classList.toggle("expanded");
-    btn.innerText = card.classList.contains("expanded") ? "Collapse" : "Expand";
-  };
+    btn.textContent = card.classList.contains("expanded")
+      ? "Collapse"
+      : "Expand";
+  });
 </script>
 
 </body>
