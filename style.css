@@ -68,14 +68,17 @@ body{
   font-weight:700;
   border-radius:18px;
   cursor:pointer;
+
   display:flex;
   align-items:center;
   justify-content:center;
   gap:10px;
+
   letter-spacing:.3px;
   white-space:nowrap;
+
   box-shadow:0 14px 34px rgba(0,0,0,.38);
-  transition:transform .22s ease, box-shadow .22s ease, filter .22s ease;
+  transition:transform .22s ease, box-shadow .22s ease;
 }
 
 .hero-actions button:first-child{
@@ -97,20 +100,20 @@ body{
   box-shadow:0 10px 24px rgba(0,0,0,.35);
 }
 
-/* ================= HERO / HOF ================= */
+/* ================= HERO / HALL OF FAME ================= */
 .hero{
   width:100%;
   display:flex;
   justify-content:center;
-  padding:0 16px 60px;
+  padding:0 16px 70px;
 }
 
 /* ================= POST CARD ================= */
 .post-card{
   position:relative;
   width:100%;
-  max-width:860px;       /* 🔥 RECTANGULAR FIX */
-  padding:30px 34px 92px;
+  max-width:860px;          /* long rectangular */
+  padding:30px 34px 96px;
   border-radius:26px;
 
   background:linear-gradient(
@@ -140,12 +143,14 @@ body{
 .post-preview{
   font-size:15px;
   line-height:1.7;
+  display:block;
 }
 
 .post-full{
   font-size:15px;
   line-height:1.7;
   display:none;
+  white-space:pre-line;
 }
 
 /* ================= EXPANDED STATE ================= */
@@ -162,15 +167,20 @@ body{
   position:absolute;
   left:34px;
   bottom:28px;
+
   padding:14px 28px;
   border:none;
   border-radius:16px;
+
   font-weight:700;
   font-size:14px;
   cursor:pointer;
+
   background:linear-gradient(135deg,#ff5da2,#c084fc);
   color:#1b0f2e;
+
   box-shadow:0 12px 30px rgba(0,0,0,.35);
+  transition:transform .2s ease;
 }
 
 #toggleBtn:hover{
@@ -180,7 +190,7 @@ body{
 /* ================= RESPONSIVE ================= */
 @media(max-width:768px){
   .post-card{
-    padding:26px 22px 88px;
+    padding:26px 22px 92px;
   }
   #toggleBtn{
     left:22px;
