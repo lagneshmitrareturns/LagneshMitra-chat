@@ -1,34 +1,40 @@
-/* =========================================
+/* =====================================================
    HERO ACTION BUTTONS (CONTACT / ADMIN)
-   FINAL STABLE • SAFE • DECENTRALIZED
-========================================= */
+   FINAL STABLE • SAFE • DECENTRALIZED • MOBILE FIRST
+   File: hero-actions.css
+===================================================== */
 
+/* CONTAINER */
 .hero-actions{
   width:100%;
   display:flex;
-  gap:16px;
   justify-content:center;
   align-items:center;
+  flex-wrap:wrap;
 
+  gap:16px;
   margin:32px auto 36px;
   padding:0 16px;
 
-  flex-wrap:wrap;
   position:relative;
-  z-index:50; /* force above HOF + backgrounds */
+  z-index:50; /* always above HOF & background */
 }
 
-/* ===== COMMON BUTTON BASE ===== */
+/* COMMON BUTTON BASE */
 .hero-actions button{
   appearance:none;
+  -webkit-appearance:none;
+
   border:none;
+  outline:none;
 
   padding:15px 28px;
   font-size:15px;
   font-weight:700;
-  border-radius:16px;
 
+  border-radius:16px;
   cursor:pointer;
+
   display:flex;
   align-items:center;
   justify-content:center;
@@ -37,18 +43,23 @@
   letter-spacing:.25px;
   white-space:nowrap;
 
+  box-shadow:0 14px 34px rgba(0,0,0,.38);
+
   transition:
     transform .22s ease,
     box-shadow .22s ease,
     filter .22s ease;
 
-  box-shadow:0 14px 34px rgba(0,0,0,.38);
   touch-action:manipulation;
 }
 
-/* ===== CONTACT / CONSULT BUTTON ===== */
+/* CONTACT / CONSULT BUTTON */
 .hero-actions button:first-child{
-  background:linear-gradient(135deg,#ff5da2 0%,#ff8acb 100%);
+  background:linear-gradient(
+    135deg,
+    #ff5da2 0%,
+    #ff8acb 100%
+  );
   color:#2b0f2a;
 }
 
@@ -58,9 +69,13 @@
   filter:saturate(1.06);
 }
 
-/* ===== ADMIN PANEL BUTTON ===== */
+/* ADMIN PANEL BUTTON */
 .hero-actions button:last-child{
-  background:linear-gradient(135deg,#7c3aed 0%,#a78bfa 100%);
+  background:linear-gradient(
+    135deg,
+    #7c3aed 0%,
+    #a78bfa 100%
+  );
   color:#1b1035;
 }
 
@@ -70,14 +85,14 @@
   filter:saturate(1.06);
 }
 
-/* ===== ACTIVE / TAP FEEDBACK ===== */
+/* ACTIVE / TAP STATE */
 .hero-actions button:active{
   transform:translateY(0);
   box-shadow:0 10px 24px rgba(0,0,0,.35);
   filter:saturate(.98);
 }
 
-/* ===== MOBILE TUNING ===== */
+/* MOBILE OPTIMIZATION */
 @media (max-width:600px){
   .hero-actions{
     gap:12px;
