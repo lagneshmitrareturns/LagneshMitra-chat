@@ -8,7 +8,7 @@
   <!-- MAIN CSS -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- SAFETY BASE (ANTI-WHITE) -->
+  <!-- SAFETY BASE (ANTI-WHITE FLASH) -->
   <style>
     html, body {
       margin: 0;
@@ -17,6 +17,33 @@
       background: radial-gradient(circle at top, #2b1055, #160a26 60%);
       color: #f5f3ff;
       font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    /* HEADER FLOW FIX */
+    .header-wrap{
+      position:relative;
+      z-index:40;
+      padding-top:26px;
+      padding-bottom:10px;
+      text-align:center;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .brand span{
+      margin-top:6px;
+      font-size:14px;
+      color:#d8b4fe;
+    }
+
+    /* PUSH CONTENT BELOW HEADER */
+    .content-start{
+      margin-top:18px;
     }
   </style>
 
@@ -55,44 +82,53 @@
 </div>
 
 <!-- HEADER -->
-<header class="topbar">
+<div class="header-wrap">
   <div class="brand">
-    LagneshMitra
+    <div style="font-size:34px;font-weight:700;font-style:italic;color:#ff5da2;">
+      LagneshMitra
+    </div>
     <span>Astrology • Decision Intelligence</span>
   </div>
-</header>
+</div>
 
-<!-- ACTION BUTTONS -->
-<section class="hero-actions">
-  <button onclick="location.href='email-chat.html'">📩 Contact / Consult</button>
-  <button onclick="location.href='admin-posts.html'">⚙ Admin Panel</button>
-</section>
+<!-- MAIN CONTENT START -->
+<div class="content-start">
 
-<!-- HALL OF FAME -->
-<main class="hero">
-  <div class="post-card" id="postCard">
-    <h3>Hall of Fame</h3>
+  <!-- ACTION BUTTONS -->
+  <section class="hero-actions">
+    <button onclick="location.href='email-chat.html'">📩 Contact / Consult</button>
+    <button onclick="location.href='admin-posts.html'">⚙ Admin Panel</button>
+  </section>
 
-    <div class="meta" id="postMeta">
-      Loading latest transmission…
+  <!-- HALL OF FAME -->
+  <main class="hero">
+    <div class="post-card" id="postCard">
+      <h3>Hall of Fame</h3>
+
+      <div class="meta" id="postMeta">
+        Loading latest transmission…
+      </div>
+
+      <div class="post-preview" id="postPreview"></div>
+      <div class="post-full" id="postFull"></div>
+
+      <button id="toggleBtn">Expand</button>
     </div>
+  </main>
 
-    <div class="post-preview" id="postPreview"></div>
-    <div class="post-full" id="postFull"></div>
-
-    <button id="toggleBtn">Expand</button>
-  </div>
-</main>
+</div>
 
 <!-- CORE LOGIC -->
 <script type="module" src="app.js"></script>
 
 <script>
+  // INTRO CLEANUP
   setTimeout(()=>{
     const intro=document.getElementById("lm-intro");
     if(intro) intro.remove();
   },4500);
 
+  // EXPAND TOGGLE
   const btn=document.getElementById("toggleBtn");
   const card=document.getElementById("postCard");
   btn.onclick=()=>{
