@@ -26,8 +26,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 /* =====================================================
-   🔵 HALL OF FAME — UNCHANGED
-   ===================================================== */
+   🔵 HALL OF FAME — STATE
+===================================================== */
 
 let currentPostRef = null;
 let currentPostId = null;
@@ -37,7 +37,7 @@ let isToggling = false;
 
 /* =====================================================
    🔵 UTILS
-   ===================================================== */
+===================================================== */
 
 window.closeAllDropdowns = function () {
   document.querySelectorAll(".dropdown").forEach(d => d.style.display = "none");
@@ -49,42 +49,81 @@ function formatMinutesAgo(seconds) {
 }
 
 /* =====================================================
-   🔵 LOAD LATEST POST (SAFE)
-   ===================================================== */
+   🏆 LOAD HALL OF FAME POST (FEATURED SAFE)
+===================================================== */
 
 window.loadLatestPost = async function () {
-  const q = query(collection(db, "posts"), orderBy("updatedAt", "desc"), limit(1));
-  const snap = await getDocs(q);
-  if (snap.empty) return;
+  try {
+    const hofQuery = query(
+      collection(db, "posts"),
+      orderBy("featured", "desc"),
+      orderBy("updatedAt", "desc"),
+      limit(1)
+    );
 
-  const d = snap.docs[0];
-  const post = d.data();
+    const snap = await getDocs(hofQuery);
+    if (snap.empty) return;
 
-  currentPostId = d.id;
-  currentPostRef = doc(db, "posts", d.id);
+    const d = snap.docs[0];
+    const post = d.data();
 
-  const preview = post.content.length > 260
-    ? post.content.slice(0, 260) + "..."
-    : post.content;
+    currentPostId = d.id;
+    currentPostRef = doc(db, "posts", d.id);
 
-  const previewEl = document.getElementById("postPreview");
-  const fullEl = document.getElementById("postFull");
-  const metaEl = document.getElementById("postMeta");
+    const preview = post.content.length > 260
+      ? post.content.slice(0, 260) + "..."
+      : post.content;
 
-  if (!previewEl || !fullEl || !metaEl) return;
+    const previewEl = document.getElementById("postPreview");
+    const fullEl = document.getElementById("postFull");
+    const metaEl = document.getElementById("postMeta");
 
-  if (!expanded) {
+    if (!previewEl || !fullEl || !metaEl) return;
+
     previewEl.innerText = preview;
     fullEl.innerText = post.content;
+
+    metaEl.innerText =
+      `Updated ${post.updatedAt?.seconds
+        ? formatMinutesAgo(post.updatedAt.seconds)
+        : "just now"} • Views ${post.views || 0}`;
+
+  } catch (err) {
+    console.error("❌ Hall of Fame load failed:", err);
+  }
+};
+
+/* =====================================================
+   📈 VIEW COUNT (ON EXPAND)
+===================================================== */
+
+window.togglePost = async function () {
+  if (!currentPostRef || isToggling) return;
+
+  isToggling = true;
+  expanded = !expanded;
+
+  const card = document.getElementById("postCard");
+  card.classList.toggle("expanded", expanded);
+
+  if (expanded && !viewCounted) {
+    viewCounted = true;
+    try {
+      await updateDoc(currentPostRef, {
+        views: increment(1),
+        updatedAt: serverTimestamp()
+      });
+    } catch (e) {
+      console.error("View increment failed", e);
+    }
   }
 
-  metaEl.innerText =
-    `Updated ${post.updatedAt?.seconds ? formatMinutesAgo(post.updatedAt.seconds) : "just now"} • Views ${post.views || 0}`;
+  setTimeout(() => (isToggling = false), 300);
 };
 
 /* =====================================================
    🟣 CASE / MAILBOX ENGINE — FINAL
-   ===================================================== */
+===================================================== */
 
 /* 🔹 SUBMIT CASE (CUSTOMER SIDE) */
 window.submitCase = async function (payload) {
@@ -126,7 +165,7 @@ window.submitCase = async function (payload) {
 
 /* =====================================================
    📥 ADMIN INBOX — STAGE AWARE LISTENER
-   ===================================================== */
+===================================================== */
 
 window.listenCasesInbox = function (callback) {
   const q = query(collection(db, "cases"), orderBy("createdAt", "desc"));
@@ -141,8 +180,6 @@ window.listenCasesInbox = function (callback) {
 
     snap.forEach(d => {
       const data = { id: d.id, ...d.data() };
-
-      /* 🔧 BACKWARD COMPAT FIX */
       if (!data.stage) data.stage = "Inbox";
 
       switch (data.stage) {
@@ -172,7 +209,7 @@ window.listenCasesInbox = function (callback) {
 
 /* =====================================================
    ✉️ OPEN CASE (MARK READ)
-   ===================================================== */
+===================================================== */
 
 window.openCase = async function (caseId) {
   try {
@@ -186,8 +223,8 @@ window.openCase = async function (caseId) {
 };
 
 /* =====================================================
-   🔁 STATUS + STAGE CONTROLLER (CRITICAL)
-   ===================================================== */
+   🔁 STATUS + STAGE CONTROLLER
+===================================================== */
 
 window.updateCaseStatus = async function (caseId, action) {
   let status = "Query Submitted";
@@ -198,17 +235,14 @@ window.updateCaseStatus = async function (caseId, action) {
       status = "Replied";
       stage = "Sent";
       break;
-
     case "draft":
       status = "Draft";
       stage = "Draft";
       break;
-
     case "archive":
       status = "Closed";
       stage = "Archive";
       break;
-
     case "restore":
       status = "Query Submitted";
       stage = "Inbox";
@@ -228,7 +262,7 @@ window.updateCaseStatus = async function (caseId, action) {
 
 /* =====================================================
    🔔 NEW CASE NOTIFICATION HOOK
-   ===================================================== */
+===================================================== */
 
 window.onNewCaseNotify = function (handler) {
   const q = query(
