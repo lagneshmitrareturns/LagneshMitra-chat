@@ -1,214 +1,61 @@
-/* ================================
-   LagneshMitra – Core Styling
-   STABLE BASELINE • ZENO REMOVED
-================================ */
+/* =========================================
+   HERO ACTION BUTTONS (CONTACT / ADMIN)
+   Isolated Styling – Safe to Modify
+========================================= */
 
-/* ===== RESET ===== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+.hero-actions{
+  display:flex;
+  gap:14px;
+  justify-content:center;
+  align-items:center;
+  margin:22px auto 26px;
+  flex-wrap:wrap;
 }
 
-/* ===== BODY ===== */
-body {
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  background: radial-gradient(circle at top, #2b1055, #160a26 60%);
-  color: #f5f3ff;
-  line-height: 1.6;
-  padding: 16px;
-  padding-top: 140px;
-  overflow-x: hidden;
+/* COMMON BUTTON BASE */
+.hero-actions button{
+  border:none;
+  padding:14px 22px;
+  font-size:15px;
+  font-weight:700;
+  border-radius:14px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  transition:all .25s ease;
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
 }
 
-/* ===== TOP BAR ===== */
-.topbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  padding: 22px 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: transparent;
-  z-index: 5000;
+/* CONTACT BUTTON */
+.hero-actions button:first-child{
+  background:linear-gradient(135deg,#ff5da2,#ff8acb);
+  color:#2b0f2a;
 }
 
-/* ===== BRAND ===== */
-.brand {
-  font-size: 36px;
-  font-style: italic;
-  font-weight: 600;
-  color: #ff5da2;
-  display: flex;
-  flex-direction: column;
+.hero-actions button:first-child:hover{
+  transform:translateY(-2px);
+  box-shadow:0 18px 40px rgba(255,93,162,.45);
 }
 
-.brand span {
-  font-size: 14px;
-  color: #d8b4fe;
+/* ADMIN BUTTON */
+.hero-actions button:last-child{
+  background:linear-gradient(135deg,#7c3aed,#a78bfa);
+  color:#1b1035;
 }
 
-/* ===== TOP ACTIONS (DESKTOP READY) ===== */
-.top-actions {
-  display: flex;
-  gap: 10px;
+.hero-actions button:last-child:hover{
+  transform:translateY(-2px);
+  box-shadow:0 18px 40px rgba(124,58,237,.45);
 }
 
-.top-actions button {
-  background: linear-gradient(135deg, #ff5da2, #c084fc);
-  border: none;
-  border-radius: 14px;
-  padding: 10px 16px;
-  color: #1b0f2e;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* ===== MENU (3 DOTS) ===== */
-.menu {
-  font-size: 40px;
-  cursor: pointer;
-  color: #e9d5ff;
-  position: relative;
-  z-index: 6000;
-  padding: 6px 10px;
-  border-radius: 10px;
-}
-
-.menu:hover {
-  background: rgba(255,255,255,0.08);
-}
-
-/* ===== DROPDOWN (FIXED & STABLE) ===== */
-.dropdown {
-  position: fixed;
-  top: 92px;              /* topbar ke niche */
-  right: 16px;
-  width: 260px;
-  padding: 16px;
-  display: none;
-  background: rgba(36,18,61,0.96);
-  border-radius: 16px;
-  box-shadow: 0 20px 45px rgba(0,0,0,0.7);
-  z-index: 9000;
-}
-
-.dropdown button {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
-  background: rgba(255,255,255,0.08);
-  color: #fff;
-  cursor: pointer;
-}
-
-.dropdown button:last-child {
-  margin-bottom: 0;
-}
-
-/* ===== HERO ===== */
-.hero {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-top: 20px;
-}
-
-/* ==================================================
-   HALL OF FAME CARD (STABLE)
-================================================== */
-.post-card {
-  position: relative;
-  width: 100%;
-  max-width: 1100px;
-  padding: 32px 36px 96px;
-  border-radius: 26px;
-  background: linear-gradient(
-    160deg,
-    rgba(255,255,255,0.12),
-    rgba(255,255,255,0.04)
-  );
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 22px 60px rgba(0,0,0,0.6);
-  z-index: 1;
-}
-
-.post-card h3 {
-  font-size: 26px;
-  margin-bottom: 14px;
-  color: #ff5da2;
-  font-style: italic;
-}
-
-.meta {
-  font-size: 13px;
-  color: #c4b5fd;
-  margin-bottom: 16px;
-}
-
-.post-preview {
-  margin-top: 10px;
-}
-
-.post-full {
-  margin-top: 18px;
-  display: none;
-}
-
-.post-card.expanded .post-preview {
-  display: none;
-}
-
-.post-card.expanded .post-full {
-  display: block;
-}
-
-/* ===== EXPAND BUTTON ===== */
-#toggleBtn {
-  position: absolute;
-  left: 36px;
-  bottom: 28px;
-  padding: 14px 26px;
-  background: linear-gradient(135deg, #ff5da2, #c084fc);
-  border: none;
-  border-radius: 16px;
-  color: #1b0f2e;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* ==================================================
-   EMAIL / CHAT PAGE SAFETY
-================================================== */
-.email-page {
-  min-height: calc(100vh - 120px);
-  padding: 40px 16px;
-}
-
-.email-page .email-container {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 28px;
-  background: rgba(36,18,61,0.88);
-  border-radius: 22px;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.65);
-}
-
-/* ==================================================
-   RESPONSIVE RULES
-================================================== */
-@media (max-width: 768px) {
-  .top-actions {
-    display: none;
+/* MOBILE TUNING */
+@media(max-width:600px){
+  .hero-actions{
+    gap:10px;
   }
-}
-
-@media (max-width: 600px) {
-  body { padding-top: 120px; }
-  .brand { font-size: 28px; }
+  .hero-actions button{
+    width:100%;
+    justify-content:center;
+  }
 }
