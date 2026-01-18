@@ -51,7 +51,7 @@ body {
   color: #d8b4fe;
 }
 
-/* ===== TOP ACTIONS (DESKTOP) ===== */
+/* ===== TOP ACTIONS (DESKTOP READY) ===== */
 .top-actions {
   display: flex;
   gap: 10px;
@@ -82,17 +82,18 @@ body {
   background: rgba(255,255,255,0.08);
 }
 
-/* ===== DROPDOWN ===== */
+/* ===== DROPDOWN (FIXED & STABLE) ===== */
 .dropdown {
-  position: absolute;
-  top: calc(100% + 12px);
-  right: 0;
+  position: fixed;
+  top: 92px;              /* topbar ke niche */
+  right: 16px;
   width: 260px;
   padding: 16px;
   display: none;
   background: rgba(36,18,61,0.96);
   border-radius: 16px;
   box-shadow: 0 20px 45px rgba(0,0,0,0.7);
+  z-index: 9000;
 }
 
 .dropdown button {
@@ -104,6 +105,10 @@ body {
   background: rgba(255,255,255,0.08);
   color: #fff;
   cursor: pointer;
+}
+
+.dropdown button:last-child {
+  margin-bottom: 0;
 }
 
 /* ===== HERO ===== */
