@@ -1,84 +1,93 @@
 /* =========================================
    HERO ACTION BUTTONS (CONTACT / ADMIN)
    Isolated Styling – SAFE • DECENTRALIZED
+   FINAL STABLE VERSION
 ========================================= */
 
 .hero-actions{
+  width:100%;
   display:flex;
   gap:16px;
   justify-content:center;
   align-items:center;
-  margin:26px auto 30px;
+  margin:28px auto 34px;
+  padding:0 16px;
   flex-wrap:wrap;
+
   position:relative;
-  z-index:20; /* ensure above background cards */
+  z-index:30; /* always above cards/background */
 }
 
 /* ===== COMMON BUTTON BASE ===== */
 .hero-actions button{
   appearance:none;
   border:none;
+
   padding:15px 26px;
   font-size:15px;
   font-weight:700;
   border-radius:16px;
-  cursor:pointer;
 
+  cursor:pointer;
   display:flex;
   align-items:center;
   justify-content:center;
   gap:10px;
 
-  letter-spacing:.2px;
+  letter-spacing:.25px;
+  white-space:nowrap;
+
+  background-clip:padding-box;
 
   transition:
-    transform .25s ease,
-    box-shadow .25s ease,
-    filter .25s ease;
+    transform .22s ease,
+    box-shadow .22s ease,
+    filter .22s ease;
 
-  box-shadow:0 14px 34px rgba(0,0,0,.35);
-  white-space:nowrap;
+  box-shadow:0 14px 34px rgba(0,0,0,.38);
 }
 
 /* ===== CONTACT / CONSULT BUTTON ===== */
 .hero-actions button:first-child{
-  background:linear-gradient(135deg,#ff5da2,#ff8acb);
+  background:linear-gradient(135deg,#ff5da2 0%,#ff8acb 100%);
   color:#2b0f2a;
 }
 
 .hero-actions button:first-child:hover{
   transform:translateY(-2px);
-  box-shadow:0 20px 44px rgba(255,93,162,.45);
-  filter:saturate(1.05);
+  box-shadow:0 20px 44px rgba(255,93,162,.48);
+  filter:saturate(1.06);
 }
 
 /* ===== ADMIN PANEL BUTTON ===== */
 .hero-actions button:last-child{
-  background:linear-gradient(135deg,#7c3aed,#a78bfa);
+  background:linear-gradient(135deg,#7c3aed 0%,#a78bfa 100%);
   color:#1b1035;
 }
 
 .hero-actions button:last-child:hover{
   transform:translateY(-2px);
-  box-shadow:0 20px 44px rgba(124,58,237,.45);
-  filter:saturate(1.05);
+  box-shadow:0 20px 44px rgba(124,58,237,.48);
+  filter:saturate(1.06);
 }
 
 /* ===== ACTIVE / TAP FEEDBACK ===== */
 .hero-actions button:active{
   transform:translateY(0);
   box-shadow:0 10px 24px rgba(0,0,0,.35);
+  filter:saturate(.98);
 }
 
 /* ===== MOBILE TUNING ===== */
 @media (max-width:600px){
   .hero-actions{
     gap:12px;
-    margin:22px auto 26px;
+    margin:24px auto 30px;
   }
 
   .hero-actions button{
     width:100%;
+    max-width:520px;
     padding:15px 18px;
     font-size:15px;
   }
