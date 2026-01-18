@@ -26,15 +26,10 @@ const fullEl = document.getElementById("postFull");
 const cardEl = document.getElementById("postCard");
 const toggleBtn = document.getElementById("toggleBtn");
 
-/* ================= STATE ================= */
-let FULL_TEXT = "";
-const PREVIEW_LIMIT = 260;
-
 /* ================= LOAD HOF ================= */
 async function loadHallOfFame() {
-  let snap = null;
+  let snap;
 
-  // 1️⃣ Try featured post
   const featuredQ = query(
     collection(db, "posts"),
     where("featured", "==", true),
@@ -45,7 +40,6 @@ async function loadHallOfFame() {
   if (!featuredSnap.empty) {
     snap = featuredSnap.docs[0];
   } else {
-    // 2️⃣ Fallback to latest updated
     const latestQ = query(
       collection(db, "posts"),
       orderBy("updatedAt", "desc"),
@@ -62,48 +56,35 @@ async function loadHallOfFame() {
 /* ================= RENDER ================= */
 async function renderPost(docSnap) {
   const data = docSnap.data();
-  FULL_TEXT = data.content || "";
+  const content = data.content || "";
 
-  // Meta
   metaEl.innerText = data.featured
     ? "🏆 Featured Transmission"
-    : "🕯 Latest Transmission";
+    : "Latest Transmission";
 
-  // Preview + full separation
   previewEl.innerText =
-    FULL_TEXT.slice(0, PREVIEW_LIMIT) +
-    (FULL_TEXT.length > PREVIEW_LIMIT ? "…" : "");
+    content.slice(0, 240) + (content.length > 240 ? "…" : "");
 
-  fullEl.innerText = FULL_TEXT;
-  fullEl.style.display = "none"; // default collapsed
+  fullEl.innerText = content;
 
-  toggleBtn.style.display =
-    FULL_TEXT.length > PREVIEW_LIMIT ? "inline-block" : "none";
+  // reset state
+  cardEl.classList.remove("expanded");
+  toggleBtn.innerText = "Expand";
 
-  // Silent view increment
+  // 🔥 FIX: bind expand AFTER render
+  toggleBtn.onclick = () => {
+    cardEl.classList.toggle("expanded");
+    toggleBtn.innerText =
+      cardEl.classList.contains("expanded") ? "Collapse" : "Expand";
+  };
+
+  // silent view increment
   try {
     await updateDoc(doc(db, "posts", docSnap.id), {
       views: (data.views || 0) + 1
     });
-  } catch {
-    // ignore
-  }
+  } catch {}
 }
-
-/* ================= EXPAND / COLLAPSE ================= */
-toggleBtn.addEventListener("click", () => {
-  const expanded = cardEl.classList.toggle("expanded");
-
-  if (expanded) {
-    previewEl.style.display = "none";
-    fullEl.style.display = "block";
-    toggleBtn.innerText = "Collapse";
-  } else {
-    previewEl.style.display = "block";
-    fullEl.style.display = "none";
-    toggleBtn.innerText = "Expand";
-  }
-});
 
 /* ================= INIT ================= */
 loadHallOfFame();
