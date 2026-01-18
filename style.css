@@ -1,6 +1,6 @@
 /* ================================
    LagneshMitra – Core Styling
-   STABLE BASELINE • SAFE BUILD
+   STABLE BASELINE • ZENO REMOVED
 ================================ */
 
 /* ===== RESET ===== */
@@ -21,9 +21,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ==================================================
-   TOP BAR
-================================================== */
+/* ===== TOP BAR ===== */
 .topbar {
   position: fixed;
   top: 0;
@@ -35,8 +33,7 @@ body {
   align-items: center;
   justify-content: space-between;
   background: transparent;
-  z-index: 10000;
-  pointer-events: auto;
+  z-index: 5000;
 }
 
 .brand {
@@ -53,18 +50,15 @@ body {
   color: #d8b4fe;
 }
 
-/* ==================================================
-   THREE DOT MENU (HARD FIX)
-================================================== */
+/* ===== MENU ===== */
 .menu {
   font-size: 40px;
   cursor: pointer;
   color: #e9d5ff;
   position: relative;
-  z-index: 20000;
+  z-index: 6000;
   padding: 6px 10px;
   border-radius: 10px;
-  pointer-events: auto;
 }
 
 .menu:hover {
@@ -81,8 +75,6 @@ body {
   background: rgba(36,18,61,0.96);
   border-radius: 16px;
   box-shadow: 0 20px 45px rgba(0,0,0,0.7);
-  z-index: 21000;
-  pointer-events: auto;
 }
 
 .dropdown button {
@@ -91,25 +83,22 @@ body {
   padding: 12px;
   border-radius: 12px;
   border: none;
-  background: rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.08);
   color: #fff;
-  font-size: 15px;
   cursor: pointer;
-  pointer-events: auto;
 }
 
-/* ==================================================
-   HERO / HALL OF FAME
-================================================== */
+/* ===== HERO ===== */
 .hero {
   display: flex;
   justify-content: center;
   width: 100%;
   margin-top: 20px;
-  position: relative;
-  z-index: 1;
 }
 
+/* ==================================================
+   HALL OF FAME CARD (STABLE)
+================================================== */
 .post-card {
   position: relative;
   width: 100%;
@@ -123,7 +112,7 @@ body {
   );
   border: 1px solid rgba(255,255,255,0.2);
   box-shadow: 0 22px 60px rgba(0,0,0,0.6);
-  z-index: 2;
+  z-index: 1;
 }
 
 .post-card h3 {
@@ -156,7 +145,7 @@ body {
   display: block;
 }
 
-/* Expand Button */
+/* ===== EXPAND BUTTON ===== */
 #toggleBtn {
   position: absolute;
   left: 36px;
@@ -168,87 +157,6 @@ body {
   color: #1b0f2e;
   font-weight: 700;
   cursor: pointer;
-}
-
-/* ==================================================
-   ZENO — EYE (GPU SAFE)
-================================================== */
-#zeno-eye {
-  position: fixed;
-  right: 22px;
-  bottom: 22px;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at center,
-    #fdf4ff 12%,
-    #c084fc 32%,
-    #7c3aed 48%,
-    #1b0f2e 72%
-  );
-  box-shadow:
-    0 0 18px rgba(236,72,153,0.7),
-    0 0 32px rgba(124,58,237,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 30000;
-}
-
-#zeno-eye .ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 2px solid rgba(255,93,162,0.75);
-  animation: ring-rotate 10s linear infinite;
-}
-
-#zeno-eye .pupil {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #ff5da2, #7c3aed);
-  animation: pupil-move 6s ease-in-out infinite;
-}
-
-#zeno-eye .lid {
-  display: none;
-}
-
-/* ==================================================
-   ZENO CLOUD (TEXT FIXED)
-================================================== */
-#zeno-cloud {
-  position: fixed;
-  right: 22px;
-  bottom: 94px;
-  width: 340px;
-  padding: 18px;
-  font-size: 14px;
-  color: #fdf4ff;
-  background: rgba(20,10,40,0.96);
-  border-radius: 16px;
-  box-shadow: 0 25px 55px rgba(0,0,0,0.75);
-  z-index: 31000;
-  pointer-events: auto;
-}
-
-/* ==================================================
-   ANIMATIONS
-================================================== */
-@keyframes ring-rotate {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-@keyframes pupil-move {
-  0%   { transform: translate(0,0); }
-  25%  { transform: translate(3px,-2px); }
-  50%  { transform: translate(-3px,2px); }
-  75%  { transform: translate(2px,3px); }
-  100% { transform: translate(0,0); }
 }
 
 /* ==================================================
@@ -268,11 +176,8 @@ body {
   box-shadow: 0 25px 60px rgba(0,0,0,0.65);
 }
 
-/* ==================================================
-   MOBILE
-================================================== */
+/* ===== MOBILE ===== */
 @media (max-width: 600px) {
   body { padding-top: 120px; }
   .brand { font-size: 28px; }
-  #zeno-cloud { width: 92vw; right: 4vw; }
 }
