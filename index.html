@@ -1,7 +1,16 @@
-<!DOCTYPE html><html lang="en">
-<head>  <!-- BASIC META -->  <meta charset="UTF-8">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- BASIC META -->
+  <meta charset="UTF-8">
   <title>LagneshMitra</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">  <!-- MAIN STYLESHEET -->  <link rel="stylesheet" href="style.css">  <!-- LM INTRO – FULL SCREEN SLAB (GPU SAFE) -->  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- MAIN STYLESHEET -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- LM INTRO -->
+  <style>
     #lm-intro{
       position:fixed;
       inset:0;
@@ -25,94 +34,130 @@
     }
 
     @keyframes lm-slide-up{
-      0%   { transform:translateY(0); }
-      85%  { transform:translateY(0); }
+      0% { transform:translateY(0); }
+      85% { transform:translateY(0); }
       100% { transform:translateY(-110%); }
     }
 
     @media(max-width:600px){
       .lm-core{ font-size:80px; }
     }
+  </style>
+</head>
 
-    /* 🔒 HOF VISIBILITY HARD FIX */
-    .hero{
-      position:relative;
-      z-index:10;
-      margin-top:40px;
-    }
-  </style></head><body><!-- LM INTRO --><div id="lm-intro">
+<body>
+
+<!-- INTRO -->
+<div id="lm-intro">
   <div class="lm-core">LM</div>
-</div><!-- TOP BAR --><div class="topbar">
+</div>
+
+<!-- TOP BAR -->
+<div class="topbar">
   <div class="brand">
     LagneshMitra
     <span>Astrology • Decision Intelligence</span>
-  </div>  <!-- DESKTOP ACTION BUTTONS -->  <div class="top-actions">
+  </div>
+
+  <!-- DESKTOP ACTIONS -->
+  <div class="top-actions">
     <button onclick="location.href='email-chat.html'">Contact</button>
     <button onclick="location.href='admin-posts.html'">Admin</button>
-  </div>  <!-- MOBILE MENU -->  <div class="menu" onclick="toggleMenu()">⋮
+  </div>
+
+  <!-- MOBILE MENU -->
+  <div class="menu" onclick="toggleMenu()">⋮
     <div class="dropdown" id="mainMenu">
       <button onclick="location.href='email-chat.html'">📩 Contact</button>
       <button onclick="location.href='admin-posts.html'">⚙ Admin</button>
     </div>
   </div>
-</div><!-- HALL OF FAME --><div class="hero">
-  <div class="post-card" id="postCard">
-    <h3>Hall of Fame</h3><div class="meta" id="postMeta">
-  Loading latest transmission…
 </div>
 
-<div class="post-preview" id="postPreview"></div>
-<div class="post-full" id="postFull"></div>
+<!-- HALL OF FAME -->
+<div class="hero">
+  <div class="post-card" id="postCard">
+    <h3>Hall of Fame</h3>
 
-<button id="toggleBtn">Expand</button>
+    <div class="meta" id="postMeta">
+      Loading latest transmission…
+    </div>
 
+    <div class="post-preview" id="postPreview"></div>
+    <div class="post-full" id="postFull"></div>
+
+    <button id="toggleBtn">Expand</button>
   </div>
-</div><!-- ZENO (TEMP – WILL BE REMOVED LATER) --><div id="zeno-eye" onclick="toggleZeno()">
-  <div class="ring"></div>
-  <div class="pupil"></div>
-</div><div id="zeno-cloud" style="display:none;">
-  ZENO is observing resonance patterns…
-</div><!-- CORE LOGIC --><script type="module" src="app.js"></script><script>
-  /* HARD LOCK DURING INTRO */
-  document.body.style.pointerEvents = "none";
-  document.body.style.paddingTop = "0px";
+</div>
 
-  (function(){
-    const intro = document.getElementById("lm-intro");
+<!-- CORE LOGIC -->
+<script type="module" src="app.js"></script>
 
-    if(sessionStorage.getItem("lm_intro_seen")){
-      intro.remove();
-      document.body.style.pointerEvents = "auto";
-      document.body.style.paddingTop = "140px";
-      window.dispatchEvent(new Event("resize"));
-      return;
-    }
+<script>
+/* ===== INTRO LOCK ===== */
+document.body.style.pointerEvents = "none";
+document.body.style.paddingTop = "0px";
 
-    sessionStorage.setItem("lm_intro_seen","1");
+(function(){
+  const intro = document.getElementById("lm-intro");
 
-    setTimeout(()=>{
-      intro.remove();
-      document.body.style.pointerEvents = "auto";
-      document.body.style.paddingTop = "140px";
-      window.dispatchEvent(new Event("resize"));
-    },5500);
-  })();
+  if(sessionStorage.getItem("lm_intro_seen")){
+    intro.remove();
+    document.body.style.pointerEvents = "auto";
+    document.body.style.paddingTop = "140px";
+    return;
+  }
 
-  function toggleMenu(){
+  sessionStorage.setItem("lm_intro_seen","1");
+
+  setTimeout(()=>{
+    intro.remove();
+    document.body.style.pointerEvents = "auto";
+    document.body.style.paddingTop = "140px";
+  },5500);
+})();
+
+/* ===== MENU ===== */
+function toggleMenu(){
+  const m = document.getElementById("mainMenu");
+  m.style.display = (m.style.display === "block") ? "none" : "block";
+}
+
+document.addEventListener("click",e=>{
+  if(!e.target.closest(".menu")){
     const m = document.getElementById("mainMenu");
-    m.style.display = (m.style.display === "block") ? "none" : "block";
+    if(m) m.style.display="none";
+  }
+});
+
+/* ===== HALL OF FAME FALLBACK + TOGGLE ===== */
+document.addEventListener("DOMContentLoaded", () => {
+  const meta = document.getElementById("postMeta");
+  const preview = document.getElementById("postPreview");
+  const full = document.getElementById("postFull");
+  const btn = document.getElementById("toggleBtn");
+  const card = document.getElementById("postCard");
+
+  // 🔒 SAFETY FALLBACK (if app.js fails)
+  if (!preview.innerHTML.trim()) {
+    meta.textContent = "Featured Insight";
+    preview.innerHTML = `
+      True predictions are not guesses.
+      They are outcomes of structure, timing, and karmic sequence.
+    `;
+    full.innerHTML = `
+      Astrology works when prediction is treated as decision intelligence,
+      not belief. Lagna strength, dasha timing, and transit triggers
+      together decide manifestation — not hope.
+    `;
   }
 
-  document.addEventListener("click",e=>{
-    if(!e.target.closest(".menu")){
-      const m = document.getElementById("mainMenu");
-      if(m) m.style.display="none";
-    }
+  btn.addEventListener("click", () => {
+    card.classList.toggle("expanded");
+    btn.textContent = card.classList.contains("expanded") ? "Collapse" : "Expand";
   });
+});
+</script>
 
-  function toggleZeno(){
-    const z = document.getElementById("zeno-cloud");
-    z.style.display = (z.style.display === "block") ? "none" : "block";
-  }
-</script></body>
+</body>
 </html>
