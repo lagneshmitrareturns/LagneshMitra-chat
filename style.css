@@ -36,6 +36,7 @@ body {
   z-index: 5000;
 }
 
+/* ===== BRAND ===== */
 .brand {
   font-size: 36px;
   font-style: italic;
@@ -50,7 +51,23 @@ body {
   color: #d8b4fe;
 }
 
-/* ===== MENU ===== */
+/* ===== TOP ACTIONS (DESKTOP) ===== */
+.top-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.top-actions button {
+  background: linear-gradient(135deg, #ff5da2, #c084fc);
+  border: none;
+  border-radius: 14px;
+  padding: 10px 16px;
+  color: #1b0f2e;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ===== MENU (3 DOTS) ===== */
 .menu {
   font-size: 40px;
   cursor: pointer;
@@ -65,6 +82,7 @@ body {
   background: rgba(255,255,255,0.08);
 }
 
+/* ===== DROPDOWN ===== */
 .dropdown {
   position: absolute;
   top: calc(100% + 12px);
@@ -176,7 +194,15 @@ body {
   box-shadow: 0 25px 60px rgba(0,0,0,0.65);
 }
 
-/* ===== MOBILE ===== */
+/* ==================================================
+   RESPONSIVE RULES
+================================================== */
+@media (max-width: 768px) {
+  .top-actions {
+    display: none;
+  }
+}
+
 @media (max-width: 600px) {
   body { padding-top: 120px; }
   .brand { font-size: 28px; }
