@@ -1,17 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-  <!-- BASIC META -->
-  <meta charset="UTF-8">
+<!DOCTYPE html><html lang="en">
+<head>  <!-- BASIC META -->  <meta charset="UTF-8">
   <title>LagneshMitra</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- MAIN STYLESHEET -->
-  <link rel="stylesheet" href="style.css">
-
-  <!-- LM INTRO – FULL SCREEN SLAB (GPU SAFE) -->
-  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">  <!-- MAIN STYLESHEET -->  <link rel="stylesheet" href="style.css">  <!-- LM INTRO – FULL SCREEN SLAB (GPU SAFE) -->  <style>
     #lm-intro{
       position:fixed;
       inset:0;
@@ -43,63 +33,46 @@
     @media(max-width:600px){
       .lm-core{ font-size:80px; }
     }
-  </style>
 
-</head>
-
-<body>
-
-<!-- LM INTRO -->
-<div id="lm-intro">
+    /* 🔒 HOF VISIBILITY HARD FIX */
+    .hero{
+      position:relative;
+      z-index:10;
+      margin-top:40px;
+    }
+  </style></head><body><!-- LM INTRO --><div id="lm-intro">
   <div class="lm-core">LM</div>
-</div>
-
-<!-- TOP BAR -->
-<div class="topbar">
+</div><!-- TOP BAR --><div class="topbar">
   <div class="brand">
     LagneshMitra
     <span>Astrology • Decision Intelligence</span>
-  </div>
-
-  <div class="menu" onclick="toggleMenu()">⋮
+  </div>  <!-- DESKTOP ACTION BUTTONS -->  <div class="top-actions">
+    <button onclick="location.href='email-chat.html'">Contact</button>
+    <button onclick="location.href='admin-posts.html'">Admin</button>
+  </div>  <!-- MOBILE MENU -->  <div class="menu" onclick="toggleMenu()">⋮
     <div class="dropdown" id="mainMenu">
       <button onclick="location.href='email-chat.html'">📩 Contact</button>
       <button onclick="location.href='admin-posts.html'">⚙ Admin</button>
     </div>
   </div>
-</div>
-
-<!-- HALL OF FAME -->
-<div class="hero">
+</div><!-- HALL OF FAME --><div class="hero">
   <div class="post-card" id="postCard">
-    <h3>Hall of Fame</h3>
-
-    <div class="meta" id="postMeta">
-      Loading latest transmission…
-    </div>
-
-    <div class="post-preview" id="postPreview"></div>
-    <div class="post-full" id="postFull"></div>
-
-    <button id="toggleBtn">Expand</button>
-  </div>
+    <h3>Hall of Fame</h3><div class="meta" id="postMeta">
+  Loading latest transmission…
 </div>
 
-<!-- ZENO -->
-<div id="zeno-eye" onclick="toggleZeno()">
+<div class="post-preview" id="postPreview"></div>
+<div class="post-full" id="postFull"></div>
+
+<button id="toggleBtn">Expand</button>
+
+  </div>
+</div><!-- ZENO (TEMP – WILL BE REMOVED LATER) --><div id="zeno-eye" onclick="toggleZeno()">
   <div class="ring"></div>
   <div class="pupil"></div>
-  <div class="lid"></div>
-</div>
-
-<div id="zeno-cloud" style="display:none;">
+</div><div id="zeno-cloud" style="display:none;">
   ZENO is observing resonance patterns…
-</div>
-
-<!-- CORE LOGIC -->
-<script type="module" src="app.js"></script>
-
-<script>
+</div><!-- CORE LOGIC --><script type="module" src="app.js"></script><script>
   /* HARD LOCK DURING INTRO */
   document.body.style.pointerEvents = "none";
   document.body.style.paddingTop = "0px";
@@ -111,6 +84,7 @@
       intro.remove();
       document.body.style.pointerEvents = "auto";
       document.body.style.paddingTop = "140px";
+      window.dispatchEvent(new Event("resize"));
       return;
     }
 
@@ -140,7 +114,5 @@
     const z = document.getElementById("zeno-cloud");
     z.style.display = (z.style.display === "block") ? "none" : "block";
   }
-</script>
-
-</body>
+</script></body>
 </html>
